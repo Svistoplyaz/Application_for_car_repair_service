@@ -10,42 +10,45 @@ public class MainFrame extends JFrame{
     private final HashMap<String, AbstractView> views = new HashMap<>();
     public static final Loading loading = new Loading();
     public JPanel navigation, content;
-    private boolean type;
+    public boolean type;
 
     public MainFrame(boolean _type){
         super("Реестр имущества студенческого городка");
         type = _type;
-        getContentPane().setPreferredSize(new Dimension(970 + 60, 420 + 83));
+        getContentPane().setPreferredSize(new Dimension(970 + 60, 420 + 83 + 30));
         setLayout(null);
 
         navigation = new JPanel();
         navigation.setLayout(null);
-        navigation.setBounds(10, 10, 200, 400 + 83);
+        navigation.setBounds(10, 10, 200, 400 + 83 + 30);
         navigation.setBorder(BorderFactory.createLineBorder(Color.decode("#828790")));
         add(navigation);
 
         content = new JPanel();
         content.setLayout(null);
-        content.setBounds(220, 10, 740 + 60, 400 + 83);
+        content.setBounds(220, 10, 740 + 60, 400 + 83 + 30);
         content.setBorder(BorderFactory.createLineBorder(Color.decode("#828790")));
         add(content);
 
         initViews();
 
+        if(type){
+            addButton(68, views.get("Services"));
+            addButton(322, views.get("Spares"));
+            addButton(195, views.get("Stats"));
+            addButton(244, views.get("Profit"));
+        }
         addButton(10, views.get("Home"));
         addButton(39, views.get("Orders"));
-        addButton(68, views.get("Services"));
         addButton(117, views.get("Clients"));
         addButton(146, views.get("Staff"));
-        addButton(195, views.get("Stats"));
-        addButton(244, views.get("Profit"));
-        addButton(322, views.get("Spares"));
         addButton(351, views.get("Reserved"));
 
         setResizable(false);
         pack();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        showView(views.get("Home"),true);
     }
 
     private void addButton(int y, JPanel panel) {
@@ -83,14 +86,14 @@ public class MainFrame extends JFrame{
     }
 
     private void initViews(){
-        views.put("Home", new HomeView());
-        views.put("Orders", new OrdersView());
-        views.put("Services", new ServicesView());
-        views.put("Clients", new ClientsView());
-        views.put("Staff", new StaffView());
-        views.put("Stats", new StatsView());
-        views.put("Profit", new ProfitView());
-        views.put("Spares", new SparesView());
-        views.put("Reserved", new ReservedView());
+        views.put("Home", new HomeView(this));
+        views.put("Orders", new OrdersView(this));
+        views.put("Services", new ServicesView(this));
+        views.put("Clients", new ClientsView(this));
+        views.put("Staff", new StaffView(this));
+        views.put("Stats", new StatsView(this));
+        views.put("Profit", new ProfitView(this));
+        views.put("Spares", new SparesView(this));
+        views.put("Reserved", new ReservedView(this));
     }
 }

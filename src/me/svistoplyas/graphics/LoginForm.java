@@ -10,7 +10,7 @@ public class LoginForm {
     private JFrame frame;
 
     private int defUser = 1;
-    private String defPass = "goose";
+    private String defPass = "qwe";
 
     public LoginForm() {
         frame = new JFrame("Вход в систему");
