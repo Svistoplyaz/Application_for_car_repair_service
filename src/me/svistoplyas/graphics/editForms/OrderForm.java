@@ -1,5 +1,7 @@
 package me.svistoplyas.graphics.editForms;
 
+import me.svistoplyas.graphics.TableModel;
+
 import javax.swing.*;
 
 public class OrderForm extends AbstractEdit {
@@ -69,6 +71,9 @@ public class OrderForm extends AbstractEdit {
         add(forward);
 
         //Таблица с историей статусов
+        JTable table = new JTable(new TableModel(new String[]{"Статус", "Дата"}, null));
+        table.setBounds(10, 230, 320, 200);
+
     }
 
     @Override
