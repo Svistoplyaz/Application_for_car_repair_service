@@ -10,10 +10,10 @@
 .idea/**/uiDesigner.xml
 
 .idea/**/gradle.xml
-.idea/**/libraries
 .idea/inspectionProfiles
 
 /out
 *.xlsx
 
 /*.db
+.m2/
