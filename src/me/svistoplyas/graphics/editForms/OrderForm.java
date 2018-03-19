@@ -78,11 +78,11 @@ public class OrderForm extends AbstractEdit {
         add(curLabel);
 
         JButton back = new JButton("Back");
-        back.setBounds(10, 200, 170, 24);
+        back.setBounds(170, 200, 95, 24);
         add(back);
 
         JButton forward = new JButton("Forward");
-        forward.setBounds(200, 200, 170, 24);
+        forward.setBounds(275, 200, 95, 24);
         add(forward);
 
         //Таблица с историей статусов
@@ -107,7 +107,7 @@ public class OrderForm extends AbstractEdit {
         add(spinnerIn);
 
         datePickerIn = new JDatePicker(date);
-        datePickerIn.setBounds(10, 470, 200, 24);
+        datePickerIn.setBounds(170, 470, 200, 24);
         add(datePickerIn);
 
         //Дата и время выдачи
@@ -123,7 +123,7 @@ public class OrderForm extends AbstractEdit {
         add(spinnerOut);
 
         datePickerOut = new JDatePicker(date);
-        datePickerOut.setBounds(10, 530, 200, 24);
+        datePickerOut.setBounds(170, 530, 200, 24);
         add(datePickerOut);
 
     }

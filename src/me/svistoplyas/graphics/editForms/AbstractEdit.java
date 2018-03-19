@@ -28,6 +28,7 @@ public abstract class AbstractEdit extends JDialog {
         save.addActionListener((e) -> {
             performEdit();
             try {
+                baddies.clear();
                 for (Pair<String, JComponent> component : components) {
                     switch (isEmptyOrBadlyFilled(component)) {
                         case 0:
@@ -95,7 +96,6 @@ public abstract class AbstractEdit extends JDialog {
     public abstract void performEdit();
 
     private int isEmptyOrBadlyFilled(Pair<String, JComponent> pair) {
-        baddies.clear();
 
         JComponent c = pair.getValue();
         String type = pair.getKey();
@@ -134,18 +134,13 @@ public abstract class AbstractEdit extends JDialog {
             Pair<Integer, Integer> pair = marks.get(component);
             String file;
             if (baddies.contains(component))
-                file = "resources/images/correct-symbol.png";
-            else
                 file = "resources/images/letter-x.png";
+            else
+                file = "resources/images/correct-symbol.png";
 
-            JButton butn = new JButton(new ImageIcon(imageLoader.getImage(file)));
-            butn.setBounds(pair.getKey(), pair.getValue(), 24, 24);
-            butn.setOpaque(false);
-            butn.setContentAreaFilled(false);
-            butn.setBorderPainted(false);
-            butn.setEnabled(false);
-            butn.setDisabledIcon(new ImageIcon(imageLoader.getImage(file)));
-            add(butn);
+            JLabel label = new JLabel(new ImageIcon(imageLoader.getImage(file)));
+            label.setBounds(pair.getKey(), pair.getValue(), 24, 24);
+            add(label);
         }
     }
 
