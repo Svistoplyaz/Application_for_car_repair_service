@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
@@ -14,7 +13,5 @@
 .idea/**/libraries
 .idea/inspectionProfiles
 
-=======
->>>>>>> Stashed changes
 /out
 *.xlsx
