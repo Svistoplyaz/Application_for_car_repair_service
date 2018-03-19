@@ -1,6 +1,8 @@
 package me.svistoplyas.graphics.views;
 
 import me.svistoplyas.graphics.MainFrame;
+import me.svistoplyas.graphics.editForms.AbstractEdit;
+import me.svistoplyas.graphics.editForms.ClientForm;
 
 public class HomeView extends AbstractView {
 
@@ -31,6 +33,11 @@ public class HomeView extends AbstractView {
     @Override
     boolean canDelete() {
         return mainFrame.type;
+    }
+
+    @Override
+    public AbstractEdit getEdit(boolean b, Object o) {
+        return new ClientForm(mainFrame, b, o);
     }
 
     @Override

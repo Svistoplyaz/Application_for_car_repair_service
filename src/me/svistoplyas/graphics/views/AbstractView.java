@@ -2,6 +2,8 @@ package me.svistoplyas.graphics.views;
 
 import me.svistoplyas.graphics.MainFrame;
 import me.svistoplyas.graphics.TableModel;
+import me.svistoplyas.graphics.editForms.AbstractEdit;
+import me.svistoplyas.graphics.editForms.ClientForm;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -49,15 +51,15 @@ public abstract class AbstractView extends JPanel{
         if(canEdit()) {
             edit = new JButton("Изменить");
             edit.addActionListener((e) -> {
-//            int row = table.getSelectedRow();
+            int row = table.getSelectedRow();
 //            if(hasFakeRow()) row--;
-//            try {
-//                EditFormBuilder b = new EditFormBuilder(false, globalFilter, frame, getEditableFieldsDescriptionsEdit(), data.get(row), this);
-//                b.setVisible(true);
+            try {
+                AbstractEdit b = getEdit(true, new Object());
+                b.setVisible(true);
 //                if(b.isNeedUpdate()) updateData(row, false);
-//            } catch(Exception ex) {
-//                Main.handleDatabaseException(ex);
-//            }
+            } catch(Exception ex) {
+                ex.printStackTrace();
+            }
             });
             setBtBounds(edit, 1);
             add(edit);
@@ -66,25 +68,21 @@ public abstract class AbstractView extends JPanel{
         if(canDelete()) {
             delete = new JButton("Удалить");
             delete.addActionListener((e) -> {
-//            String text = "Вы действительно хотите удалить выбранную запись?";
-//            if(JOptionPane.showConfirmDialog(this, text, "Подтверждение", JOptionPane.YES_NO_OPTION) != 0) return;
-//
-//            int row = table.getSelectedRow();
-//            if(hasFakeRow()) row--;
-//            try {
-//                Session s = Connection.getSession();
-//                s.beginTransaction();
-//                s.delete(data.get(row));
-//                s.getTransaction().commit();
-//
-//                data.remove(row);
-//
-//                ((TableModel)table.getModel()).fireTableDataChanged();
-//                if(row == data.size()) row--;
-//                if(row != -1) table.setRowSelectionInterval(row, row);
-//            } catch(Exception ex) {
-//                Main.handleDatabaseException(ex);
-//            }
+            String text = "Вы действительно хотите удалить выбранную запись?";
+//            if(JOptionPane.showConfirmDialog(this, text, "Подтверждение", JOptionPane.YES_NO_OPTION,
+//                    JOptionPane.INFORMATION_MESSAGE, null, new String[]{"Да", "Нет"}) != 0) return;
+
+                JOptionPane.showOptionDialog(this,
+                        "Do you like this answer?",
+                        "Подтверждение",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        null,
+                        new String[]{"Да", "Нет"}, // this is the array
+                        "default");
+
+            int row = table.getSelectedRow();
+            //Удаление выбранной записи
             });
             setBtBounds(delete, 2);
             add(delete);
@@ -136,5 +134,9 @@ public abstract class AbstractView extends JPanel{
 
     private static void setBtBounds(JButton button, int index) {
         button.setBounds(10 + 295 * index, 440, 190, 60);
+    }
+
+    public AbstractEdit getEdit(boolean b, Object o){
+        return null;
     }
 }

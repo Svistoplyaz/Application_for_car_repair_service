@@ -1,6 +1,8 @@
 package me.svistoplyas.graphics.views;
 
 import me.svistoplyas.graphics.MainFrame;
+import me.svistoplyas.graphics.editForms.AbstractEdit;
+import me.svistoplyas.graphics.editForms.ServiceForm;
 
 public class ServicesView extends AbstractView {
 
@@ -31,6 +33,11 @@ public class ServicesView extends AbstractView {
     @Override
     boolean canDelete() {
         return true;
+    }
+
+    @Override
+    public AbstractEdit getEdit(boolean b, Object o) {
+        return new ServiceForm(mainFrame, b, o);
     }
 
     @Override
