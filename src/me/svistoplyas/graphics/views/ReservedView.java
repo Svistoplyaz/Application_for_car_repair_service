@@ -34,7 +34,7 @@ public class ReservedView extends AbstractView {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Заброннированные детали";
     }
 }

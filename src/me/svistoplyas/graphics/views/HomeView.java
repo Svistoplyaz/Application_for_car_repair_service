@@ -41,7 +41,7 @@ public class HomeView extends AbstractView {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Домашняя страница";
     }
 }

@@ -8,17 +8,18 @@ import me.svistoplyas.graphics.editForms.ClientForm;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
-public abstract class AbstractView extends JPanel{
+public abstract class AbstractView extends JPanel {
     private JTable table;
     private JButton add, edit, delete;
     MainFrame mainFrame;
 
-    AbstractView(MainFrame _mainFrame){
+    AbstractView(MainFrame _mainFrame) {
         mainFrame = _mainFrame;
         setLayout(null);
 
-        if(canAdd()) {
+        if (canAdd()) {
             add = new JButton("Добавить");
             add.addActionListener((e) -> {
 //            boolean changed = false;
@@ -48,27 +49,28 @@ public abstract class AbstractView extends JPanel{
             add(add);
         }
 
-        if(canEdit()) {
+        if (canEdit()) {
             edit = new JButton("Изменить");
             edit.addActionListener((e) -> {
-            int row = table.getSelectedRow();
-//            if(hasFakeRow()) row--;
-            try {
-                AbstractEdit b = getEdit(true, new Object());
-                b.setVisible(true);
-//                if(b.isNeedUpdate()) updateData(row, false);
-            } catch(Exception ex) {
-                ex.printStackTrace();
-            }
+                int row = table.getSelectedRow();
+                try {
+                    AbstractEdit b = getEdit(true, new Object());
+                    b.setVisible(true);
+
+                    if (b.changed())
+                        b.performEdit();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             });
             setBtBounds(edit, 1);
             add(edit);
         }
 
-        if(canDelete()) {
+        if (canDelete()) {
             delete = new JButton("Удалить");
             delete.addActionListener((e) -> {
-            String text = "Вы действительно хотите удалить выбранную запись?";
+                String text = "Вы действительно хотите удалить выбранную запись?";
 //            if(JOptionPane.showConfirmDialog(this, text, "Подтверждение", JOptionPane.YES_NO_OPTION,
 //                    JOptionPane.INFORMATION_MESSAGE, null, new String[]{"Да", "Нет"}) != 0) return;
 
@@ -81,8 +83,8 @@ public abstract class AbstractView extends JPanel{
                         new String[]{"Да", "Нет"}, // this is the array
                         "default");
 
-            int row = table.getSelectedRow();
-            //Удаление выбранной записи
+                int row = table.getSelectedRow();
+                //Удаление выбранной записи
             });
             setBtBounds(delete, 2);
             add(delete);
@@ -136,7 +138,7 @@ public abstract class AbstractView extends JPanel{
         button.setBounds(10 + 295 * index, 440, 190, 60);
     }
 
-    public AbstractEdit getEdit(boolean b, Object o){
+    public AbstractEdit getEdit(boolean b, Object o) {
         return null;
     }
 }

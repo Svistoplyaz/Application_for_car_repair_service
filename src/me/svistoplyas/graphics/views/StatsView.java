@@ -34,7 +34,7 @@ public class StatsView extends AbstractView {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Статистика";
     }
 }

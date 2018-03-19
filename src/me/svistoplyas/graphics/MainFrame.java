@@ -6,13 +6,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
-public class MainFrame extends JFrame{
+public class MainFrame extends JFrame {
     private final HashMap<String, AbstractView> views = new HashMap<>();
     public static final Loading loading = new Loading();
     public JPanel navigation, content;
     public boolean type;
 
-    public MainFrame(boolean _type){
+    public MainFrame(boolean _type) {
         super("Реестр имущества студенческого городка");
         type = _type;
         getContentPane().setPreferredSize(new Dimension(970 + 60, 420 + 83 + 30));
@@ -32,7 +32,7 @@ public class MainFrame extends JFrame{
 
         initViews();
 
-        if(type){
+        if (type) {
             addButton(68, views.get("Services"));
             addButton(322, views.get("Spares"));
             addButton(195, views.get("Stats"));
@@ -48,7 +48,7 @@ public class MainFrame extends JFrame{
         pack();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        showView(views.get("Home"),true);
+        showView(views.get("Home"), true);
     }
 
     private void addButton(int y, JPanel panel) {
@@ -56,8 +56,8 @@ public class MainFrame extends JFrame{
         bt.setBounds(10, y, 180, 24);
         bt.setFocusable(false);
         bt.addActionListener((e) -> {
-            if(panel instanceof AbstractView)
-                showView((AbstractView)panel, true);
+            if (panel instanceof AbstractView)
+                showView((AbstractView) panel, true);
             else showPanel(panel);
         });
         navigation.add(bt);
@@ -85,7 +85,7 @@ public class MainFrame extends JFrame{
         return views.get(name);
     }
 
-    private void initViews(){
+    private void initViews() {
         views.put("Home", new HomeView(this));
         views.put("Orders", new OrdersView(this));
         views.put("Services", new ServicesView(this));

@@ -41,7 +41,7 @@ public class ClientsView extends AbstractView {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Клиенты";
     }
 }

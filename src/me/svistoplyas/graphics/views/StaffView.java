@@ -34,7 +34,7 @@ public class StaffView extends AbstractView {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Сотрудники";
     }
 }
