@@ -1,5 +1,7 @@
 package net.web_kot.teamdev.db;
 
+import org.intellij.lang.annotations.Language;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -10,6 +12,8 @@ public class Database {
     
     private final Connection connection;
     private Statement statement;
+    
+    private final Model model = new Model(this);
     
     public Database(File file) throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite:" + file.getPath());
@@ -45,12 +49,44 @@ public class Database {
         for(String query : queries) statement.execute(query);
     }
     
-    public Statement getStatement() {
-        return statement;
-    }
-    
     public void close() throws SQLException {
         connection.close();
+    }
+    
+    public Model getModel() {
+        return model;
+    }
+    
+    public int getLastInsertRowId() throws SQLException {
+        return statement.getGeneratedKeys().getInt(1);
+    }
+    
+    public void exec(@Language("SQL")String sql, Object... args) throws SQLException {
+        wrapArguments(args);
+        statement.execute(String.format(sql, args));
+    }
+    
+    public int insert(@Language("SQL")String sql, Object... args) throws SQLException {
+        exec(sql, args);
+        return getLastInsertRowId();
+    }
+    
+    public void update(@Language("SQL")String sql, Object... args) throws SQLException {
+        wrapArguments(args);
+        statement.executeUpdate(String.format(sql, args));
+    }
+    
+    public ResultSet select(@Language("SQL")String sql, Object... args) throws SQLException {
+        wrapArguments(args);
+        return statement.executeQuery(String.format(sql, args));
+    }
+    
+    private void wrapArguments(Object[] args) {
+        for(int i = 0; i < args.length; i++)
+            if(args[i] == null)
+                args[i] = "NULL";
+            else if(args[i] instanceof String)
+                args[i] = "'" + args[i] + "'";
     }
     
 }
