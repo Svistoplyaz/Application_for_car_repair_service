@@ -9,25 +9,35 @@ public class ClientForm extends AbstractEdit {
 
         //ФИО
         JLabel fioLabel = new JLabel("ФИО клиента");
-        fioLabel.setBounds(10,20, 120,24);
+        fioLabel.setBounds(10, 20, 120, 24);
         add(fioLabel);
 
         JTextField fioText = new JTextField();
-        fioText.setBounds(170,20, 200,24);
+        fioText.setBounds(170, 20, 200, 24);
         add(fioText);
 
         //Телефон
         JLabel phoneLabel = new JLabel("Телефон клиента");
-        phoneLabel.setBounds(10,20 + 30, 120,24);
+        phoneLabel.setBounds(10, 20 + 30, 120, 24);
         add(phoneLabel);
 
         JTextField phoneText = new JTextField();
-        phoneText.setBounds(170,20 + 30, 200,24);
+        phoneText.setBounds(170, 20 + 30, 200, 24);
         add(phoneText);
     }
 
     @Override
     void setSize() {
-        this.setSize(385,200);
+        this.setSize(385, 200);
+    }
+
+    @Override
+    public void performAdd() {
+
+    }
+
+    @Override
+    public void performEdit() {
+
     }
 }

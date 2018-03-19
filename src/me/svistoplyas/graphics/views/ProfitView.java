@@ -34,7 +34,7 @@ public class ProfitView extends AbstractView {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Расходы и доходы";
     }
 }

@@ -29,7 +29,7 @@ public class LoginForm {
 
 //        JComboBox box = new JComboBox(Connection.getSession().createQuery("from Staff").list().toArray());
         JComboBox box = new JComboBox(new String[]{"Менеджер", "Владелец"});
-        if(box.getItemCount() >= (defUser + 1)) box.setSelectedIndex(defUser);
+        if (box.getItemCount() >= (defUser + 1)) box.setSelectedIndex(defUser);
         box.setBounds(120, 10, 200, 20);
         frame.add(box);
 
@@ -51,13 +51,13 @@ public class LoginForm {
             String password = new String(pass.getPassword());
 //            Staff user = (Staff)box.getSelectedItem();
 //
-            if(String.valueOf(box.getSelectedItem()).equals("Менеджер") && password.equals("123")) {
+            if (String.valueOf(box.getSelectedItem()).equals("Менеджер") && password.equals("123")) {
                 frame.setVisible(false);
                 Main.afterLogin(false);
-            } else if(String.valueOf(box.getSelectedItem()).equals("Владелец") && password.equals("qwe")){
+            } else if (String.valueOf(box.getSelectedItem()).equals("Владелец") && password.equals("qwe")) {
                 frame.setVisible(false);
                 Main.afterLogin(true);
-            }else {
+            } else {
                 text.setText("Неверный логин или пароль!");
             }
         });

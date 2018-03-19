@@ -41,7 +41,7 @@ public class ServicesView extends AbstractView {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Услуги";
     }
 }

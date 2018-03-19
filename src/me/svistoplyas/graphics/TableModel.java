@@ -2,11 +2,11 @@ package me.svistoplyas.graphics;
 
 import javax.swing.table.AbstractTableModel;
 
-public class TableModel extends AbstractTableModel{
+public class TableModel extends AbstractTableModel {
     private String[] columnNames = {"1", "2"};
-    private Object[][] data = {{"Leonid", "Grisha"},{"Barmaley", "Peter"}};
+    private Object[][] data = {{"Leonid", "Grisha"}, {"Barmaley", "Peter"}};
 
-    public TableModel(String[] _columnNames, Object[][] _data){
+    public TableModel(String[] _columnNames, Object[][] _data) {
         columnNames = _columnNames;
         data = _data;
     }
