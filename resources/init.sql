@@ -14,13 +14,12 @@ CREATE TABLE IF NOT EXISTS Service (
 ---
 
 CREATE TABLE IF NOT EXISTS Service_price (
-  PK_Service_price INTEGER NOT NULL,
+  PK_Service_price INTEGER PRIMARY KEY NOT NULL,
   Date INTEGER NOT NULL,
   Price INTEGER NOT NULL,
   PK_Service INTEGER NOT NULL 
     REFERENCES Service(PK_Service)
-    ON DELETE CASCADE,
-  PRIMARY KEY (PK_Service_price, PK_Service) -- TODO
+    ON DELETE CASCADE
 );
 
 ---

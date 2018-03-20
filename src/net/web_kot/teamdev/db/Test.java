@@ -1,9 +1,9 @@
 package net.web_kot.teamdev.db;
 
-import net.web_kot.teamdev.db.entities.Mark;
-import net.web_kot.teamdev.db.entities.VehicleModel;
+import net.web_kot.teamdev.db.entities.Service;
 
 import java.io.File;
+import java.util.Date;
 
 public class Test {
     
@@ -15,16 +15,19 @@ public class Test {
         Database db = new Database(f);
         Model model = db.getModel();
         
-        Mark toyota = model.createMark("Toyota").save();
-        Mark lada = model.createMark("Lada").save();
+        Service s = model.createService("Покраска").save().setPrice(123);
         
-        model.createVehicleModel(toyota, "Corolla", 2012).save();
-        model.createVehicleModel(toyota, "Land Cruiser", 2010).save();
-        model.createVehicleModel(lada, "Priora", 2014).save();
+        Service service = model.createService("Замена масла").save().setPrice(1);
+        Thread.sleep(1000);
+        service.setPrice(2);
+        long time = System.currentTimeMillis();
+        Thread.sleep(1000);
+        service.setPrice(3);
         
-        for(Mark m : model.getMarks()) System.out.println(m);
-        System.out.println();
-        for(VehicleModel m : model.getVehiclesModels()) System.out.println(m);
+        System.out.println(service.getPrice());
+        System.out.println(service.getPrice(new Date(time + 100)));
+        
+        for(Service ss : model.getServices()) System.out.println(ss);
         
         db.close();
     }

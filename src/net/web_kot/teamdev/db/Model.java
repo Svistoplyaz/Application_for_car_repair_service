@@ -103,4 +103,14 @@ public class Model {
         return getList(VehicleModel.class, "SELECT * FROM Model");
     }
     
+    /* Service */
+    
+    public Service createService(String name) {
+        return new Service(this, name);
+    }
+    
+    public List<Service> getServices() throws Exception {
+        return getList(Service.class, "SELECT * FROM Service");
+    }
+    
 }
