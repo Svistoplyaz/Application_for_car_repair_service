@@ -88,7 +88,7 @@ public class Database {
             if(args[i] == null)
                 args[i] = "NULL";
             else if(args[i] instanceof String)
-                args[i] = "'" + args[i] + "'";
+                args[i] = "\"" + ((String)args[i]).replace("'", "") + "\"";
     }
     
 }

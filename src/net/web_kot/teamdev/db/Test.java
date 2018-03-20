@@ -1,6 +1,6 @@
 package net.web_kot.teamdev.db;
 
-import net.web_kot.teamdev.db.entities.Service;
+import net.web_kot.teamdev.db.entities.*;
 
 import java.io.File;
 import java.util.Date;
@@ -15,19 +15,16 @@ public class Test {
         Database db = new Database(f);
         Model model = db.getModel();
         
-        Service s = model.createService("Покраска").save().setPrice(123);
+        Client vasya = model.createClient("Vasya").setPhone("222222").save();
         
-        Service service = model.createService("Замена масла").save().setPrice(1);
-        Thread.sleep(1000);
-        service.setPrice(2);
-        long time = System.currentTimeMillis();
-        Thread.sleep(1000);
-        service.setPrice(3);
+        Mark toyota = model.createMark("Toyota").save();
+        VehicleModel corolla = model.createVehicleModel(toyota, "Corolla", 2012).save();
+        VehicleModel markII = model.createVehicleModel(toyota, "MarkII", 1993).save();
         
-        System.out.println(service.getPrice());
-        System.out.println(service.getPrice(new Date(time + 100)));
+        model.createOrder(vasya, corolla, new Date()).setRegistrationNumber("А222МР777RUS").save();
+        model.createOrder(vasya, markII, new Date()).setFinishDate(new Date()).save();
         
-        for(Service ss : model.getServices()) System.out.println(ss);
+        for(Order o : model.getOrders()) System.out.println(o);
         
         db.close();
     }

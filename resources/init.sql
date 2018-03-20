@@ -50,12 +50,10 @@ CREATE TABLE IF NOT EXISTS `Order` (
   Registration_number TEXT(20),
   Start_date INTEGER NOT NULL,
   Finish_date INTEGER,
-  PK_Model INTEGER NOT NULL,
-  PK_Mark INTEGER NOT NULL,
-  Finish_cost INTEGER,
-  FOREIGN KEY (PK_Model, PK_Mark) 
-    REFERENCES Model(PK_Model, PK_Mark)
-    ON DELETE RESTRICT
+  PK_Model INTEGER NOT NULL
+    REFERENCES Model(PK_Model)
+    ON DELETE RESTRICT,
+  Finish_cost INTEGER
 );
 
 ---

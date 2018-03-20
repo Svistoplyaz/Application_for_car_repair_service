@@ -4,10 +4,9 @@ import net.web_kot.teamdev.db.entities.*;
 import org.intellij.lang.annotations.Language;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Parameter;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @SuppressWarnings("SqlResolve")
@@ -75,6 +74,10 @@ public class Model {
         return new Client(this, name);
     }
     
+    public Client getClientById(int id) throws Exception {
+        return getById(Client.class, db.formatQuery("SELECT * FROM Clients WHERE PK_Clients = %d", id));
+    }
+    
     public List<Client> getClients() throws Exception {
         return getList(Client.class, "SELECT * FROM Clients");
     }
@@ -98,6 +101,10 @@ public class Model {
     public VehicleModel createVehicleModel(Mark mark, String name, int year) {
         return new VehicleModel(this, mark, name, year);
     }
+
+    public VehicleModel getVehicleModelById(int id) throws Exception {
+        return getById(VehicleModel.class, db.formatQuery("SELECT * FROM Model WHERE PK_Model = %d", id));
+    }
     
     public List<VehicleModel> getVehiclesModels() throws Exception {
         return getList(VehicleModel.class, "SELECT * FROM Model");
@@ -111,6 +118,16 @@ public class Model {
     
     public List<Service> getServices() throws Exception {
         return getList(Service.class, "SELECT * FROM Service");
+    }
+    
+    /* Order */
+    
+    public Order createOrder(Client client, VehicleModel vehicle, Date start) {
+        return new Order(this, client, vehicle, start);
+    }
+    
+    public List<Order> getOrders() throws Exception {
+        return getList(Order.class, "SELECT * FROM `Order`");
     }
     
 }
