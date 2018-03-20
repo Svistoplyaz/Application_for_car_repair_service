@@ -13,6 +13,7 @@ public class VehicleModel extends AbstractEntity {
         this(model, -1, name, year, mark.getId());
     }
 
+    @SelectConstructor
     public VehicleModel(Model model, int id, String name, int year, int markId) {
         super(model);
         this.id = id; this.markId = markId; this.name = name; this.year = year;

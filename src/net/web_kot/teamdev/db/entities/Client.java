@@ -13,6 +13,7 @@ public class Client extends AbstractEntity {
         this.name = name;
     }
     
+    @SelectConstructor
     public Client(Model model, int id, String name, String phone) {
         super(model);
         this.id = id; this.name = name; this.phone = phone;

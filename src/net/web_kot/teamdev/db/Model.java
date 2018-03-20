@@ -4,6 +4,7 @@ import net.web_kot.teamdev.db.entities.*;
 import org.intellij.lang.annotations.Language;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Parameter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,39 +23,50 @@ public class Model {
         return db;
     }
     
-    private <T extends AbstractEntity> List<T> getList(Class<T> clazz, @Language("SQL")String sql, 
-                                                       Class<?>... arguments) throws Exception {
+    @SuppressWarnings("unchecked")
+    private <T extends AbstractEntity> List<T> getList(Class<T> clazz, @Language("SQL")String sql) throws Exception {
+        Constructor<T> constructor = null;
+        for(Constructor<?> c : clazz.getConstructors())
+            if(c.isAnnotationPresent(AbstractEntity.SelectConstructor.class) && c.getDeclaringClass() == clazz) {
+                constructor = (Constructor<T>) c;
+                break;
+            }
+            
+        if(constructor == null) 
+            throw new Exception("Class " + clazz.getCanonicalName() + " doesn't contains @SelectConstructor");    
+        
         ArrayList<T> list = new ArrayList<>(1);
-        Constructor<T> constructor = clazz.getConstructor(prepareArgs(arguments));
         
         ResultSet result = db.select(sql);
         while(result.next()) {
-            Object[] values = new Object[arguments.length + 1];
+            Object[] values = new Object[constructor.getParameterCount()];
             values[0] = this;
             
-            for(int i = 0; i < arguments.length; i++)
-                if(arguments[i] == String.class)
-                    values[i + 1] = result.getString(i + 1);
-                else if(arguments[i] == int.class)
-                    values[i + 1] = result.getInt(i + 1);
-                
+            Class<?>[] parameters = constructor.getParameterTypes();
+            for(int i = 1; i < parameters.length; i++) values[i] = getParameter(result, parameters[i], i);
+            
             list.add(constructor.newInstance(values));
         }
         
         return list;
     }
     
-    private Class<?>[] prepareArgs(Class<?>[] arguments) {
-        Class<?>[] args = new Class<?>[arguments.length + 1];
-        System.arraycopy(arguments, 0, args, 1, arguments.length);
+    private Object getParameter(ResultSet result, Class<?> clazz, int index) throws Exception {
+        Object value;
+        if(clazz == String.class)
+            value = result.getString(index);
+        else if(clazz == int.class || clazz == Integer.class)
+            value = result.getInt(index);
+        else if(clazz == long.class || clazz == Long.class)
+            value = result.getLong(index);
+        else throw new Exception("Unknown field type " + clazz.getCanonicalName());
         
-        args[0] = Model.class;
-        return args;
+        if(result.wasNull()) return null;
+        return value;
     }
     
-    private <T extends AbstractEntity> T getById(Class<T> clazz, @Language("SQL")String sql, 
-                                                 Class<?>... arguments) throws Exception {
-        return getList(clazz, sql, arguments).get(0);
+    private <T extends AbstractEntity> T getById(Class<T> clazz, @Language("SQL")String sql) throws Exception {
+        return getList(clazz, sql).get(0);
     }
     
     /* Clients */
@@ -64,11 +76,7 @@ public class Model {
     }
     
     public List<Client> getClients() throws Exception {
-        return getList(
-                Client.class,
-                "SELECT * FROM Clients",
-                int.class, String.class, String.class
-        );
+        return getList(Client.class, "SELECT * FROM Clients");
     }
     
     /* Mark */
@@ -78,19 +86,11 @@ public class Model {
     }
     
     public Mark getMarkById(int id) throws Exception {
-        return getById(
-                Mark.class,
-                db.formatQuery("SELECT * FROM Mark WHERE PK_Mark = %d", id),
-                int.class, String.class
-        );
+        return getById(Mark.class, db.formatQuery("SELECT * FROM Mark WHERE PK_Mark = %d", id));
     }
     
     public List<Mark> getMarks() throws Exception {
-        return getList(
-                Mark.class,
-                "SELECT * FROM Mark",
-                int.class, String.class
-        );
+        return getList(Mark.class, "SELECT * FROM Mark");
     }
     
     /* Vehicle model */
@@ -100,11 +100,7 @@ public class Model {
     }
     
     public List<VehicleModel> getVehiclesModels() throws Exception {
-        return getList(
-                VehicleModel.class,
-                "SELECT * FROM Model",
-                int.class, String.class, int.class, int.class
-        );
+        return getList(VehicleModel.class, "SELECT * FROM Model");
     }
     
 }

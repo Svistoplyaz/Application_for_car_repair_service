@@ -12,6 +12,7 @@ public class Mark extends AbstractEntity {
         this(model, -1, name);
     }
     
+    @SelectConstructor
     public Mark(Model model, int id, String name) {
         super(model);
         this.id = id; this.name = name;
