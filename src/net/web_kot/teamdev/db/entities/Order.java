@@ -3,6 +3,7 @@ package net.web_kot.teamdev.db.entities;
 import net.web_kot.teamdev.db.Model;
 
 import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("SqlResolve")
 public class Order extends AbstractEntity {
@@ -103,6 +104,35 @@ public class Order extends AbstractEntity {
         Order other = (Order)o;
         
         return id == other.id;
+    }
+    
+    public void addService(Service service) throws Exception {
+        model.db().insert(
+                "INSERT INTO Order_Service (PK_Order, PK_Service, Date) VALUES (%d, %d, %d)",
+                id, service.getId(), System.currentTimeMillis()
+        );
+    }
+    
+    public List<Service> getServices() throws Exception {
+        return model.getList(Service.class, model.db().formatQuery(
+                "SELECT s.PK_Service, s.Name FROM Service s, Order_Service os WHERE " +
+                        "s.PK_Service = os.PK_Service AND os.PK_Order = %d", id)
+        );
+    }
+    
+    public void removeService(Service service) throws Exception {
+        model.db().exec(
+                "DELETE FROM Order_Service WHERE PK_Order = %d AND PK_Service = %d",
+                id, service.getId()
+        );
+    }
+    
+    public void setServices(List<Service> services) throws Exception {
+        List<Service> existing = getServices();
+        for(Service s : services) 
+            if(!existing.contains(s)) addService(s);
+        for(Service s : existing)
+            if(!services.contains(s)) removeService(s);
     }
     
 }

@@ -23,7 +23,7 @@ public class Model {
     }
     
     @SuppressWarnings("unchecked")
-    private <T extends AbstractEntity> List<T> getList(Class<T> clazz, @Language("SQL")String sql) throws Exception {
+    public <T extends AbstractEntity> List<T> getList(Class<T> clazz, @Language("SQL")String sql) throws Exception {
         Constructor<T> constructor = null;
         for(Constructor<?> c : clazz.getConstructors())
             if(c.isAnnotationPresent(AbstractEntity.SelectConstructor.class) && c.getDeclaringClass() == clazz) {

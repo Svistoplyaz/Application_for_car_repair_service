@@ -2,6 +2,7 @@ package net.web_kot.teamdev.db;
 
 import org.intellij.lang.annotations.Language;
 
+import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -9,6 +10,8 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class Database {
+    
+    private boolean debug = false;
     
     private final Connection connection;
     private Statement statement;
@@ -57,12 +60,19 @@ public class Database {
         return model;
     }
     
+    public Database setDebug(boolean d) {
+        debug = d;
+        return this;
+    }
+    
     public int getLastInsertRowId() throws SQLException {
         return statement.getGeneratedKeys().getInt(1);
     }
     
     public void exec(@Language("SQL")String sql, Object... args) throws SQLException {
-        statement.execute(formatQuery(sql, args));
+        String query = formatQuery(sql, args);
+        if(debug) System.out.println("> " + query);
+        statement.execute(query);
     }
     
     public int insert(@Language("SQL")String sql, Object... args) throws SQLException {
@@ -71,24 +81,31 @@ public class Database {
     }
     
     public void update(@Language("SQL")String sql, Object... args) throws SQLException {
-        statement.executeUpdate(formatQuery(sql, args));
+        String query = formatQuery(sql, args);
+        if(debug) System.out.println("> " + query);
+        statement.executeUpdate(query);
     }
     
     public ResultSet select(@Language("SQL")String sql, Object... args) throws SQLException {
-        return statement.executeQuery(formatQuery(sql, args));
+        String query = formatQuery(sql, args);
+        if(debug) System.out.println("> " + query);
+        return statement.executeQuery(query);
     }
     
     public String formatQuery(@Language("SQL")String sql, Object... args) {
-        wrapArguments(args);
-        return String.format(sql, args);
+        return String.format(sql, wrapArguments(args));
     }
     
-    private void wrapArguments(Object[] args) {
+    private Object[] wrapArguments(Object[] args) {
+        Object[] nw = new Object[args.length];
         for(int i = 0; i < args.length; i++)
             if(args[i] == null)
-                args[i] = "NULL";
+                nw[i] = "NULL";
             else if(args[i] instanceof String)
-                args[i] = "\"" + ((String)args[i]).replace("'", "") + "\"";
+                nw[i] = "\"" + ((String)args[i]).replace("'", "") + "\"";
+            else
+                nw[i] = args[i];
+        return nw;
     }
     
 }
