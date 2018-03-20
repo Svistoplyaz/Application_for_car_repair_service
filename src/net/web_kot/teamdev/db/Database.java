@@ -62,8 +62,7 @@ public class Database {
     }
     
     public void exec(@Language("SQL")String sql, Object... args) throws SQLException {
-        wrapArguments(args);
-        statement.execute(String.format(sql, args));
+        statement.execute(formatQuery(sql, args));
     }
     
     public int insert(@Language("SQL")String sql, Object... args) throws SQLException {
@@ -72,13 +71,16 @@ public class Database {
     }
     
     public void update(@Language("SQL")String sql, Object... args) throws SQLException {
-        wrapArguments(args);
-        statement.executeUpdate(String.format(sql, args));
+        statement.executeUpdate(formatQuery(sql, args));
     }
     
     public ResultSet select(@Language("SQL")String sql, Object... args) throws SQLException {
+        return statement.executeQuery(formatQuery(sql, args));
+    }
+    
+    public String formatQuery(@Language("SQL")String sql, Object... args) {
         wrapArguments(args);
-        return statement.executeQuery(String.format(sql, args));
+        return String.format(sql, args);
     }
     
     private void wrapArguments(Object[] args) {
