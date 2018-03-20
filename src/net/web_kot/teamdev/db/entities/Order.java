@@ -8,7 +8,7 @@ import java.util.List;
 @SuppressWarnings("SqlResolve")
 public class Order extends AbstractEntity {
     
-    private int id, idClient, idModel;
+    private int idClient, idModel;
     private String number;
     private Long start, finish;
     private int finishCost;
@@ -19,7 +19,7 @@ public class Order extends AbstractEntity {
     
     @SelectConstructor
     public Order(Model model, int id, int idClient, String number, long start, Long finish, int idModel, int cost) {
-        super(model);
+        super(model, "Order", "PK_Order");
         this.id = id; this.idClient = idClient; this.number = number; 
         this.start = start; this.finish = finish; this.idModel = idModel; this.finishCost = cost;
     }
@@ -38,10 +38,6 @@ public class Order extends AbstractEntity {
                     number, start, finish, idModel, finishCost, id
             );
         return this;
-    }
-    
-    public int getId() {
-        return id;
     }
     
     public Client getClient() throws Exception {

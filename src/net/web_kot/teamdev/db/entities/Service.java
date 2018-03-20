@@ -9,7 +9,6 @@ import java.util.Date;
 @SuppressWarnings("SqlResolve")
 public class Service extends AbstractEntity {
     
-    private int id;
     private String name;
     
     public Service(Model model, String name) {
@@ -18,7 +17,7 @@ public class Service extends AbstractEntity {
     
     @SelectConstructor
     public Service(Model model, int id, String name) {
-        super(model);
+        super(model, "Service", "PK_Service");
         this.id = id; this.name = name;
     }
 
@@ -34,10 +33,6 @@ public class Service extends AbstractEntity {
                     name, id
             );
         return this;
-    }
-    
-    public int getId() {
-        return id;
     }
     
     public String getName() {

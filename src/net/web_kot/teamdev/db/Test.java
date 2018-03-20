@@ -3,6 +3,7 @@ package net.web_kot.teamdev.db;
 import net.web_kot.teamdev.db.entities.*;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,12 +27,20 @@ public class Test {
         Service service1 = model.createService("Замена масла").save();
         Service service2 = model.createService("Проверка тормозов").save().setPrice(12);
         
-        o.addService(service1);
-        o.addService(service2);
+        ArrayList<Service> add = new ArrayList<>();
+        add.add(service1);
+        add.add(service2);
+        o.setServices(add);
         
         List<Service> services = o.getServices();
-        services.remove(service1);
+        //services.remove(model.getServices().get(0));
         o.setServices(services);
+        
+        try {
+            model.getServices().get(0).delete();
+        } catch(Exception e) {
+            System.out.println("!! " + e.getMessage());    
+        }
         
         System.out.println(o);
         for(Service s : o.getServices()) System.out.println("> " + s);

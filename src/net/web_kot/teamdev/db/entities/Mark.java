@@ -5,7 +5,6 @@ import net.web_kot.teamdev.db.Model;
 @SuppressWarnings("SqlResolve")
 public class Mark extends AbstractEntity {
     
-    private int id;
     private String name;
     
     public Mark(Model model, String name) {
@@ -14,7 +13,7 @@ public class Mark extends AbstractEntity {
     
     @SelectConstructor
     public Mark(Model model, int id, String name) {
-        super(model);
+        super(model, "Mark", "PK_Mark");
         this.id = id; this.name = name;
     }
 
@@ -30,10 +29,6 @@ public class Mark extends AbstractEntity {
                     name, id
             );
         return this;
-    }
-    
-    public int getId() {
-        return id;
     }
     
     public String getName() {

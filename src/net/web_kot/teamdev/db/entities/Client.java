@@ -5,17 +5,15 @@ import net.web_kot.teamdev.db.Model;
 @SuppressWarnings("SqlResolve")
 public class Client extends AbstractEntity {
     
-    private int id = -1;
     private String name, phone = null;
     
     public Client(Model model, String name) {
-        super(model);
-        this.name = name;
+        this(model, -1, name, null);
     }
     
     @SelectConstructor
     public Client(Model model, int id, String name, String phone) {
-        super(model);
+        super(model, "Clients", "PK_Clients");
         this.id = id; this.name = name; this.phone = phone;
     }
     
@@ -31,10 +29,6 @@ public class Client extends AbstractEntity {
                     name, phone, id
             );
         return this;
-    }
-    
-    public int getId() {
-        return id;
     }
     
     public String getName() {

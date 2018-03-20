@@ -5,7 +5,7 @@ import net.web_kot.teamdev.db.Model;
 @SuppressWarnings("SqlResolve")
 public class VehicleModel extends AbstractEntity {
     
-    private int id, markId;
+    private int markId;
     private String name;
     private int year;
     
@@ -15,7 +15,7 @@ public class VehicleModel extends AbstractEntity {
 
     @SelectConstructor
     public VehicleModel(Model model, int id, String name, int year, int markId) {
-        super(model);
+        super(model, "Model", "PK_Model");
         this.id = id; this.markId = markId; this.name = name; this.year = year;
     }
 
@@ -31,10 +31,6 @@ public class VehicleModel extends AbstractEntity {
                     name, year, markId, id
             );
         return this;
-    }
-    
-    public int getId() {
-        return id;
     }
     
     public Mark getMark() throws Exception {
