@@ -1,4 +1,4 @@
-package me.svistoplyas.graphics;
+package me.svistoplyas.teamdev.graphics;
 
 import javax.swing.*;
 

@@ -1,14 +1,12 @@
-package me.svistoplyas.graphics.views;
+package me.svistoplyas.teamdev.graphics.views;
 
-import me.svistoplyas.graphics.MainFrame;
-import me.svistoplyas.graphics.TableModel;
-import me.svistoplyas.graphics.editForms.AbstractEdit;
-import me.svistoplyas.graphics.editForms.ClientForm;
+import me.svistoplyas.teamdev.graphics.MainFrame;
+import me.svistoplyas.teamdev.graphics.TableModel;
+import me.svistoplyas.teamdev.graphics.editForms.AbstractEdit;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public abstract class AbstractView extends JPanel {
     private JTable table;

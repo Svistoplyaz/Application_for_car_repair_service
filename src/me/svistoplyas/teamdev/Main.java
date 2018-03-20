@@ -1,7 +1,7 @@
-package me.svistoplyas;
+package me.svistoplyas.teamdev;
 
-import me.svistoplyas.graphics.LoginForm;
-import me.svistoplyas.graphics.MainFrame;
+import me.svistoplyas.teamdev.graphics.LoginForm;
+import me.svistoplyas.teamdev.graphics.MainFrame;
 
 import javax.swing.*;
 import java.util.Locale;

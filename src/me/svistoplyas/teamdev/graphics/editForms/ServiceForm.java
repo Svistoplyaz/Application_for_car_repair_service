@@ -1,4 +1,4 @@
-package me.svistoplyas.graphics.editForms;
+package me.svistoplyas.teamdev.graphics.editForms;
 
 import javax.swing.*;
 
@@ -14,11 +14,12 @@ public class ServiceForm extends AbstractEdit {
         JTextField nameText = new JTextField();
         nameText.setBounds(170, 20, 200, 24);
         add(nameText);
+        addMark(nameText);
     }
 
     @Override
     void setSize() {
-        this.setSize(385, 150);
+        this.setSize(385 + 35, 150);
     }
 
     @Override

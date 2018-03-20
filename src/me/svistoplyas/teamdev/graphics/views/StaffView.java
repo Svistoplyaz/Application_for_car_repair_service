@@ -1,6 +1,6 @@
-package me.svistoplyas.graphics.views;
+package me.svistoplyas.teamdev.graphics.views;
 
-import me.svistoplyas.graphics.MainFrame;
+import me.svistoplyas.teamdev.graphics.MainFrame;
 
 public class StaffView extends AbstractView {
 

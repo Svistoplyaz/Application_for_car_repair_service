@@ -1,10 +1,10 @@
-package me.svistoplyas.graphics.views;
+package me.svistoplyas.teamdev.graphics.views;
 
-import me.svistoplyas.graphics.MainFrame;
+import me.svistoplyas.teamdev.graphics.MainFrame;
 
-public class StatsView extends AbstractView {
+public class SparesView extends AbstractView {
 
-    public StatsView(MainFrame _mainFrame) {
+    public SparesView(MainFrame _mainFrame) {
         super(_mainFrame);
     }
 
@@ -35,6 +35,6 @@ public class StatsView extends AbstractView {
 
     @Override
     public String toString() {
-        return "Статистика";
+        return "Зап. части";
     }
 }
