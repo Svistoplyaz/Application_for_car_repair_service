@@ -2,6 +2,8 @@ package net.web_kot.teamdev.db.entities;
 
 import net.web_kot.teamdev.db.Model;
 
+import java.util.List;
+
 @SuppressWarnings("SqlResolve")
 public class Mark extends AbstractEntity {
     
@@ -51,6 +53,13 @@ public class Mark extends AbstractEntity {
         Mark other = (Mark)o;
         
         return id == other.id;
+    }
+    
+    public List<VehicleModel> getVehiclesModels() throws Exception {
+        return model.getList(
+                VehicleModel.class, 
+                model.db().formatQuery("SELECT * FROM Model WHERE PK_Mark = %d", id)
+        );
     }
     
 }
