@@ -1,22 +1,20 @@
-package me.svistoplyas.graphics.editForms;
+package me.svistoplyas.teamdev.graphics.editForms;
 
 import javafx.util.Pair;
-import me.svistoplyas.graphics.ImageLoader;
+import me.svistoplyas.teamdev.graphics.ImageLoader;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 
 import static java.lang.Integer.parseInt;
 
 public abstract class AbstractEdit extends JDialog {
     ArrayList<Pair<String, JComponent>> components = new ArrayList<>();
-    HashMap<JComponent, Pair<Integer, Integer>> marks = new HashMap<>();
-    HashSet<JComponent> baddies = new HashSet<>();
+    //    HashMap<JComponent, Pair<Integer, Integer>> marks = new HashMap<>();
+    HashMap<JComponent, Boolean> baddies = new HashMap<>();
     ImageLoader imageLoader = ImageLoader.getInstance();
+    HashMap<JComponent, JLabel> marks = new HashMap<>();
 
     public AbstractEdit(JFrame frame, boolean isEdit, Object data) {
         super(frame, isEdit ? "Редактирование записи" : "Добавление записи", true);
@@ -35,7 +33,10 @@ public abstract class AbstractEdit extends JDialog {
                             //throw new RuntimeException("Все поля обязательны для заполнения");
                         case 1:
                             //throw new RuntimeException("Не все поля верно заполнены");
-                            baddies.add(component.getValue());
+                            baddies.put(component.getValue(), true);
+                            break;
+                        default:
+                            baddies.put(component.getValue(), false);
                     }
                 }
                 int i = 1;
@@ -128,30 +129,34 @@ public abstract class AbstractEdit extends JDialog {
     }
 
     public void redraw() {
-        repaint();
-
-        for (JComponent component : marks.keySet()) {
-            Pair<Integer, Integer> pair = marks.get(component);
+        for (JComponent component : baddies.keySet()) {
+            Boolean filledWrong = baddies.get(component);
             String file;
-            if (baddies.contains(component))
+            if (filledWrong)
                 file = "resources/images/letter-x.png";
             else
                 file = "resources/images/correct-symbol.png";
 
-            JLabel label = new JLabel(new ImageIcon(imageLoader.getImage(file)));
-            label.setBounds(pair.getKey(), pair.getValue(), 24, 24);
-            add(label);
+            if (marks.get(component) == null) {
+                JLabel label = new JLabel(new ImageIcon(imageLoader.getImage(file)));
+                label.setBounds(component.getX() + component.getWidth() + 10, component.getY(), 24, 24);
+                add(label);
+                marks.put(component, label);
+            }else{
+                marks.get(component).setIcon(new ImageIcon(imageLoader.getImage(file)));
+            }
         }
+
+        repaint();
     }
 
-    public void addMark(JComponent component, int x, int y, String type) {
+    //
+    public void addMark(JComponent component, String type) {
         components.add(new Pair<>(type, component));
-        marks.put(component, new Pair<>(x, y));
     }
 
-    public void addMark(JComponent component, int x, int y) {
+    public void addMark(JComponent component) {
         components.add(new Pair<>("", component));
-        marks.put(component, new Pair<>(x, y));
     }
 
 }

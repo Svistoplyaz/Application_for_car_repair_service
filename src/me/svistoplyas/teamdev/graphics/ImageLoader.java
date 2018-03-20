@@ -1,11 +1,9 @@
-package me.svistoplyas.graphics;
+package me.svistoplyas.teamdev.graphics;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
-import java.util.StringTokenizer;
 
 public class ImageLoader {
     private HashMap<String, BufferedImage> map = new HashMap<>();

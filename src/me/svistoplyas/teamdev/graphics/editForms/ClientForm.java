@@ -1,4 +1,4 @@
-package me.svistoplyas.graphics.editForms;
+package me.svistoplyas.teamdev.graphics.editForms;
 
 import javax.swing.*;
 
@@ -15,6 +15,7 @@ public class ClientForm extends AbstractEdit {
         JTextField fioText = new JTextField();
         fioText.setBounds(170, 20, 200, 24);
         add(fioText);
+        addMark(fioText);
 
         //Телефон
         JLabel phoneLabel = new JLabel("Телефон клиента");
@@ -24,11 +25,12 @@ public class ClientForm extends AbstractEdit {
         JTextField phoneText = new JTextField();
         phoneText.setBounds(170, 20 + 30, 200, 24);
         add(phoneText);
+        addMark(phoneText);
     }
 
     @Override
     void setSize() {
-        this.setSize(385, 200);
+        this.setSize(385 + 35, 200);
     }
 
     @Override

@@ -1,10 +1,10 @@
-package me.svistoplyas.graphics.views;
+package me.svistoplyas.teamdev.graphics.views;
 
-import me.svistoplyas.graphics.MainFrame;
+import me.svistoplyas.teamdev.graphics.MainFrame;
 
-public class ReservedView extends AbstractView {
+public class ProfitView extends AbstractView {
 
-    public ReservedView(MainFrame _mainFrame) {
+    public ProfitView(MainFrame _mainFrame) {
         super(_mainFrame);
     }
 
@@ -35,6 +35,6 @@ public class ReservedView extends AbstractView {
 
     @Override
     public String toString() {
-        return "Заброннированные детали";
+        return "Расходы и доходы";
     }
 }

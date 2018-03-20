@@ -1,8 +1,8 @@
-package me.svistoplyas.graphics.views;
+package me.svistoplyas.teamdev.graphics.views;
 
-import me.svistoplyas.graphics.MainFrame;
-import me.svistoplyas.graphics.editForms.AbstractEdit;
-import me.svistoplyas.graphics.editForms.OrderForm;
+import me.svistoplyas.teamdev.graphics.MainFrame;
+import me.svistoplyas.teamdev.graphics.editForms.AbstractEdit;
+import me.svistoplyas.teamdev.graphics.editForms.OrderForm;
 
 public class OrdersView extends AbstractView {
 

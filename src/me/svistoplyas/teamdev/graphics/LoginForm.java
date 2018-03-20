@@ -1,6 +1,6 @@
-package me.svistoplyas.graphics;
+package me.svistoplyas.teamdev.graphics;
 
-import me.svistoplyas.Main;
+import me.svistoplyas.teamdev.Main;
 
 import javax.swing.*;
 import java.awt.*;
