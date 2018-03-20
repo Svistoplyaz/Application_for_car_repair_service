@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS Service_price (
   PK_Service INTEGER NOT NULL 
     REFERENCES Service(PK_Service)
     ON DELETE CASCADE,
-  PRIMARY KEY (PK_Service_price, PK_Service)
+  PRIMARY KEY (PK_Service_price, PK_Service) -- TODO
 );
 
 ---
@@ -33,13 +33,12 @@ CREATE TABLE IF NOT EXISTS Mark (
 ---
 
 CREATE TABLE IF NOT EXISTS Model (
-  PK_Model INTEGER NOT NULL,
+  PK_Model INTEGER PRIMARY KEY NOT NULL,
   Name TEXT(40) NOT NULL,
   Year INTEGER NOT NULL,
   PK_Mark INTEGER NOT NULL
     REFERENCES Mark(PK_Mark)
-    ON DELETE RESTRICT,
-  PRIMARY KEY (PK_Model, PK_Mark)
+    ON DELETE RESTRICT
 );
 
 ---
@@ -69,7 +68,7 @@ CREATE TABLE IF NOT EXISTS Status (
   PK_Order INTEGER NOT NULL
     REFERENCES `Order`(PK_Order)
     ON DELETE CASCADE,
-  PRIMARY KEY (PK_Status, PK_Order)
+  PRIMARY KEY (PK_Status, PK_Order) -- TODO
 );
 
 ---
@@ -83,5 +82,5 @@ CREATE TABLE IF NOT EXISTS Order_Service (
     REFERENCES Service(PK_Service)
     ON DELETE RESTRICT,
   Date INTEGER NOT NULL,
-  PRIMARY KEY (PK_Order_Service, PK_Order, PK_Service)
+  PRIMARY KEY (PK_Order_Service, PK_Order, PK_Service) -- TODO
 );
