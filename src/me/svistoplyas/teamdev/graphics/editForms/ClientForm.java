@@ -1,8 +1,12 @@
 package me.svistoplyas.teamdev.graphics.editForms;
 
+import net.web_kot.teamdev.db.entities.Client;
+
 import javax.swing.*;
 
 public class ClientForm extends AbstractEdit {
+    private JTextField fioText;
+    private JTextField phoneText;
 
     public ClientForm(JFrame frame, boolean isEdit, Object data) {
         super(frame, isEdit, data);
@@ -12,7 +16,7 @@ public class ClientForm extends AbstractEdit {
         fioLabel.setBounds(10, 20, 120, 24);
         add(fioLabel);
 
-        JTextField fioText = new JTextField();
+        fioText = new JTextField();
         fioText.setBounds(170, 20, 200, 24);
         add(fioText);
         addMark(fioText);
@@ -22,15 +26,25 @@ public class ClientForm extends AbstractEdit {
         phoneLabel.setBounds(10, 20 + 30, 120, 24);
         add(phoneLabel);
 
-        JTextField phoneText = new JTextField();
+        phoneText = new JTextField();
         phoneText.setBounds(170, 20 + 30, 200, 24);
         add(phoneText);
         addMark(phoneText);
+
+        if (isEdit)
+            fillFields(data);
     }
 
     @Override
     void setSize() {
         this.setSize(385 + 35, 200);
+    }
+
+    @Override
+    public void fillFields(Object data) {
+        Client object = (Client) data;
+        fioText.setText(object.getName());
+        phoneText.setText(object.getPhone());
     }
 
     @Override

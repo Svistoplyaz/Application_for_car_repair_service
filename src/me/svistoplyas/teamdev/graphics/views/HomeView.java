@@ -21,6 +21,11 @@ public class HomeView extends AbstractView {
     }
 
     @Override
+    Object getObject(int row) {
+        return null;
+    }
+
+    @Override
     boolean canAdd() {
         return true;
     }
@@ -33,6 +38,11 @@ public class HomeView extends AbstractView {
     @Override
     boolean canDelete() {
         return mainFrame.type;
+    }
+
+    @Override
+    void performDelete(int row) throws Exception {
+        mainFrame.model.getOrders().get(row).delete();
     }
 
     @Override

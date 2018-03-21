@@ -3,6 +3,12 @@ package me.svistoplyas.teamdev.graphics.views;
 import me.svistoplyas.teamdev.graphics.MainFrame;
 import me.svistoplyas.teamdev.graphics.editForms.AbstractEdit;
 import me.svistoplyas.teamdev.graphics.editForms.OrderForm;
+import net.web_kot.teamdev.db.entities.Client;
+import net.web_kot.teamdev.db.entities.Order;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class OrdersView extends AbstractView {
 
@@ -17,7 +23,34 @@ public class OrdersView extends AbstractView {
 
     @Override
     Object[][] getData() {
-        return new Object[0][];
+        try {
+            List<Order> orders = mainFrame.model.getOrders();
+            Object[][] ans = new Object[orders.size()][];
+            DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
+            int i = 0;
+            for (Order order : orders) {
+                ans[i] = new Object[]{order.getClient(), "", order.getRegistrationNumber(),
+                        df.format(order.getStartDate()), "",
+                        order.getVehicleModel().getMark(), order.getVehicleModel()};
+                i++;
+            }
+
+            return ans;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    Object getObject(int row) {
+        try {
+            return mainFrame.model.getOrders().get(row);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -33,6 +66,11 @@ public class OrdersView extends AbstractView {
     @Override
     boolean canDelete() {
         return mainFrame.type;
+    }
+
+    @Override
+    void performDelete(int row) throws Exception {
+        mainFrame.model.getOrders().get(row).delete();
     }
 
     @Override

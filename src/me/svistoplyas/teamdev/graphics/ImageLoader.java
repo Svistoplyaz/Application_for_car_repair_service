@@ -20,7 +20,7 @@ public class ImageLoader {
         if (!map.containsKey(str))
             try {
                 map.put(str, ImageIO.read(new File(str)));
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 

@@ -1,20 +1,24 @@
 package me.svistoplyas.teamdev.graphics;
 
 import me.svistoplyas.teamdev.graphics.views.*;
+import net.web_kot.teamdev.db.Model;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
 public class MainFrame extends JFrame {
+    public Model model;
     private final HashMap<String, AbstractView> views = new HashMap<>();
     public static final Loading loading = new Loading();
     public JPanel navigation, content;
     public boolean type;
 
-    public MainFrame(boolean _type) {
+    public MainFrame(boolean _type, Model _model) {
         super("Реестр имущества студенческого городка");
         type = _type;
+        model = _model;
+
         getContentPane().setPreferredSize(new Dimension(970 + 60, 420 + 83 + 30));
         setLayout(null);
 

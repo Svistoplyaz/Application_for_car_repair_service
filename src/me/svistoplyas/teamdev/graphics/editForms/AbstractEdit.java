@@ -2,6 +2,7 @@ package me.svistoplyas.teamdev.graphics.editForms;
 
 import javafx.util.Pair;
 import me.svistoplyas.teamdev.graphics.ImageLoader;
+import me.svistoplyas.teamdev.graphics.MainFrame;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -15,9 +16,11 @@ public abstract class AbstractEdit extends JDialog {
     HashMap<JComponent, Boolean> baddies = new HashMap<>();
     ImageLoader imageLoader = ImageLoader.getInstance();
     HashMap<JComponent, JLabel> marks = new HashMap<>();
+    MainFrame mainFrame;
 
     public AbstractEdit(JFrame frame, boolean isEdit, Object data) {
         super(frame, isEdit ? "Редактирование записи" : "Добавление записи", true);
+        mainFrame = (MainFrame) frame;
         this.setLayout(null);
         setSize();
 
@@ -92,6 +95,8 @@ public abstract class AbstractEdit extends JDialog {
         return true;
     }
 
+    public abstract void fillFields(Object data);
+
     public abstract void performAdd();
 
     public abstract void performEdit();
@@ -142,7 +147,7 @@ public abstract class AbstractEdit extends JDialog {
                 label.setBounds(component.getX() + component.getWidth() + 10, component.getY(), 24, 24);
                 add(label);
                 marks.put(component, label);
-            }else{
+            } else {
                 marks.get(component).setIcon(new ImageIcon(imageLoader.getImage(file)));
             }
         }

@@ -9,7 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public abstract class AbstractView extends JPanel {
-    private JTable table;
+    JTable table;
     private JButton add, edit, delete;
     MainFrame mainFrame;
 
@@ -51,15 +51,18 @@ public abstract class AbstractView extends JPanel {
             edit = new JButton("Изменить");
             edit.addActionListener((e) -> {
                 int row = table.getSelectedRow();
-                try {
-                    AbstractEdit b = getEdit(true, new Object());
-                    b.setVisible(true);
+                if (row != -1)
+                    try {
+                        AbstractEdit b = getEdit(true, getObject(row));
+                        b.setVisible(true);
 
-                    if (b.changed())
-                        b.performEdit();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                        if (b.changed())
+                            b.performEdit();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                else
+                    JOptionPane.showMessageDialog(this, "Выберите элемент из таблицы для изменения");
             });
             setBtBounds(edit, 1);
             add(edit);
@@ -68,21 +71,35 @@ public abstract class AbstractView extends JPanel {
         if (canDelete()) {
             delete = new JButton("Удалить");
             delete.addActionListener((e) -> {
-                String text = "Вы действительно хотите удалить выбранную запись?";
-//            if(JOptionPane.showConfirmDialog(this, text, "Подтверждение", JOptionPane.YES_NO_OPTION,
-//                    JOptionPane.INFORMATION_MESSAGE, null, new String[]{"Да", "Нет"}) != 0) return;
-
-                JOptionPane.showOptionDialog(this,
-                        "Do you like this answer?",
-                        "Подтверждение",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.INFORMATION_MESSAGE,
-                        null,
-                        new String[]{"Да", "Нет"}, // this is the array
-                        "default");
-
                 int row = table.getSelectedRow();
-                //Удаление выбранной записи
+                if (row != -1) {
+                    String text = "Вы действительно хотите удалить выбранную запись?";
+    //            if(JOptionPane.showConfirmDialog(this, text, "Подтверждение", JOptionPane.YES_NO_OPTION,
+    //                    JOptionPane.INFORMATION_MESSAGE, null, new String[]{"Да", "Нет"}) != 0) return;
+
+                    if(JOptionPane.showOptionDialog(this,
+                            "Вы действительно хотите удалить выбранную запись?",
+                            "Подтверждение",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE,
+                            null,
+                            new String[]{"Да", "Нет"},
+                            "default")!= 0) return;
+                    else {
+                        try {
+                            AbstractView.this.performDelete(row);
+                            ((TableModel)table.getModel()).setData(getData());
+                            mainFrame.repaint();
+                        }catch (Exception ex){
+                            JOptionPane.showMessageDialog(this, "Невозможно удалить элемент",
+                                    "Внимание!", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+
+                    //Удаление выбранной записи
+                }else
+                    JOptionPane.showMessageDialog(this, "Выберите элемент из таблицы для удаления",
+                            "Внимание!", JOptionPane.INFORMATION_MESSAGE);
             });
             setBtBounds(delete, 2);
             add(delete);
@@ -126,11 +143,15 @@ public abstract class AbstractView extends JPanel {
 
     abstract Object[][] getData();
 
+    abstract Object getObject(int row);
+
     abstract boolean canAdd();
 
     abstract boolean canEdit();
 
     abstract boolean canDelete();
+
+    abstract void performDelete(int row) throws Exception;
 
     private static void setBtBounds(JButton button, int index) {
         button.setBounds(10 + 295 * index, 440, 190, 60);

@@ -19,6 +19,11 @@ public class SparesView extends AbstractView {
     }
 
     @Override
+    Object getObject(int row) {
+        return null;
+    }
+
+    @Override
     boolean canAdd() {
         return false;
     }
@@ -31,6 +36,11 @@ public class SparesView extends AbstractView {
     @Override
     boolean canDelete() {
         return false;
+    }
+
+    @Override
+    void performDelete(int row) {
+
     }
 
     @Override

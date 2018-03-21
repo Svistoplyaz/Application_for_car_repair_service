@@ -3,8 +3,8 @@ package me.svistoplyas.teamdev.graphics;
 import javax.swing.table.AbstractTableModel;
 
 public class TableModel extends AbstractTableModel {
-    private String[] columnNames = {"1", "2"};
-    private Object[][] data = {{"Leonid", "Grisha"}, {"Barmaley", "Peter"}};
+    private String[] columnNames;
+    private Object[][] data;
 
     public TableModel(String[] _columnNames, Object[][] _data) {
         columnNames = _columnNames;
@@ -29,6 +29,14 @@ public class TableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         return data[rowIndex][columnIndex];
+    }
+
+    public Object[] getValueAt(int rowIndex) {
+        return data[rowIndex];
+    }
+
+    public void setData(Object[][] data) {
+        this.data = data;
     }
 
     @Override

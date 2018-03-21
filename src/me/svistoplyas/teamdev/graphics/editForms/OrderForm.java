@@ -1,6 +1,11 @@
 package me.svistoplyas.teamdev.graphics.editForms;
 
 import me.svistoplyas.teamdev.graphics.TableModel;
+import net.web_kot.teamdev.db.Model;
+import net.web_kot.teamdev.db.entities.Client;
+import net.web_kot.teamdev.db.entities.Mark;
+import net.web_kot.teamdev.db.entities.Order;
+import net.web_kot.teamdev.db.entities.VehicleModel;
 import org.jdatepicker.DateModel;
 import org.jdatepicker.JDatePicker;
 
@@ -9,24 +14,33 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class OrderForm extends AbstractEdit {
+    JComboBox<Client> clientCombo;
+    JComboBox<String> workerCombo;
+    JTextField numberText;
+    JComboBox<Mark> markCombo;
+    JComboBox<VehicleModel> modelCombo;
+    JButton back;
+    JButton forward;
+    JLabel curLabel;
     JSpinner spinnerIn;
     JDatePicker datePickerIn;
     JSpinner spinnerOut;
     JDatePicker datePickerOut;
+    boolean isEdit;
 
-    int firstrow = 10, secondrow = 170;
+    int firstRow = 10, secondRow = 170;
 
-
-    public OrderForm(JFrame frame, boolean isEdit, Object data) {
-        super(frame, isEdit, data);
+    public OrderForm(JFrame frame, boolean _isEdit, Object data) {
+        super(frame, _isEdit, data);
+        isEdit = _isEdit;
 
         //Клиент
         JLabel clientLabel = new JLabel("Клиент");
-        clientLabel.setBounds(firstrow, 20, 120, 24);
+        clientLabel.setBounds(firstRow, 20, 120, 24);
         add(clientLabel);
 
-        JComboBox<String> clientCombo = new JComboBox<>();
-        clientCombo.setBounds(secondrow, 20, 200, 24);
+        clientCombo = new JComboBox<>();
+        clientCombo.setBounds(secondRow, 20, 200, 24);
         add(clientCombo);
         addMark(clientCombo);
 
@@ -34,11 +48,11 @@ public class OrderForm extends AbstractEdit {
 
         //Ответственный
         JLabel workerLabel = new JLabel("Ответственный");
-        workerLabel.setBounds(firstrow, previous + 30, 120, 24);
+        workerLabel.setBounds(firstRow, previous + 30, 120, 24);
         add(workerLabel);
 
-        JComboBox<String> workerCombo = new JComboBox<>();
-        workerCombo.setBounds(secondrow, previous + 30, 200, 24);
+        workerCombo = new JComboBox<>();
+        workerCombo.setBounds(secondRow, previous + 30, 200, 24);
         add(workerCombo);
         addMark(workerCombo);
 
@@ -46,11 +60,11 @@ public class OrderForm extends AbstractEdit {
 
         //Рег. номер
         JLabel numberLabel = new JLabel("Телефон клиента");
-        numberLabel.setBounds(firstrow, previous + 30, 120, 24);
+        numberLabel.setBounds(firstRow, previous + 30, 120, 24);
         add(numberLabel);
 
-        JTextField numberText = new JTextField();
-        numberText.setBounds(secondrow, previous + 30, 200, 24);
+        numberText = new JTextField();
+        numberText.setBounds(secondRow, previous + 30, 200, 24);
         add(numberText);
         addMark(numberText, "Phone");
 
@@ -58,11 +72,11 @@ public class OrderForm extends AbstractEdit {
 
         //Марка
         JLabel markLabel = new JLabel("Марка");
-        markLabel.setBounds(firstrow, previous + 30, 120, 24);
+        markLabel.setBounds(firstRow, previous + 30, 120, 24);
         add(markLabel);
 
-        JComboBox<String> markCombo = new JComboBox<>();
-        markCombo.setBounds(secondrow, previous + 30, 200, 24);
+        markCombo = new JComboBox<>();
+        markCombo.setBounds(secondRow, previous + 30, 200, 24);
         add(markCombo);
         addMark(markCombo);
 
@@ -70,11 +84,11 @@ public class OrderForm extends AbstractEdit {
 
         //Модель
         JLabel modelLabel = new JLabel("Модель");
-        modelLabel.setBounds(firstrow, previous + 30, 120, 24);
+        modelLabel.setBounds(firstRow, previous + 30, 120, 24);
         add(modelLabel);
 
-        JComboBox<String> modelCombo = new JComboBox<>();
-        modelCombo.setBounds(secondrow, previous + 30, 200, 24);
+        modelCombo = new JComboBox<>();
+        modelCombo.setBounds(secondRow, previous + 30, 200, 24);
         add(modelCombo);
         addMark(modelCombo);
 
@@ -82,20 +96,20 @@ public class OrderForm extends AbstractEdit {
 
         //Статус
         JLabel statusLabel = new JLabel("Статус:");
-        statusLabel.setBounds(firstrow, previous + 30, 120, 24);
+        statusLabel.setBounds(firstRow, previous + 30, 120, 24);
         add(statusLabel);
 
-        JLabel curLabel = new JLabel("Предварительный заказ");
-        curLabel.setBounds(secondrow, previous + 30, 200, 24);
+        curLabel = new JLabel("Предварительный заказ");
+        curLabel.setBounds(secondRow, previous + 30, 200, 24);
         add(curLabel);
 
         previous += 30;
 
-        JButton back = new JButton("Back");
-        back.setBounds(secondrow, previous + 30, 95, 24);
+        back = new JButton("Back");
+        back.setBounds(secondRow, previous + 30, 95, 24);
         add(back);
 
-        JButton forward = new JButton("Forward");
+        forward = new JButton("Forward");
         forward.setBounds(275, previous + 30, 95, 24);
         add(forward);
 
@@ -103,17 +117,17 @@ public class OrderForm extends AbstractEdit {
 
         //Таблица с историей статусов
         JTable table = new JTable(new TableModel(new String[]{"Статус", "Дата"}, new Object[0][]));
-//        table.setBounds(firstrow, previous + 30, 320, 134);
+//        table.setBounds(firstRow, previous + 30, 320, 134);
 
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(firstrow, previous + 30, 360, 134);
+        scrollPane.setBounds(firstRow, previous + 30, 360, 134);
         add(scrollPane);
 
         previous += 140;
 
         //Дата и время приёма
         JLabel inDateLabel = new JLabel("Дата и время приёма");
-        inDateLabel.setBounds(firstrow, previous + 30, 120, 24);
+        inDateLabel.setBounds(firstRow, previous + 30, 120, 24);
         add(inDateLabel);
 
         Date date = new Date();
@@ -121,40 +135,84 @@ public class OrderForm extends AbstractEdit {
         spinnerIn = new javax.swing.JSpinner(smIn);
         JSpinner.DateEditor deIn = new JSpinner.DateEditor(spinnerIn, "HH:mm:ss");
         spinnerIn.setEditor(deIn);
-        spinnerIn.setBounds(secondrow, previous + 30, 200, 24);
+        spinnerIn.setBounds(secondRow, previous + 30, 200, 24);
         add(spinnerIn);
 
         previous += 30;
 
         datePickerIn = new JDatePicker(date);
-        datePickerIn.setBounds(secondrow, previous + 30, 200, 24);
+        datePickerIn.setBounds(secondRow, previous + 30, 200, 24);
         add(datePickerIn);
 
         previous += 30;
 
         //Дата и время выдачи
         JLabel outDateLabel = new JLabel("Дата и время приёма");
-        outDateLabel.setBounds(firstrow, previous + 30, 120, 24);
+        outDateLabel.setBounds(firstRow, previous + 30, 120, 24);
         add(outDateLabel);
 
         SpinnerDateModel smOut = new SpinnerDateModel(date, null, null, Calendar.HOUR_OF_DAY);
         spinnerOut = new javax.swing.JSpinner(smOut);
         JSpinner.DateEditor deOut = new JSpinner.DateEditor(spinnerOut, "HH:mm:ss");
         spinnerOut.setEditor(deOut);
-        spinnerOut.setBounds(secondrow, previous + 30, 200, 24);
+        spinnerOut.setBounds(secondRow, previous + 30, 200, 24);
         add(spinnerOut);
 
         previous += 30;
 
         datePickerOut = new JDatePicker(date);
-        datePickerOut.setBounds(secondrow, previous + 30, 200, 24);
+        datePickerOut.setBounds(secondRow, previous + 30, 200, 24);
         add(datePickerOut);
 
+        fillFields(data);
     }
 
     @Override
     void setSize() {
         this.setSize(600, 600);
+    }
+
+    @Override
+    public void fillFields(Object data) {
+        Order order = (Order) data;
+
+        try {
+            for (Client client : mainFrame.model.getClients())
+                clientCombo.addItem(client);
+            clientCombo.setSelectedItem(order.getClient());
+
+            for (Mark mark : mainFrame.model.getMarks())
+                markCombo.addItem(mark);
+            markCombo.setSelectedItem(order.getVehicleModel().getMark());
+
+            numberText.setText(order.getRegistrationNumber());
+
+            for (VehicleModel model : mainFrame.model.getVehiclesModels())
+                modelCombo.addItem(model);
+            modelCombo.setSelectedItem(order.getVehicleModel());
+
+            Date date = order.getStartDate();
+            spinnerIn.getModel().setValue(date);
+            datePickerIn.getModel().setDate(date.getYear(), date.getMonth(), date.getDay());
+
+            date = order.getFinishDate();
+            if (date != null) {
+                spinnerOut.getModel().setValue(date);
+                datePickerOut.getModel().setDate(date.getYear(), date.getMonth(), date.getDay());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void changeMark() {
+        try {
+            for (VehicleModel model : ((Mark) markCombo.getSelectedItem()).getVehiclesModels())
+                modelCombo.addItem(model);
+            modelCombo.setSelectedItem(0);
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
@@ -171,6 +229,7 @@ public class OrderForm extends AbstractEdit {
         date.setMonth(model.getMonth());
         date.setYear(model.getYear());
         System.out.println(date.toString());
+
     }
 
 }
