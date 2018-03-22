@@ -332,7 +332,7 @@ public class OrderForm extends AbstractEdit {
         date = ((SpinnerDateModel) spinnerIn.getModel()).getDate();
         DateModel model = datePickerIn.getModel();
         date.setDate(model.getDay());
-        date.setMonth(model.getMonth() - 1);
+        date.setMonth(model.getMonth());
         date.setYear(model.getYear() - 1900);
 
         try {
@@ -359,7 +359,7 @@ public class OrderForm extends AbstractEdit {
         date = ((SpinnerDateModel) spinnerOut.getModel()).getDate();
         model = datePickerOut.getModel();
         date.setDate(model.getDay());
-        date.setMonth(model.getMonth() - 1);
+        date.setMonth(model.getMonth());
         date.setYear(model.getYear() - 1900);
         order.setFinishDate(date);
 
