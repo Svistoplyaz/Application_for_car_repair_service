@@ -8,6 +8,7 @@ import net.web_kot.teamdev.db.entities.Order;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class OrdersView extends AbstractView {
@@ -83,7 +84,7 @@ public class OrdersView extends AbstractView {
 
     @Override
     public AbstractEdit getEdit(boolean b, Object o) {
-        return new OrderForm(mainFrame, b, o);
+        return new OrderForm(mainFrame, b, o, new Date());
     }
 
     @Override

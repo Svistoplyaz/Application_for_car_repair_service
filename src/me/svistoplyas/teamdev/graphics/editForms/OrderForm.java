@@ -37,7 +37,7 @@ public class OrderForm extends AbstractEdit {
     private int firstRow = 10, secondRow = 170, thirdRow = 420, fourthRow = 670;
     private int previous;
 
-    public OrderForm(JFrame frame, boolean _isEdit, Object data) {
+    public OrderForm(JFrame frame, boolean _isEdit, Object data, Date date) {
         super(frame, _isEdit, data);
         isEdit = _isEdit;
 
@@ -137,7 +137,7 @@ public class OrderForm extends AbstractEdit {
         inDateLabel.setBounds(firstRow, previous + 30, 120, 24);
         add(inDateLabel);
 
-        Date date = new Date();
+        //Date date = registerDate;
         SpinnerDateModel smIn = new SpinnerDateModel(date, null, null, Calendar.HOUR_OF_DAY);
         spinnerIn = new javax.swing.JSpinner(smIn);
         JSpinner.DateEditor deIn = new JSpinner.DateEditor(spinnerIn, "HH:mm:ss");

@@ -31,7 +31,7 @@ public class HomeView extends AbstractView {
         panel.addActionListener((e) -> {
             DateModel<?> model = panel.getModel();
             
-            GregorianCalendar calendar = new GregorianCalendar(model.getYear(), model.getMonth(), model.getDay());
+            GregorianCalendar calendar = new GregorianCalendar(model.getYear(), model.getMonth(), model.getDay(), 12, 0);
             date = calendar.getTime();
             
             updateTable();
@@ -95,7 +95,7 @@ public class HomeView extends AbstractView {
 
     @Override
     public AbstractEdit getEdit(boolean b, Object o) {
-        return new OrderForm(mainFrame, b, o);
+        return new OrderForm(mainFrame, b, o, date);
     }
 
     @Override
