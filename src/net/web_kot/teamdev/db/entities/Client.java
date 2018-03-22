@@ -51,7 +51,7 @@ public class Client extends AbstractEntity {
     
     @Override
     public String toString() {
-        return String.format("%d: %s (%s)", id, name, phone);
+        return String.format("%s (%s)", name, phone);
     }
     
     @Override

@@ -58,7 +58,7 @@ public class VehicleModel extends AbstractEntity {
     @Override
     public String toString() {
         try {
-            return String.format("%d: %s %d (%s)", id, name, year, getMark().toString());
+            return String.format("%s %s %d", getMark().getName(), name, year);
         } catch(Exception e) {
             e.printStackTrace();
             return "ERROR";
