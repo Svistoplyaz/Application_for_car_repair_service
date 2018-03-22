@@ -53,7 +53,7 @@ public class HomeView extends AbstractView {
             
             for(int i = 0; i < orders.size(); i++) {
                 Order order = orders.get(i);
-                ans[i] = new Object[]{order.getClient(), order.getRegistrationNumber(), order.getCurrentStatus()};
+                ans[i] = new Object[]{order.getClient(), order.getRegistrationNumber(), order.getCurrentStatus(),order};
             }
             
             return ans;
@@ -66,7 +66,7 @@ public class HomeView extends AbstractView {
     @Override
     Object getObject(int row) {
         try {
-            return mainFrame.model.getOrders().get(row);
+            return (Order)mainFrame.getView("Home").table.getModel().getValueAt(row, 3);
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -90,7 +90,8 @@ public class HomeView extends AbstractView {
 
     @Override
     void performDelete(int row) throws Exception {
-        mainFrame.model.getOrders().get(row).delete();
+        ((Order)mainFrame.getView("Home").table.getModel().getValueAt(row, 3)).delete();
+//        mainFrame.model.getOrders().get(row).delete();
     }
 
     @Override
