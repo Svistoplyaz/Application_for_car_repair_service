@@ -57,6 +57,17 @@ public class Service extends AbstractEntity {
         return result.getInt(1);
     }
     
+    public int getPriceForOrder(Order order) throws Exception {
+        if(order == null) return getPrice();
+        ResultSet result = model.db().select(
+                "SELECT Date FROM Order_Service WHERE PK_Order = %d AND PK_Service = %d",
+                order.getId(), id
+        );
+        
+        if(!result.next()) return getPrice();
+        return getPrice(new Date(result.getLong(1)));
+    }
+    
     public Service setPrice(int price) throws Exception {
         model.db().insert(
                 "INSERT INTO Service_price(`Date`, Price, PK_Service) VALUES (%d, %d, %d)",

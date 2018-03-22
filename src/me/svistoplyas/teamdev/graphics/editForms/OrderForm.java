@@ -440,6 +440,7 @@ public class OrderForm extends AbstractEdit {
     }
 
     private Object[][] getDataServiceLeft() {
+        Order order = (Order)data;
         try {
             List<Service> services = mainFrame.model.getServices();
             if (isEdit) {
@@ -450,7 +451,7 @@ public class OrderForm extends AbstractEdit {
                 int i = 0;
                 for (Service service : services) {
                     if (!hasServices.contains(service))
-                        ans[i] = new Object[]{service.getName(), Converter.getInstance().convertPriceToStr(service.getPrice()), service};
+                        ans[i] = new Object[]{service.getName(), Converter.getInstance().convertPriceToStr(service.getPriceForOrder(order)), service};
                     i++;
                 }
 
@@ -473,6 +474,7 @@ public class OrderForm extends AbstractEdit {
     }
 
     private Object[][] getDataServiceRight() {
+        Order order = (Order)data;
         try {
             if (isEdit) {
                 List<Service> hasServices = ((Order) data).getServices();
@@ -481,7 +483,7 @@ public class OrderForm extends AbstractEdit {
 
                 int i = 0;
                 for (Service service : hasServices) {
-                    ans[i] = new Object[]{service.getName(), Converter.getInstance().convertPriceToStr(service.getPrice()), service};
+                    ans[i] = new Object[]{service.getName(), Converter.getInstance().convertPriceToStr(service.getPriceForOrder(order)), service};
                     i++;
                 }
 
