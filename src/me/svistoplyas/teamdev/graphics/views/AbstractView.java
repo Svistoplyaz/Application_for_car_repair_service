@@ -133,7 +133,7 @@ public abstract class AbstractView extends JPanel {
         return null;
     }
 
-    private void updateTable(){
+    public void updateTable(){
         ((TableModel)table.getModel()).setData(getData());
         mainFrame.repaint();
     }

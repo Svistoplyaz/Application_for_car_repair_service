@@ -1,11 +1,13 @@
 package net.web_kot.teamdev.db;
 
 import net.web_kot.teamdev.db.entities.*;
+import org.apache.commons.lang3.time.DateUtils;
 import org.intellij.lang.annotations.Language;
 
 import java.lang.reflect.Constructor;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -132,6 +134,16 @@ public class Model {
     
     public List<Order> getOrders() throws Exception {
         return getList(Order.class, "SELECT * FROM `Order`");
+    }
+    
+    public List<Order> getOrders(Date day) throws Exception {
+        long start = DateUtils.truncate(day, Calendar.DATE).getTime();
+        long end = DateUtils.addMilliseconds(DateUtils.ceiling(day, Calendar.DATE), -1).getTime();
+        
+        return getList(
+                Order.class, 
+                db.formatQuery("SELECT * FROM `Order` WHERE %d <= Start_date AND Start_date <= %d", start, end)
+        );
     }
     
 }
