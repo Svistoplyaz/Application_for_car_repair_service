@@ -27,15 +27,14 @@ public class OrdersView extends AbstractView {
         try {
             List<Order> orders = mainFrame.model.getOrders();
             Object[][] ans = new Object[orders.size()][];
-            DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
             int i = 0;
             for (Order order : orders) {
                 String worker = "";
-//                if(order.get)
 
                 String finishDate = "";
-                if (order.getFinishDate() == null)
+                if (order.getFinishDate() != null)
                     finishDate = df.format(order.getFinishDate());
 
                 ans[i] = new Object[]{order.getClient(), worker, order.getRegistrationNumber(),

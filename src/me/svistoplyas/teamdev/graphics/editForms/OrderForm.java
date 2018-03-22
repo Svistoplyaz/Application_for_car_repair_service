@@ -302,21 +302,23 @@ public class OrderForm extends AbstractEdit {
                 numberText.setText(order.getRegistrationNumber());
 
             modelCombo.removeAllItems();
-            for (VehicleModel model : ((Mark)markCombo.getSelectedItem()).getVehiclesModels())
-                modelCombo.addItem(model);
-            if (isEdit)
-                modelCombo.setSelectedItem(order.getVehicleModel());
+            if(markCombo.getItemCount() > 0) {
+                for (VehicleModel model : ((Mark) markCombo.getSelectedItem()).getVehiclesModels())
+                    modelCombo.addItem(model);
+                if (isEdit)
+                    modelCombo.setSelectedItem(order.getVehicleModel());
+            }
 
             if (isEdit) {
                 Date date = order.getStartDate();
                 spinnerIn.getModel().setValue(date);
 
-                datePickerIn.getModel().setDate(1900 + date.getYear(), date.getMonth(), date.getDay());
+                datePickerIn.getModel().setDate(1900 + date.getYear(), date.getMonth(), date.getDate());
 
                 date = order.getFinishDate();
                 if (date != null) {
                     spinnerOut.getModel().setValue(date);
-                    datePickerOut.getModel().setDate(1900 + date.getYear(), date.getMonth(), date.getDay());
+                    datePickerOut.getModel().setDate(1900 + date.getYear(), date.getMonth(), date.getDate());
                 }
             }
         } catch (Exception e) {
@@ -330,7 +332,7 @@ public class OrderForm extends AbstractEdit {
         date = ((SpinnerDateModel) spinnerIn.getModel()).getDate();
         DateModel model = datePickerIn.getModel();
         date.setDate(model.getDay());
-        date.setMonth(model.getMonth());
+        date.setMonth(model.getMonth() - 1);
         date.setYear(model.getYear() - 1900);
 
         try {
@@ -357,7 +359,7 @@ public class OrderForm extends AbstractEdit {
         date = ((SpinnerDateModel) spinnerOut.getModel()).getDate();
         model = datePickerOut.getModel();
         date.setDate(model.getDay());
-        date.setMonth(model.getMonth());
+        date.setMonth(model.getMonth() - 1);
         date.setYear(model.getYear() - 1900);
         order.setFinishDate(date);
 
@@ -425,11 +427,13 @@ public class OrderForm extends AbstractEdit {
 
     private void changeMark() {
         try {
-            modelCombo.removeAllItems();
-            for (VehicleModel model : ((Mark) markCombo.getSelectedItem()).getVehiclesModels())
-                modelCombo.addItem(model);
-            modelCombo.setSelectedItem(0);
-            repaint();
+            if(markCombo.getItemCount() > 0) {
+                modelCombo.removeAllItems();
+                for (VehicleModel model : ((Mark) markCombo.getSelectedItem()).getVehiclesModels())
+                    modelCombo.addItem(model);
+                modelCombo.setSelectedItem(0);
+                repaint();
+            }
         } catch (Exception e) {
 
         }

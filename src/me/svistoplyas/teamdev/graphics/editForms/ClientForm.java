@@ -29,7 +29,7 @@ public class ClientForm extends AbstractEdit {
         phoneText = new JTextField();
         phoneText.setBounds(170, 20 + 30, 200, 24);
         add(phoneText);
-        addMark(phoneText);
+        addMark(phoneText, "Phone");
 
         if (isEdit)
             fillFields();

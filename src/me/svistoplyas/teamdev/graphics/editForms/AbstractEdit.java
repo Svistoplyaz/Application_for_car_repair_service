@@ -8,11 +8,8 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static java.lang.Integer.parseInt;
-
 public abstract class AbstractEdit extends JDialog {
     ArrayList<Pair<String, JComponent>> components = new ArrayList<>();
-    //    HashMap<JComponent, Pair<Integer, Integer>> marks = new HashMap<>();
     HashMap<JComponent, Boolean> baddies = new HashMap<>();
     ImageLoader imageLoader = ImageLoader.getInstance();
     HashMap<JComponent, JLabel> marks = new HashMap<>();
@@ -51,35 +48,8 @@ public abstract class AbstractEdit extends JDialog {
                         performAdd();
                     AbstractEdit.this.setVisible(false);
                 }
-//
-//                if(nw && view.hasCustomAddAction()) {
-//                    Object[] values = new Object[fields.length];
-//                    for(int i = 0; i < fields.length; i++)
-//                        values[i] = getValue(getters[i].getReturnType().getCanonicalName(), components[i]);
-//
-//                    view.customAddAction(values);
-//                    Connection.getSession().evict(object);
-//                } else {
-//                    for(int i = 0; i < fields.length; i++)
-//                        if(fields[i].isEditable(nw, filter))
-//                            setters[i].invoke(object, getValue(getters[i].getReturnType().getCanonicalName(), components[i]));
-//
-//                    Session s = Connection.getSession();
-//                    s.beginTransaction();
-//                    try {
-//                        s.save(object);
-//                        s.getTransaction().commit();
-//                        if(nw) s.evict(object);
-//                    } catch(Exception ex) {
-//                        if(!nw) update = true; // ??? - s.refresh(object);
-//                        throw ex;
-//                    }
-//                }
-//
-//                update = true;
             } catch (Exception ex) {
                 ex.printStackTrace();
-                //Main.handleDatabaseException(ex);
             }
         });
         add(save);
@@ -96,10 +66,6 @@ public abstract class AbstractEdit extends JDialog {
     }
 
     abstract void setSize();
-
-    public boolean changed() {
-        return true;
-    }
 
     public abstract void fillFields();
 
@@ -119,7 +85,7 @@ public abstract class AbstractEdit extends JDialog {
                     if (str.length() != 5 && str.length() != 6 && str.length() != 7 && str.length() != 11)
                         return 1;
 
-                    Integer.parseInt(str);
+                    Long.parseLong(str);
                 } catch (Exception e) {
                     return 1;
                 }
