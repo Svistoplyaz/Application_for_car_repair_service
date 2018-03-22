@@ -1,8 +1,10 @@
 package me.svistoplyas.teamdev.graphics.editForms;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import me.svistoplyas.teamdev.graphics.TableModel;
 import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.entities.*;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jdatepicker.DateModel;
 import org.jdatepicker.JDatePicker;
 
@@ -19,10 +21,9 @@ public class OrderForm extends AbstractEdit {
     private JTextField numberText;
     private JComboBox<Mark> markCombo;
     private JComboBox<VehicleModel> modelCombo;
-    JLabel statusLabel;
-    JButton back;
-    JButton forward;
-    JLabel curLabel;
+    private JButton back;
+    private JButton forward;
+    private JLabel curLabel;
     private JSpinner spinnerIn;
     private JDatePicker datePickerIn;
     private JSpinner spinnerOut;
@@ -30,6 +31,8 @@ public class OrderForm extends AbstractEdit {
     private boolean isEdit;
     private ArrayList<Order.Status> statusArrayList = new ArrayList<>();
     private boolean generated = false;
+    private JTable tableServiceRight;
+    private JLabel finalPrice;
 
     private int firstRow = 10, secondRow = 170, thirdRow = 420, fourthRow = 670;
     private int previous;
@@ -88,6 +91,9 @@ public class OrderForm extends AbstractEdit {
         add(markCombo);
         if (isEdit)
             markCombo.setEnabled(false);
+        markCombo.addActionListener(e -> {
+            changeMark();
+        });
         addMark(markCombo);
 
         previous += 30;
@@ -119,7 +125,7 @@ public class OrderForm extends AbstractEdit {
         previous += 40;
 
         //Таблица с историей статусов
-        JTable table = new JTable(new TableModel(new String[]{"Статус", "Дата"}, new Object[0][]));
+        JTable table = new JTable(new TableModel(new String[]{"Статус", "Дата"}, getStatusTableData()));
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(firstRow, previous + 30, 360, 134);
         add(scrollPane);
@@ -180,7 +186,7 @@ public class OrderForm extends AbstractEdit {
         add(scrollPaneServiceLeft);
 
         //Таблица с услугами которых нет в заказе
-        JTable tableServiceRight = new JTable(new TableModel(new String[]{"Услуга", "Цена"}, getDataServiceRight()));
+        tableServiceRight = new JTable(new TableModel(new String[]{"Услуга", "Цена"}, getDataServiceRight()));
         JScrollPane scrollPaneServiceRight = new JScrollPane(tableServiceRight);
         scrollPaneServiceRight.setBounds(fourthRow, previous, 190, 190);
         add(scrollPaneServiceRight);
@@ -193,9 +199,8 @@ public class OrderForm extends AbstractEdit {
             if (row != -1) {
                 ((TableModel) tableServiceRight.getModel()).addData(((TableModel) tableServiceLeft.getModel()).getValueAt(row));
                 ((TableModel) tableServiceLeft.getModel()).deleteData(row);
-                OrderForm.this.repaint();
-                tableServiceLeft.repaint();
-                tableServiceRight.repaint();
+//                OrderForm.this.repaint();
+                setCurrentPrice();
             }
         });
         add(serviceToRight);
@@ -207,9 +212,8 @@ public class OrderForm extends AbstractEdit {
             if (row != -1) {
                 ((TableModel) tableServiceLeft.getModel()).addData(((TableModel) tableServiceRight.getModel()).getValueAt(row));
                 ((TableModel) tableServiceRight.getModel()).deleteData(row);
-                OrderForm.this.repaint();
-                tableServiceLeft.repaint();
-                tableServiceRight.repaint();
+//                OrderForm.this.repaint();
+                setCurrentPrice();
             }
         });
         add(serviceToLeft);
@@ -242,9 +246,8 @@ public class OrderForm extends AbstractEdit {
             if (row != -1) {
                 ((TableModel) tableSparesRight.getModel()).addData(((TableModel) tableSparesLeft.getModel()).getValueAt(row));
                 ((TableModel) tableSparesLeft.getModel()).deleteData(row);
-                OrderForm.this.repaint();
-                tableSparesLeft.repaint();
-                tableSparesRight.repaint();
+//                OrderForm.this.repaint();
+                setCurrentPrice();
             }
         });
         add(SparesToRight);
@@ -256,12 +259,18 @@ public class OrderForm extends AbstractEdit {
             if (row != -1) {
                 ((TableModel) tableSparesLeft.getModel()).addData(((TableModel) tableSparesRight.getModel()).getValueAt(row));
                 ((TableModel) tableSparesRight.getModel()).deleteData(row);
-                OrderForm.this.repaint();
-                tableSparesLeft.repaint();
-                tableSparesRight.repaint();
+//                OrderForm.this.repaint();
+                setCurrentPrice();
             }
         });
         add(SparesToLeft);
+
+        previous += scrollPaneSparesLeft.getHeight() + 15;
+
+        finalPrice = new JLabel();
+        finalPrice.setBounds(thirdRow, previous, 370, 24);
+        setCurrentPrice();
+        add(finalPrice);
 
         fillFields();
 
@@ -315,29 +324,25 @@ public class OrderForm extends AbstractEdit {
 
     @Override
     public void performAdd() {
+        Date date;
+        date = ((SpinnerDateModel) spinnerIn.getModel()).getDate();
+        DateModel model = datePickerIn.getModel();
+        date.setDate(model.getDay());
+        date.setMonth(model.getMonth());
+        date.setYear(model.getYear() - 1900);
 
-    }
-
-    @Override
-    public void performEdit() {
-        if (data == null) {
-            Date date;
-            date = ((SpinnerDateModel) spinnerIn.getModel()).getDate();
-            DateModel model = datePickerIn.getModel();
-            date.setDate(model.getDay());
-            date.setMonth(model.getMonth());
-            date.setYear(model.getYear());
-
-            try {
-                data = mainFrame.model.createOrder((Client) clientCombo.getSelectedItem(), (VehicleModel) modelCombo.getSelectedItem(), date).save();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            data = mainFrame.model.createOrder((Client) clientCombo.getSelectedItem(), (VehicleModel) modelCombo.getSelectedItem(), date).save();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         Order order = (Order) data;
-//        order.setStatusLabel();
+
+        //Установка регистрационного номера
         order.setRegistrationNumber(numberText.getText());
 
+        //Установка статусов
         for (Order.Status status : statusArrayList) {
             try {
                 order.setStatus(status);
@@ -346,29 +351,83 @@ public class OrderForm extends AbstractEdit {
             }
         }
 
+        //Установка конечной даты
+        date = ((SpinnerDateModel) spinnerOut.getModel()).getDate();
+        model = datePickerOut.getModel();
+        date.setDate(model.getDay());
+        date.setMonth(model.getMonth());
+        date.setYear(model.getYear() - 1900);
+        order.setFinishDate(date);
+
+        //Услуги
+        Object[][] tableData = ((TableModel) tableServiceRight.getModel()).getData();
+        ArrayList<Service> services = new ArrayList<>();
+        for (Object[] objects : tableData) {
+            services.add((Service) objects[2]);
+        }
+        try {
+            order.setServices(services);
+            order.save();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void performEdit() {
+        Order order = (Order) data;
+
+        //Установка регистрационного номера
+        order.setRegistrationNumber(numberText.getText());
+
+        //Установка статусов
+        for (Order.Status status : statusArrayList) {
+            try {
+                order.setStatus(status);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        //Установка начальной даты
         Date date;
         date = ((SpinnerDateModel) spinnerIn.getModel()).getDate();
         DateModel model = datePickerIn.getModel();
         date.setDate(model.getDay());
         date.setMonth(model.getMonth());
-        date.setYear(model.getYear());
+        date.setYear(model.getYear() - 1900);
         order.setStartDate(date);
 
+        //Установка конечной даты
         date = ((SpinnerDateModel) spinnerOut.getModel()).getDate();
         model = datePickerOut.getModel();
         date.setDate(model.getDay());
         date.setMonth(model.getMonth());
-        date.setYear(model.getYear());
+        date.setYear(model.getYear() - 1900);
         order.setFinishDate(date);
 
-        System.out.println(date.toString());
+        //Услуги
+        Object[][] tableData = ((TableModel) tableServiceRight.getModel()).getData();
+        ArrayList<Service> services = new ArrayList<>();
+        for (Object[] objects : tableData) {
+            services.add((Service) objects[2]);
+        }
+        try {
+            order.setServices(services);
+            order.save();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     private void changeMark() {
         try {
+            modelCombo.removeAllItems();
             for (VehicleModel model : ((Mark) markCombo.getSelectedItem()).getVehiclesModels())
                 modelCombo.addItem(model);
             modelCombo.setSelectedItem(0);
+            repaint();
         } catch (Exception e) {
 
         }
@@ -441,7 +500,7 @@ public class OrderForm extends AbstractEdit {
     private void setStatusLabel(Order.Status status) {
         //Статус
         if (!generated) {
-            statusLabel = new JLabel("Статус:");
+            JLabel statusLabel = new JLabel("Статус:");
             statusLabel.setBounds(firstRow, previous + 30, 120, 24);
             add(statusLabel);
         }
@@ -524,5 +583,48 @@ public class OrderForm extends AbstractEdit {
         }
 
         this.repaint();
+    }
+
+    private Object[][] getStatusTableData() {
+        if (data != null) {
+            try {
+                ArrayList<Pair<String, String>> arrayList = ((Order) data).getHistory();
+                Object[][] ans = new Object[arrayList.size()][];
+                int i = 0;
+                for (Pair pair : arrayList) {
+                    ans[i] = new Object[]{pair.getLeft(), pair.getRight()};
+                    i++;
+                }
+                return ans;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new Object[0][];
+            }
+        } else
+            return new Object[0][];
+    }
+
+    private void setCurrentPrice() {
+        finalPrice.setText("Стоимость заказа: " + Converter.getInstance().convertPriceToStr(getCurrentPrice()));
+        repaint();
+    }
+
+    private int getCurrentPrice() {
+        Object[][] tableData = ((TableModel) tableServiceRight.getModel()).getData();
+        int len = tableData.length;
+
+        ArrayList<Service> services = new ArrayList<>();
+        for (Object[] aTableData : tableData) {
+            services.add((Service) aTableData[aTableData.length - 1]);
+        }
+
+        try {
+            if (data == null)
+                return Order.getPrice(null, services);
+            else
+                return Order.getPrice((Order) data, services);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }

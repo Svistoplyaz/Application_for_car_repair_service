@@ -18,7 +18,7 @@ public class OrdersView extends AbstractView {
 
     @Override
     String[] getColumnNames() {
-        return new String[]{"Клиент", "Работник", "Регистрационный номер", "Дата начала", "Дата конца", "Марка", "Модель"};
+        return new String[]{"Клиент", "Работник", "Регистрационный номер", "Дата начала", "Дата конца", "Марка", "Модель", "Статус"};
     }
 
     @Override
@@ -34,12 +34,13 @@ public class OrdersView extends AbstractView {
 //                if(order.get)
 
                 String finishDate = "";
-                if(order.getFinishDate() == null)
+                if (order.getFinishDate() == null)
                     finishDate = df.format(order.getFinishDate());
 
                 ans[i] = new Object[]{order.getClient(), worker, order.getRegistrationNumber(),
                         df.format(order.getStartDate()), finishDate,
-                        order.getVehicleModel().getMark(), order.getVehicleModel()};
+                        order.getVehicleModel().getMark(), order.getVehicleModel(),
+                        order.getCurrentStatus()};
                 i++;
             }
 
@@ -54,7 +55,7 @@ public class OrdersView extends AbstractView {
     Object getObject(int row) {
         try {
             return mainFrame.model.getOrders().get(row);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

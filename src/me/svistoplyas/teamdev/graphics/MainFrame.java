@@ -80,6 +80,7 @@ public class MainFrame extends JFrame {
         SwingUtilities.invokeLater(() -> {
 //            if(reset) view.resetFilters();
 //            view.updateData(-1, true);
+            view.updateTable();
             showPanel(view);
         });
     }

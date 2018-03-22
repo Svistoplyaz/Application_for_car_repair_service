@@ -24,20 +24,23 @@ public class Main {
         Locale.setDefault(Locale.ENGLISH);
 
         File f = new File("myfile.db");
-        f.delete();
+        if(!f.exists()) {
 
-        db = new Database(f);
-        model = db.getModel();
-        model.createService("Замена масла").save();
-        model.getServices().get(0).setPrice(15304);
-        model.createClient("Misha").setPhone("671821").save();
+            db = new Database(f);
+            model = db.getModel();
+            model.createService("Замена масла").save();
+            model.getServices().get(0).setPrice(15304);
+            model.createClient("Misha").setPhone("671821").save();
 
-        Client vasya = model.createClient("Vasya").setPhone("222222").save();
-        Mark toyota = model.createMark("Toyota").save();
-        Mark nissan = model.createMark("Nissan").save();
-        VehicleModel corolla = model.createVehicleModel(toyota, "Corolla", 2012).save();
-        Order o = model.createOrder(vasya, corolla, new Date()).setRegistrationNumber("А222МР777RUS").
-                setFinishDate(new Date(119,10,22)).save();
+            Client vasya = model.createClient("Vasya").setPhone("222222").save();
+            Mark toyota = model.createMark("Toyota").save();
+            Mark nissan = model.createMark("Nissan").save();
+            model.createVehicleModel(nissan, "Passat", 2008).save();
+            model.createVehicleModel(nissan, "Almera", 2018).save();
+            VehicleModel corolla = model.createVehicleModel(toyota, "Corolla", 2012).save();
+            Order o = model.createOrder(vasya, corolla, new Date()).setRegistrationNumber("А222МР777RUS").
+                    setFinishDate(new Date(119, 10, 22)).save();
+        }
 
         (new LoginForm()).show();
 
