@@ -451,9 +451,10 @@ public class OrderForm extends AbstractEdit {
 
                 int i = 0;
                 for (Service service : services) {
-                    if (!hasServices.contains(service))
+                    if (!hasServices.contains(service)) {
                         ans[i] = new Object[]{service.getName(), Converter.getInstance().convertPriceToStr(service.getPriceForOrder(order)), service};
-                    i++;
+                        i++;
+                    }
                 }
 
                 return ans;
