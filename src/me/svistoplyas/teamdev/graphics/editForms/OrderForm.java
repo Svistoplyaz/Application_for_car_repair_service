@@ -292,6 +292,7 @@ public class OrderForm extends AbstractEdit {
             if (isEdit)
                 clientCombo.setSelectedItem(order.getClient());
 
+            markCombo.removeAllItems();
             for (Mark mark : mainFrame.model.getMarks())
                 markCombo.addItem(mark);
             if (isEdit)
@@ -300,7 +301,8 @@ public class OrderForm extends AbstractEdit {
             if (isEdit)
                 numberText.setText(order.getRegistrationNumber());
 
-            for (VehicleModel model : mainFrame.model.getVehiclesModels())
+            modelCombo.removeAllItems();
+            for (VehicleModel model : ((Mark)markCombo.getSelectedItem()).getVehiclesModels())
                 modelCombo.addItem(model);
             if (isEdit)
                 modelCombo.setSelectedItem(order.getVehicleModel());
