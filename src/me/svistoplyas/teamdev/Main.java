@@ -24,10 +24,11 @@ public class Main {
         Locale.setDefault(Locale.ENGLISH);
 
         File f = new File("myfile.db");
-        if(!f.exists()) {
 
-            db = new Database(f);
-            model = db.getModel();
+        db = new Database(f);
+        model = db.getModel();
+        
+        if(!f.exists()) {
             model.createService("Замена масла").save();
             model.getServices().get(0).setPrice(15304);
             model.createClient("Misha").setPhone("671821").save();
