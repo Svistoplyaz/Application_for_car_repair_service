@@ -1,11 +1,10 @@
 package net.web_kot.teamdev.db;
 
 import net.web_kot.teamdev.db.entities.*;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class Test {
     
@@ -24,26 +23,18 @@ public class Test {
         
         Order o = model.createOrder(vasya, corolla, new Date()).setRegistrationNumber("А222МР777RUS").save();
         
-        Service service1 = model.createService("Замена масла").save();
-        Service service2 = model.createService("Проверка тормозов").save().setPrice(12);
+        System.out.println(o.getCurrentStatus());
         
-        ArrayList<Service> add = new ArrayList<>();
-        add.add(service1);
-        add.add(service2);
-        o.setServices(add);
+        Thread.sleep(100);
+        o.setStatus(Order.Status.CONFIRMED);
         
-        List<Service> services = o.getServices();
-        //services.remove(model.getServices().get(0));
-        o.setServices(services);
+        Thread.sleep(100);
+        o.setStatus(Order.Status.CLOSED);
         
-        try {
-            model.getServices().get(0).delete();
-        } catch(Exception e) {
-            System.out.println("!! " + e.getMessage());    
-        }
+        System.out.println(o.getCurrentStatus());
         
-        System.out.println(o);
-        for(Service s : o.getServices()) System.out.println("> " + s);
+        System.out.println();
+        for(Pair<String, String> p : o.getHistory()) System.out.println(p);
         
         db.close();
     }

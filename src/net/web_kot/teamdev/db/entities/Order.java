@@ -1,12 +1,32 @@
 package net.web_kot.teamdev.db.entities;
 
 import net.web_kot.teamdev.db.Model;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @SuppressWarnings("SqlResolve")
 public class Order extends AbstractEntity {
+    
+    public enum Status {
+        PRELIMINARY("Предварительный"), CONFIRMED("Подтвержденный"), CANCELED("Отмененный"),
+        INWORK("В работе"), FINISHED("Завершенный"), CLOSED("Закрытый");
+        
+        private final String name;
+        public String getName() { return name; }
+        
+        @Override
+        public String toString() { return name; }
+        
+        Status(String n) { name = n; }
+    }
+    
+    private static final DateFormat FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
     
     private int idClient, idModel;
     private String number;
@@ -25,13 +45,14 @@ public class Order extends AbstractEntity {
     }
 
     public Order save() throws Exception {
-        if(id == -1)
+        if(id == -1) {
             id = model.db().insert(
                     "INSERT INTO `Order` (PK_Clients, Registration_number, Start_date, Finish_date, PK_Model, " +
                             "Finish_cost) VALUES (%d, %s, %d, %s, %d, %d)",
                     idClient, number, start, finish, idModel, finishCost
             );
-        else
+            setStatus(Status.PRELIMINARY);
+        } else
             model.db().update(
                     "UPDATE `Order` SET Registration_number = %s, Start_date = %d, Finish_date = %s, " +
                             "PK_Model = %d, Finish_cost = %d WHERE PK_Order = %d",
@@ -129,6 +150,52 @@ public class Order extends AbstractEntity {
             if(!existing.contains(s)) addService(s);
         for(Service s : existing)
             if(!services.contains(s)) removeService(s);
+    }
+    
+    public void setStatus(Status status) throws Exception {
+        model.db().insert(
+                "INSERT INTO Status (Type, Date_Time, PK_Order) VALUES (%d, %d, %d)",
+                status.ordinal(), System.currentTimeMillis(), id
+        );
+    }
+    
+    public ArrayList<Pair<String, String>> getHistory() throws Exception {
+        ArrayList<Pair<String, String>> list = new ArrayList<>();
+        
+        ResultSet result = model.db().select("SELECT * FROM Status WHERE PK_Order = %d ORDER BY Date_Time ASC", id);
+        while(result.next()) {
+            Pair<Status, Date> pair = parseStatus(result);
+            list.add(Pair.of(pair.getLeft().getName(), FORMAT.format(pair.getRight())));
+        }
+        
+        return list;
+    }
+    
+    public Status getCurrentStatus() throws Exception {
+        ResultSet result = model.db().select("SELECT * FROM Status WHERE PK_Order = %d ORDER BY Date_Time DESC", id);
+        result.next();
+        return parseStatus(result).getLeft();
+    }
+    
+    private Pair<Status, Date> parseStatus(ResultSet result) throws Exception {
+        return Pair.of(Status.values()[result.getInt(2)], new Date(result.getLong(3)));
+    }
+    
+    private Status[] getPossibleStatuses() throws Exception {
+        switch(getCurrentStatus()) {
+            case PRELIMINARY:
+                return new Status[] { Status.CONFIRMED, Status.CANCELED };
+            case CONFIRMED:
+                return new Status[] { Status.INWORK };
+            case INWORK:
+                return new Status[] { Status.FINISHED };
+            case FINISHED:
+                return new Status[] { Status.CLOSED };
+            case CLOSED:
+            case CANCELED:
+                return new Status[0];
+        }
+        throw new RuntimeException();
     }
     
 }
