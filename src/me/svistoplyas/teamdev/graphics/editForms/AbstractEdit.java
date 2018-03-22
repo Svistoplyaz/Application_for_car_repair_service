@@ -80,6 +80,9 @@ public abstract class AbstractEdit extends JDialog {
         if (c instanceof JTextField) {
             String str = ((JTextField) c).getText().trim();
 
+            if (str.equals(""))
+                return 0;
+
             if (type.equals("Phone"))
                 try {
                     if (str.length() != 5 && str.length() != 6 && str.length() != 7 && str.length() != 11)
@@ -97,14 +100,12 @@ public abstract class AbstractEdit extends JDialog {
                     try {
                         Integer.parseInt(arr[0]);
                         Integer.parseInt(arr[1]);
+                        return -1;
                     } catch (Exception e) {
                         return 1;
                     }
                 }
             }
-
-            if (str.equals(""))
-                return 0;
             else
                 return -1;
         }
@@ -113,11 +114,13 @@ public abstract class AbstractEdit extends JDialog {
                 return 0;
             else
                 return -1;
+        else
+            return -1;
 
 //        if (c instanceof JCheckBox)
 //            return false;
 
-        throw new RuntimeException("isEmptyOrBadlyFilled - unknown component " + c.getClass().getCanonicalName());
+//        throw new RuntimeException("isEmptyOrBadlyFilled - unknown component " + c.getClass().getCanonicalName());
     }
 
     public void redraw() {
