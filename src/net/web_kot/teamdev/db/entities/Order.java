@@ -181,7 +181,7 @@ public class Order extends AbstractEntity {
         return Pair.of(Status.values()[result.getInt(2)], new Date(result.getLong(3)));
     }
     
-    private Status[] getPossibleStatuses() throws Exception {
+    public Status[] getPossibleStatuses() throws Exception {
         switch(getCurrentStatus()) {
             case PRELIMINARY:
                 return new Status[] { Status.CONFIRMED, Status.CANCELED };
