@@ -42,7 +42,7 @@ public abstract class AbstractEdit extends JDialog {
                 }
                 redraw();
                 if (noBaddies()) {
-                    if(isEdit)
+                    if (isEdit)
                         performEdit();
                     else
                         performAdd();
@@ -83,44 +83,50 @@ public abstract class AbstractEdit extends JDialog {
             if (str.equals(""))
                 return 0;
 
-            if (type.equals("Phone"))
-                try {
-                    if (str.length() != 5 && str.length() != 6 && str.length() != 7 && str.length() != 11)
-                        return 1;
-
-                    Long.parseLong(str);
-                } catch (Exception e) {
-                    return 1;
-                }
-            else if (type.equals("Price")) {
-                if (str.charAt(str.length() - 3) != ',')
-                    return 1;
-                else {
-                    String[] arr = str.split(",");
+            switch (type) {
+                case "Phone": {
                     try {
-                        Integer.parseInt(arr[0]);
-                        Integer.parseInt(arr[1]);
+                        if (str.length() != 5 && str.length() != 6 && str.length() != 7 && str.length() != 11)
+                            return 1;
+
+                        Long.parseLong(str);
                         return -1;
                     } catch (Exception e) {
                         return 1;
                     }
                 }
+                case "Price": {
+                    //Проверяем что там есть запятая третьим символом с конца
+                    if (!(str.length() < 3 || !str.contains(",") || str.charAt(str.length() - 3) != ',')) {
+                        String[] arr = str.split(",");
+
+                        //Если вдруг есть несколько запятых в строке, то это ошибка
+                        if (arr.length != 2)
+                            return 1;
+
+                        //Проверяем что слева и справа от запятой числа
+                        try {
+                            Integer.parseInt(arr[0]);
+                            Integer.parseInt(arr[1]);
+                            
+                            return -1;
+                        } catch (Exception e) {
+                            return 1;
+                        }
+                    } else
+                        return 1;
+                }
+                default:
+                    return -1;
             }
-            else
-                return -1;
-        }
-        if (c instanceof JComboBox)
+        } else if (c instanceof JComboBox)
             if (((JComboBox) c).getSelectedItem() == null)
                 return 0;
             else
                 return -1;
         else
-            return -1;
+            throw new RuntimeException("isEmptyOrBadlyFilled - unknown component " + c.getClass().getCanonicalName());
 
-//        if (c instanceof JCheckBox)
-//            return false;
-
-//        throw new RuntimeException("isEmptyOrBadlyFilled - unknown component " + c.getClass().getCanonicalName());
     }
 
     public void redraw() {
@@ -145,9 +151,9 @@ public abstract class AbstractEdit extends JDialog {
         repaint();
     }
 
-    public boolean noBaddies(){
+    public boolean noBaddies() {
         for (JComponent component : baddies.keySet()) {
-            if(baddies.get(component))
+            if (baddies.get(component))
                 return false;
         }
         return true;
