@@ -13,7 +13,7 @@ public class Test {
         File f = new File("test.db");
         f.delete();
         
-        Database db = new Database(f).setDebug(false);
+        Database db = new Database(f).setDebug(true);
         Model model = db.getModel();
         
         Client vasya = model.createClient("Vasya").setPhone("222222").save();
@@ -23,18 +23,26 @@ public class Test {
         
         Order o = model.createOrder(vasya, corolla, new Date()).setRegistrationNumber("А222МР777RUS").save();
         
-        System.out.println(o.getCurrentStatus());
+        Service s1 = model.createService("Замена масла").save().setPrice(100);
+        Service s2 = model.createService("Проверка тормозов").save().setPrice(50);
+        
+        o.addService(s1);
+        o.addService(s2);
+        
+        System.out.println(o.getPrice());
         
         Thread.sleep(100);
-        o.setStatus(Order.Status.CONFIRMED);
+        s1.setPrice(500);
         
-        Thread.sleep(100);
+        System.out.println(o.getPrice());
+        
+        o.removeService(s1);
+        o.addService(s1);
+        
+        System.out.println(o.getPrice());
+        
         o.setStatus(Order.Status.CLOSED);
-        
-        System.out.println(o.getCurrentStatus());
-        
-        System.out.println();
-        for(Pair<String, String> p : o.getHistory()) System.out.println(p);
+        System.out.println(o.getPrice());
         
         db.close();
     }

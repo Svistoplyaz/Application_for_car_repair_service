@@ -28,6 +28,11 @@ public abstract class AbstractEntity {
         model.db().exec("DELETE FROM %s WHERE %s = %d", tableName, primaryKey, id);
     }
 
+    @Override
+    public int hashCode() {
+        return id;
+    }
+    
     @Target(value=ElementType.CONSTRUCTOR)
     @Retention(value=RetentionPolicy.RUNTIME)
     public @interface SelectConstructor { }

@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @SuppressWarnings("SqlResolve")
@@ -137,6 +138,18 @@ public class Order extends AbstractEntity {
         );
     }
     
+    public HashMap<Service, Date> getServicesWithDates() throws Exception {
+        ArrayList<Pair<Integer, Long>> selected = new ArrayList<>();
+        ResultSet result = model.db().select("SELECT PK_Service, `Date` FROM Order_Service WHERE PK_Order = %d", id);
+        while(result.next()) selected.add(Pair.of(result.getInt(1), result.getLong(2)));
+        
+        HashMap<Service, Date> map = new HashMap<>();
+        for(Pair<Integer, Long> p : selected) 
+            map.put(model.getServiceById(p.getLeft()), new Date(p.getRight()));
+        
+        return map;
+    }
+    
     public void removeService(Service service) throws Exception {
         model.db().exec(
                 "DELETE FROM Order_Service WHERE PK_Order = %d AND PK_Service = %d",
@@ -153,16 +166,21 @@ public class Order extends AbstractEntity {
     }
     
     public void setStatus(Status status) throws Exception {
+        int price = status == Status.CLOSED ? getPrice() : -1;
         model.db().insert(
                 "INSERT INTO Status (Type, Date_Time, PK_Order) VALUES (%d, %d, %d)",
                 status.ordinal(), System.currentTimeMillis(), id
         );
+        if(status == Status.CLOSED) {
+            finishCost = price;
+            save();
+        }
     }
     
     public ArrayList<Pair<String, String>> getHistory() throws Exception {
         ArrayList<Pair<String, String>> list = new ArrayList<>();
         
-        ResultSet result = model.db().select("SELECT * FROM Status WHERE PK_Order = %d ORDER BY Date_Time ASC", id);
+        ResultSet result = model.db().select("SELECT * FROM Status WHERE PK_Order = %d ORDER BY PK_Status ASC", id);
         while(result.next()) {
             Pair<Status, Date> pair = parseStatus(result);
             list.add(Pair.of(pair.getLeft().getName(), FORMAT.format(pair.getRight())));
@@ -172,7 +190,7 @@ public class Order extends AbstractEntity {
     }
     
     public Status getCurrentStatus() throws Exception {
-        ResultSet result = model.db().select("SELECT * FROM Status WHERE PK_Order = %d ORDER BY Date_Time DESC", id);
+        ResultSet result = model.db().select("SELECT * FROM Status WHERE PK_Order = %d ORDER BY PK_Status DESC", id);
         result.next();
         return parseStatus(result).getLeft();
     }
@@ -200,6 +218,25 @@ public class Order extends AbstractEntity {
     
     public Status[] getPossibleStatuses() throws Exception {
         return getPossibleStatuses(getCurrentStatus());
+    }
+    
+    public static int getPrice(Order o, List<Service> services) throws Exception {
+        HashMap<Service, Date> existing = o != null ? o.getServicesWithDates() : new HashMap<>();
+        
+        int price = 0;
+        for(Service service : services) {
+            if(existing.containsKey(service))
+                price += service.getPrice(existing.get(service));
+            else
+                price += service.getPrice();
+        }
+        
+        return price;
+    }
+    
+    public int getPrice() throws Exception {
+        if(getCurrentStatus() == Status.CLOSED) return finishCost;
+        return getPrice(this, getServices());
     }
     
 }

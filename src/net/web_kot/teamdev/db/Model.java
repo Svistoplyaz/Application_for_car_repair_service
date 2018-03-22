@@ -116,6 +116,10 @@ public class Model {
         return new Service(this, name);
     }
     
+    public Service getServiceById(int id) throws Exception {
+        return getById(Service.class, db.formatQuery("SELECT * FROM Service WHERE PK_Service = %d", id));
+    }
+    
     public List<Service> getServices() throws Exception {
         return getList(Service.class, "SELECT * FROM Service");
     }
