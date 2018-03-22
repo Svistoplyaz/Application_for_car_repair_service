@@ -220,6 +220,8 @@ public class Order extends AbstractEntity {
         return getPossibleStatuses(getCurrentStatus());
     }
     
+    // При создании новой записи вызываем Order.getPrice(null, <Список_услуг>)
+    // При редактировании вызываем Order.getPrice(<Текущий_заказ>, <Список_услуг>)
     public static int getPrice(Order o, List<Service> services) throws Exception {
         HashMap<Service, Date> existing = o != null ? o.getServicesWithDates() : new HashMap<>();
         
