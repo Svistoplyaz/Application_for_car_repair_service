@@ -17,9 +17,11 @@ public abstract class AbstractEdit extends JDialog {
     ImageLoader imageLoader = ImageLoader.getInstance();
     HashMap<JComponent, JLabel> marks = new HashMap<>();
     MainFrame mainFrame;
+    Object data;
 
-    public AbstractEdit(JFrame frame, boolean isEdit, Object data) {
+    public AbstractEdit(JFrame frame, boolean isEdit, Object _data) {
         super(frame, isEdit ? "Редактирование записи" : "Добавление записи", true);
+        data = _data;
         mainFrame = (MainFrame) frame;
         this.setLayout(null);
         setSize();
@@ -27,7 +29,6 @@ public abstract class AbstractEdit extends JDialog {
         JButton save = new JButton(isEdit ? "Сохранить изменения" : "Добавить запись");
         save.setBounds(10, this.getHeight() - 95, (this.getWidth() - 40) / 2, 60);
         save.addActionListener((e) -> {
-            performEdit();
             try {
                 baddies.clear();
                 for (Pair<String, JComponent> component : components) {
@@ -42,8 +43,14 @@ public abstract class AbstractEdit extends JDialog {
                             baddies.put(component.getValue(), false);
                     }
                 }
-                int i = 1;
                 redraw();
+                if (noBaddies()) {
+                    if(isEdit)
+                        performEdit();
+                    else
+                        performAdd();
+                    AbstractEdit.this.setVisible(false);
+                }
 //
 //                if(nw && view.hasCustomAddAction()) {
 //                    Object[] values = new Object[fields.length];
@@ -70,7 +77,6 @@ public abstract class AbstractEdit extends JDialog {
 //                }
 //
 //                update = true;
-//                EditFormBuilder.this.setVisible(false);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 //Main.handleDatabaseException(ex);
@@ -95,11 +101,11 @@ public abstract class AbstractEdit extends JDialog {
         return true;
     }
 
-    public abstract void fillFields(Object data);
+    public abstract void fillFields();
 
-    public abstract void performAdd();
+    public abstract void performAdd() throws Exception;
 
-    public abstract void performEdit();
+    public abstract void performEdit() throws Exception;
 
     private int isEmptyOrBadlyFilled(Pair<String, JComponent> pair) {
 
@@ -117,8 +123,21 @@ public abstract class AbstractEdit extends JDialog {
                 } catch (Exception e) {
                     return 1;
                 }
+            else if (type.equals("Price")) {
+                if (str.charAt(str.length() - 3) != ',')
+                    return 1;
+                else {
+                    String[] arr = str.split(",");
+                    try {
+                        Integer.parseInt(arr[0]);
+                        Integer.parseInt(arr[1]);
+                    } catch (Exception e) {
+                        return 1;
+                    }
+                }
+            }
 
-            if (((JTextField) c).getText().trim().equals(""))
+            if (str.equals(""))
                 return 0;
             else
                 return -1;
@@ -126,6 +145,8 @@ public abstract class AbstractEdit extends JDialog {
         if (c instanceof JComboBox)
             if (((JComboBox) c).getSelectedItem() == null)
                 return 0;
+            else
+                return -1;
 
 //        if (c instanceof JCheckBox)
 //            return false;
@@ -138,9 +159,9 @@ public abstract class AbstractEdit extends JDialog {
             Boolean filledWrong = baddies.get(component);
             String file;
             if (filledWrong)
-                file = "resources/images/letter-x.png";
+                file = "/images/letter-x.png";
             else
-                file = "resources/images/correct-symbol.png";
+                file = "/images/correct-symbol.png";
 
             if (marks.get(component) == null) {
                 JLabel label = new JLabel(new ImageIcon(imageLoader.getImage(file)));
@@ -153,6 +174,14 @@ public abstract class AbstractEdit extends JDialog {
         }
 
         repaint();
+    }
+
+    public boolean noBaddies(){
+        for (JComponent component : baddies.keySet()) {
+            if(baddies.get(component))
+                return false;
+        }
+        return true;
     }
 
     //

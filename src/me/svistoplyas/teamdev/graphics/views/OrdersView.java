@@ -30,8 +30,15 @@ public class OrdersView extends AbstractView {
 
             int i = 0;
             for (Order order : orders) {
-                ans[i] = new Object[]{order.getClient(), "", order.getRegistrationNumber(),
-                        df.format(order.getStartDate()), "",
+                String worker = "";
+//                if(order.get)
+
+                String finishDate = "";
+                if(order.getFinishDate() == null)
+                    finishDate = df.format(order.getFinishDate());
+
+                ans[i] = new Object[]{order.getClient(), worker, order.getRegistrationNumber(),
+                        df.format(order.getStartDate()), finishDate,
                         order.getVehicleModel().getMark(), order.getVehicleModel()};
                 i++;
             }

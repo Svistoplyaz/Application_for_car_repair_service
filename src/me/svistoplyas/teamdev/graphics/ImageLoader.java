@@ -19,7 +19,7 @@ public class ImageLoader {
     public BufferedImage getImage(String str) {
         if (!map.containsKey(str))
             try {
-                map.put(str, ImageIO.read(new File(str)));
+                map.put(str, ImageIO.read(ImageLoader.class.getResourceAsStream(str)));
             } catch (Exception e) {
                 e.printStackTrace();
             }

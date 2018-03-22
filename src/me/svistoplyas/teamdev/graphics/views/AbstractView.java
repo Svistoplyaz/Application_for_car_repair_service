@@ -20,28 +20,9 @@ public abstract class AbstractView extends JPanel {
         if (canAdd()) {
             add = new JButton("Добавить");
             add.addActionListener((e) -> {
-//            boolean changed = false;
-//            for(int i = 0; i < filters.length; i++)
-//                if(filters[i].getFilterField() == null && filteredValues[i] != null) {
-//                    filtersBoxes[i].setSelectedItem(null);
-//                    changed = true;
-//                }
-//            if(changed) updateFilters();
-//
-//            try {
-//                Object instance = newInstance();
-//                for(int i = 0; i < filters.length; i++)
-//                    if(filteredValues[i] != null) {
-//                        Method m = instance.getClass().getMethod("set" + filters[i].getFilterField(), filteredValues[i].getClass());
-//                        m.invoke(instance, filteredValues[i]);
-//                    }
-//
-//                EditFormBuilder b = new EditFormBuilder(true, globalFilter, frame, getEditableFieldsDescriptions(), instance, this);
-//                b.setVisible(true);
-//                if(b.isNeedUpdate()) updateData(table.getRowCount(), false);
-//            } catch(Exception ex) {
-//                Main.handleDatabaseException(ex);
-//            }
+                AbstractEdit b = getEdit(false, null);
+                b.setVisible(true);
+                updateTable();
             });
             setBtBounds(add, 0);
             add(add);
@@ -55,9 +36,7 @@ public abstract class AbstractView extends JPanel {
                     try {
                         AbstractEdit b = getEdit(true, getObject(row));
                         b.setVisible(true);
-
-                        if (b.changed())
-                            b.performEdit();
+                        updateTable();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -73,10 +52,6 @@ public abstract class AbstractView extends JPanel {
             delete.addActionListener((e) -> {
                 int row = table.getSelectedRow();
                 if (row != -1) {
-                    String text = "Вы действительно хотите удалить выбранную запись?";
-    //            if(JOptionPane.showConfirmDialog(this, text, "Подтверждение", JOptionPane.YES_NO_OPTION,
-    //                    JOptionPane.INFORMATION_MESSAGE, null, new String[]{"Да", "Нет"}) != 0) return;
-
                     if(JOptionPane.showOptionDialog(this,
                             "Вы действительно хотите удалить выбранную запись?",
                             "Подтверждение",
@@ -88,15 +63,12 @@ public abstract class AbstractView extends JPanel {
                     else {
                         try {
                             AbstractView.this.performDelete(row);
-                            ((TableModel)table.getModel()).setData(getData());
-                            mainFrame.repaint();
+                            updateTable();
                         }catch (Exception ex){
                             JOptionPane.showMessageDialog(this, "Невозможно удалить элемент",
                                     "Внимание!", JOptionPane.ERROR_MESSAGE);
                         }
                     }
-
-                    //Удаление выбранной записи
                 }else
                     JOptionPane.showMessageDialog(this, "Выберите элемент из таблицы для удаления",
                             "Внимание!", JOptionPane.INFORMATION_MESSAGE);
@@ -159,5 +131,10 @@ public abstract class AbstractView extends JPanel {
 
     public AbstractEdit getEdit(boolean b, Object o) {
         return null;
+    }
+
+    private void updateTable(){
+        ((TableModel)table.getModel()).setData(getData());
+        mainFrame.repaint();
     }
 }

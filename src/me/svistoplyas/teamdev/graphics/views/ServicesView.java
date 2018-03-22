@@ -3,6 +3,7 @@ package me.svistoplyas.teamdev.graphics.views;
 import me.svistoplyas.teamdev.graphics.MainFrame;
 import me.svistoplyas.teamdev.graphics.editForms.AbstractEdit;
 import me.svistoplyas.teamdev.graphics.editForms.ServiceForm;
+import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.entities.Service;
 
 import java.util.List;
@@ -25,9 +26,9 @@ public class ServicesView extends AbstractView {
             Object[][] ans = new Object[services.size()][];
             int i = 0;
             for (Service service : services) {
-                int price = service.getPrice();
-                String priceStr = price / 100 + " руб. " + price % 100 + " коп.";
-                ans[i] = new Object[]{service.getName(), priceStr};
+//                int price = service.getPrice();
+//                String priceStr = price / 100 + " руб. " + price % 100 + " коп.";
+                ans[i] = new Object[]{service.getName(), Converter.getInstance().convertPriceToStr(service.getPrice())};
                 i++;
             }
 

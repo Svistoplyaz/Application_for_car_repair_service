@@ -39,7 +39,12 @@ public class ClientsView extends AbstractView {
 
     @Override
     Object getObject(int row) {
-        return null;
+        try {
+            return mainFrame.model.getClients().get(row);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

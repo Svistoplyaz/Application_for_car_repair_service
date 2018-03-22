@@ -1,5 +1,6 @@
 package me.svistoplyas.teamdev.graphics.editForms;
 
+import net.web_kot.teamdev.db.entities.Client;
 import net.web_kot.teamdev.db.entities.Service;
 
 import javax.swing.*;
@@ -30,10 +31,10 @@ public class ServiceForm extends AbstractEdit {
         priceText = new JTextField();
         priceText.setBounds(170, 50, 200, 24);
         add(priceText);
-        addMark(priceText);
+        addMark(priceText, "Price");
 
         if (isEdit)
-            fillFields(data);
+            fillFields();
     }
 
     @Override
@@ -42,25 +43,31 @@ public class ServiceForm extends AbstractEdit {
     }
 
     @Override
-    public void fillFields(Object data) {
+    public void fillFields() {
         Service object = (Service) data;
         nameText.setText(object.getName());
 
         try {
             int price = object.getPrice();
-            priceText.setText(price / 100 + "," + price % 100);
+            String zero = "";
+            if (price % 100 < 10)
+                zero = "0";
+            priceText.setText(price / 100 + "," + zero + price % 100);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void performAdd() {
-
+    public void performAdd() throws Exception{
+        String[] str = priceText.getText().split(",");
+        mainFrame.model.createService(nameText.getText()).save().setPrice(Integer.parseInt(str[0])*100 + Integer.parseInt(str[1]));
     }
 
     @Override
-    public void performEdit() {
-
+    public void performEdit() throws Exception{
+        Service service = (Service) data;
+        String[] str = priceText.getText().split(",");
+        service.setName(nameText.getText()).save().setPrice(Integer.parseInt(str[0])*100 + Integer.parseInt(str[1]));
     }
 }

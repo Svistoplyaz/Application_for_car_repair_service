@@ -32,7 +32,7 @@ public class ClientForm extends AbstractEdit {
         addMark(phoneText);
 
         if (isEdit)
-            fillFields(data);
+            fillFields();
     }
 
     @Override
@@ -41,19 +41,20 @@ public class ClientForm extends AbstractEdit {
     }
 
     @Override
-    public void fillFields(Object data) {
-        Client object = (Client) data;
-        fioText.setText(object.getName());
-        phoneText.setText(object.getPhone());
+    public void fillFields() {
+        Client client = (Client) data;
+        fioText.setText(client.getName());
+        phoneText.setText(client.getPhone());
     }
 
     @Override
-    public void performAdd() {
-
+    public void performAdd() throws Exception{
+        mainFrame.model.createClient(fioText.getText()).setPhone(phoneText.getText()).save();
     }
 
     @Override
-    public void performEdit() {
-
+    public void performEdit() throws Exception{
+        Client client = (Client) data;
+        client.setName(fioText.getText()).setPhone(phoneText.getText()).save();
     }
 }

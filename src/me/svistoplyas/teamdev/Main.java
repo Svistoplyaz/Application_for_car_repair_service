@@ -34,9 +34,10 @@ public class Main {
 
         Client vasya = model.createClient("Vasya").setPhone("222222").save();
         Mark toyota = model.createMark("Toyota").save();
+        Mark nissan = model.createMark("Nissan").save();
         VehicleModel corolla = model.createVehicleModel(toyota, "Corolla", 2012).save();
         Order o = model.createOrder(vasya, corolla, new Date()).setRegistrationNumber("А222МР777RUS").
-                setFinishDate(new Date(2019,10,22)).save();
+                setFinishDate(new Date(119,10,22)).save();
 
         (new LoginForm()).show();
 

@@ -37,6 +37,34 @@ public class TableModel extends AbstractTableModel {
 
     public void setData(Object[][] data) {
         this.data = data;
+        this.fireTableDataChanged();
+    }
+
+    public Object[][] getData() {
+        return data;
+    }
+
+    public void addData(Object[] newData) {
+        int len = data.length;
+        Object[][] updatedData = new Object[len + 1][];
+        for (int i = 0; i < len; i++) {
+            updatedData[i] = data[i];
+        }
+        updatedData[len] = newData;
+        setData(updatedData);
+    }
+
+    public void deleteData(int row) {
+        int len = data.length;
+        Object[][] updatedData = new Object[len - 1][];
+        for (int i = 0; i < row; i++) {
+            updatedData[i] = data[i];
+        }
+
+        for (int i = row + 1; i < len; i++) {
+            updatedData[i-1] = data[i];
+        }
+        setData(updatedData);
     }
 
     @Override

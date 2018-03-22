@@ -3,6 +3,7 @@ package me.svistoplyas.teamdev.graphics;
 import me.svistoplyas.teamdev.graphics.views.*;
 import net.web_kot.teamdev.db.Model;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
@@ -10,12 +11,18 @@ import java.util.HashMap;
 public class MainFrame extends JFrame {
     public Model model;
     private final HashMap<String, AbstractView> views = new HashMap<>();
-    public static final Loading loading = new Loading();
-    public JPanel navigation, content;
+    private static final Loading loading = new Loading();
+    private JPanel navigation, content;
     public boolean type;
 
     public MainFrame(boolean _type, Model _model) {
-        super("Реестр имущества студенческого городка");
+        super("Автомастерская");
+        try {
+            setIconImage(ImageLoader.getInstance().getImage("/images/screwYouPunk.png"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         type = _type;
         model = _model;
 
