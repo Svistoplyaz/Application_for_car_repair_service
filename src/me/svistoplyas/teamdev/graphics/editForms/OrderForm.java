@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class OrderForm extends AbstractEdit {
     private JComboBox<Client> clientCombo;
     private JComboBox<String> workerCombo;
@@ -547,7 +548,7 @@ public class OrderForm extends AbstractEdit {
                 back.addActionListener(e -> {
                     try {
                         statusArrayList.add(statuses[0]);
-                        System.out.println(statuses[0]);
+                        //System.out.println(statuses[0]);
                         OrderForm.this.setStatusLabel(statuses[0]);
                         OrderForm.this.repaint();
                     } catch (Exception ex) {
@@ -575,7 +576,7 @@ public class OrderForm extends AbstractEdit {
                 forward.addActionListener(e -> {
                     try {
                         statusArrayList.add(statuses[1]);
-                        System.out.println(statuses[1]);
+                        //System.out.println(statuses[1]);
                         OrderForm.this.setStatusLabel(statuses[1]);
                         OrderForm.this.repaint();
                     } catch (Exception ex) {
