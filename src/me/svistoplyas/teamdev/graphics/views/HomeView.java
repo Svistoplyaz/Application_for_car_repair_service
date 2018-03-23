@@ -18,15 +18,20 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class HomeView extends AbstractView {
-    
+
+    private static final DateFormat FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+
     private Date date = new Date();
-    
+    private JLabel caption;
+
     public HomeView(MainFrame _mainFrame) {
         super(_mainFrame);
         
-        for(Component c : this.getComponents())
+        for(Component c : this.getComponents()) {
             if(c instanceof JScrollPane) c.setBounds(10, 54, 718 + 60 - 220, 378);
-        
+            if(c instanceof JLabel) caption = (JLabel) c;
+        }
+
         JDatePanel panel = new JDatePanel();
         panel.setBounds(583, 54, 200, 180);
         
@@ -37,8 +42,15 @@ public class HomeView extends AbstractView {
             date = calendar.getTime();
             
             updateTable();
+            updateCaption();
         });
         this.add(panel);
+
+        updateCaption();
+    }
+
+    private void updateCaption() {
+        caption.setText("Заказы на " + FORMAT.format(date));
     }
 
     @Override
