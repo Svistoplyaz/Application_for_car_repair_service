@@ -74,7 +74,7 @@ public class ServiceForm extends AbstractEdit {
 
     @Override
     public boolean allUnique() {
-        String name = nameText.getText();
+        String name = nameText.getText().trim();
         try {
             List<Service> services = mainFrame.model.getServices();
             for (Service service : services)

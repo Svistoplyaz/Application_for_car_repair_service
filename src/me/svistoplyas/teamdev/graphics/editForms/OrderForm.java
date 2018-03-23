@@ -200,7 +200,7 @@ public class OrderForm extends AbstractEdit {
         });
         add(scrollPaneServiceLeft);
 
-        //Таблица с услугами которых нет в заказе
+        //Таблица с услугами которые есть в заказе
         tableServiceRight = new JTable(new TableModel(new String[]{"Услуга", "Цена"}, getDataServiceRight())) {
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
                 Component c = super.prepareRenderer(renderer, row, column);
@@ -256,7 +256,7 @@ public class OrderForm extends AbstractEdit {
         scrollPaneSparesLeft.setBounds(thirdRow, previous, 190, 190);
         add(scrollPaneSparesLeft);
 
-        //Таблица с зап. частями которых нет в заказе
+        //Таблица с зап. частями которые есть в заказе
         JTable tableSparesRight = new JTable(new TableModel(new String[]{"Зап. часть", "Количество", "Цена"}, getDataSparesRight()));
         JScrollPane scrollPaneSparesRight = new JScrollPane(tableSparesRight);
         scrollPaneSparesRight.setBounds(fourthRow, previous, 190, 190);
