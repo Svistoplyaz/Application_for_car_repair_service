@@ -17,6 +17,10 @@ public abstract class AbstractView extends JPanel {
         mainFrame = _mainFrame;
         setLayout(null);
 
+        JLabel caption = new JLabel("Форма \"" + this.toString() + "\"");
+        caption.setBounds(20, 20 , 170, 24);
+        add(caption);
+
         if (canAdd()) {
             add = new JButton("Добавить");
             add.addActionListener((e) -> {
@@ -52,24 +56,24 @@ public abstract class AbstractView extends JPanel {
             delete.addActionListener((e) -> {
                 int row = table.getSelectedRow();
                 if (row != -1) {
-                    if(JOptionPane.showOptionDialog(this,
+                    if (JOptionPane.showOptionDialog(this,
                             "Вы действительно хотите удалить выбранную запись?",
                             "Подтверждение",
                             JOptionPane.OK_CANCEL_OPTION,
                             JOptionPane.INFORMATION_MESSAGE,
                             null,
                             new String[]{"Да", "Нет"},
-                            "default")!= 0) return;
+                            "default") != 0) return;
                     else {
                         try {
                             AbstractView.this.performDelete(row);
                             updateTable();
-                        }catch (Exception ex){
+                        } catch (Exception ex) {
                             JOptionPane.showMessageDialog(this, "Невозможно удалить элемент",
                                     "Внимание!", JOptionPane.ERROR_MESSAGE);
                         }
                     }
-                }else
+                } else
                     JOptionPane.showMessageDialog(this, "Выберите элемент из таблицы для удаления",
                             "Внимание!", JOptionPane.INFORMATION_MESSAGE);
             });
@@ -133,8 +137,8 @@ public abstract class AbstractView extends JPanel {
         return null;
     }
 
-    public void updateTable(){
-        ((TableModel)table.getModel()).setData(getData());
+    public void updateTable() {
+        ((TableModel) table.getModel()).setData(getData());
         mainFrame.repaint();
     }
 }

@@ -57,4 +57,9 @@ public class ClientForm extends AbstractEdit {
         Client client = (Client) data;
         client.setName(fioText.getText()).setPhone(phoneText.getText()).save();
     }
+
+    @Override
+    public boolean allUnique() {
+        return true;
+    }
 }

@@ -134,8 +134,8 @@ public class OrderForm extends AbstractEdit {
         previous += 140;
 
         //Дата и время приёма
-        JLabel inDateLabel = new JLabel("Дата и время приёма");
-        inDateLabel.setBounds(firstRow, previous + 30, 120, 24);
+        JLabel inDateLabel = new JLabel("<html>Ориентировочная дата и время приёма");
+        inDateLabel.setBounds(firstRow, previous + 30, 120, 54);
         add(inDateLabel);
 
         //Date date = registerDate;
@@ -155,8 +155,8 @@ public class OrderForm extends AbstractEdit {
         previous += 30;
 
         //Дата и время выдачи
-        JLabel outDateLabel = new JLabel("Дата и время выдачи");
-        outDateLabel.setBounds(firstRow, previous + 30, 120, 24);
+        JLabel outDateLabel = new JLabel("<html>Ориентировочная дата и время выдачи");
+        outDateLabel.setBounds(firstRow, previous + 30, 120, 54);
         add(outDateLabel);
 
         SpinnerDateModel smOut = new SpinnerDateModel(date, null, null, Calendar.HOUR_OF_DAY);
@@ -424,6 +424,11 @@ public class OrderForm extends AbstractEdit {
             ex.printStackTrace();
         }
 
+    }
+
+    @Override
+    public boolean allUnique() {
+        return false;
     }
 
     private void changeMark() {

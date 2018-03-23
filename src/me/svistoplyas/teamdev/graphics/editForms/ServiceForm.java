@@ -5,6 +5,7 @@ import net.web_kot.teamdev.db.entities.Service;
 
 import javax.swing.*;
 import java.sql.SQLException;
+import java.util.List;
 
 public class ServiceForm extends AbstractEdit {
     private JTextField nameText;
@@ -59,15 +60,30 @@ public class ServiceForm extends AbstractEdit {
     }
 
     @Override
-    public void performAdd() throws Exception{
+    public void performAdd() throws Exception {
         String[] str = priceText.getText().split(",");
-        mainFrame.model.createService(nameText.getText()).save().setPrice(Integer.parseInt(str[0])*100 + Integer.parseInt(str[1]));
+        mainFrame.model.createService(nameText.getText()).save().setPrice(Integer.parseInt(str[0]) * 100 + Integer.parseInt(str[1]));
     }
 
     @Override
-    public void performEdit() throws Exception{
+    public void performEdit() throws Exception {
         Service service = (Service) data;
         String[] str = priceText.getText().split(",");
-        service.setName(nameText.getText()).save().setPrice(Integer.parseInt(str[0])*100 + Integer.parseInt(str[1]));
+        service.setName(nameText.getText()).save().setPrice(Integer.parseInt(str[0]) * 100 + Integer.parseInt(str[1]));
     }
+
+    @Override
+    public boolean allUnique() {
+        String name = nameText.getText();
+        try {
+            List<Service> services = mainFrame.model.getServices();
+            for (Service service : services)
+                if (service.getName().equals(name))
+                    return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
 }

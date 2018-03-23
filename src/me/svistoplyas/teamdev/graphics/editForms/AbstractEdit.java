@@ -41,7 +41,8 @@ public abstract class AbstractEdit extends JDialog {
                     }
                 }
                 redraw();
-                if (noBaddies()) {
+
+                if (noBaddies() && allUnique()) {
                     if (isEdit)
                         performEdit();
                     else
@@ -72,6 +73,8 @@ public abstract class AbstractEdit extends JDialog {
     public abstract void performAdd() throws Exception;
 
     public abstract void performEdit() throws Exception;
+
+    public abstract boolean allUnique();
 
     private int isEmptyOrBadlyFilled(Pair<String, JComponent> pair) {
 
@@ -108,7 +111,7 @@ public abstract class AbstractEdit extends JDialog {
                         try {
                             Integer.parseInt(arr[0]);
                             Integer.parseInt(arr[1]);
-                            
+
                             return -1;
                         } catch (Exception e) {
                             return 1;
