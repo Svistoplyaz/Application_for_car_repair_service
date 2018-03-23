@@ -93,7 +93,7 @@ public class HomeView extends AbstractView {
     @Override
     Object getObject(int row) {
         try {
-            return (Order)mainFrame.getView("Home").table.getModel().getValueAt(row, 4);
+            return (Order)mainFrame.getView("Home").table.getModel().getValueAt(row, 5);
         }catch (Exception e){
             e.printStackTrace();
             return null;

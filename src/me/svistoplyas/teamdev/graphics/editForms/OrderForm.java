@@ -155,11 +155,11 @@ public class OrderForm extends AbstractEdit {
         add(datePickerIn);
 
         try {
-            if (!(data == null || ((Order) data).getCurrentStatus() == Order.Status.PRELIMINARY)){
+            if (!(data == null || ((Order) data).getCurrentStatus() == Order.Status.PRELIMINARY)) {
                 spinnerIn.setEnabled(false);
                 datePickerIn.setEnabled(false);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         previous += 30;
@@ -203,8 +203,8 @@ public class OrderForm extends AbstractEdit {
         };
         JScrollPane scrollPaneServiceLeft = new JScrollPane(tableServiceLeft);
         scrollPaneServiceLeft.setBounds(thirdRow, previous, 190, 190);
-        ((TableModel)tableServiceLeft.getModel()).addTableModelListener(e -> {
-            
+        ((TableModel) tableServiceLeft.getModel()).addTableModelListener(e -> {
+
         });
         add(scrollPaneServiceLeft);
 
@@ -242,10 +242,20 @@ public class OrderForm extends AbstractEdit {
         serviceToLeft.addActionListener(e -> {
             int row = tableServiceRight.getSelectedRow();
             if (row != -1) {
-                ((TableModel) tableServiceLeft.getModel()).addData(((TableModel) tableServiceRight.getModel()).getValueAt(row));
-                ((TableModel) tableServiceRight.getModel()).deleteData(row);
-//                OrderForm.this.repaint();
-                setCurrentPrice();
+                Service service = (Service) ((TableModel) tableServiceRight.getModel()).getValueAt(row)[2];
+                try {
+                    if (data == null || ((Order) data).getCurrentStatus() == Order.Status.PRELIMINARY ||
+                            !((Order) data).getServices().contains(service)) {
+                        ((TableModel) tableServiceLeft.getModel()).addData(((TableModel) tableServiceRight.getModel()).getValueAt(row));
+                        ((TableModel) tableServiceRight.getModel()).deleteData(row);
+//                        OrderForm.this.repaint();
+                        setCurrentPrice();
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Нельзя отменить услугу!");
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         add(serviceToLeft);
@@ -334,7 +344,7 @@ public class OrderForm extends AbstractEdit {
                 numberText.setText(order.getRegistrationNumber());
 
             modelCombo.removeAllItems();
-            if(markCombo.getItemCount() > 0) {
+            if (markCombo.getItemCount() > 0) {
                 for (VehicleModel model : ((Mark) markCombo.getSelectedItem()).getVehiclesModels())
                     modelCombo.addItem(model);
                 if (isEdit)
@@ -465,19 +475,19 @@ public class OrderForm extends AbstractEdit {
         return true;
     }
 
-    private void printFile(){
-        Order order = (Order)data;
+    private void printFile() {
+        Order order = (Order) data;
         try {
             if (order.getCurrentStatus() == Order.Status.FINISHED || order.getCurrentStatus() == Order.Status.CLOSED)
                 Desktop.getDesktop().open(order.formDocument());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void changeMark() {
         try {
-            if(markCombo.getItemCount() > 0) {
+            if (markCombo.getItemCount() > 0) {
                 modelCombo.removeAllItems();
                 for (VehicleModel model : ((Mark) markCombo.getSelectedItem()).getVehiclesModels())
                     modelCombo.addItem(model);
@@ -490,7 +500,7 @@ public class OrderForm extends AbstractEdit {
     }
 
     private Object[][] getDataServiceLeft() {
-        Order order = (Order)data;
+        Order order = (Order) data;
         try {
             List<Service> services = mainFrame.model.getServices();
             if (isEdit) {
@@ -525,7 +535,7 @@ public class OrderForm extends AbstractEdit {
     }
 
     private Object[][] getDataServiceRight() {
-        Order order = (Order)data;
+        Order order = (Order) data;
         try {
             if (isEdit) {
                 List<Service> hasServices = ((Order) data).getServices();
