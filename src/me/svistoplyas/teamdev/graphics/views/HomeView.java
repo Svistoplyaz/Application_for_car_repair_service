@@ -55,7 +55,7 @@ public class HomeView extends AbstractView {
 
     @Override
     String[] getColumnNames() {
-        return new String[]{"Клиент", "Регистрационный номер", "Статус", ""};
+        return new String[]{"Клиент", "Номер", "Статус", "Ориентир. приём", "Ориентир. выдача"};
     }
 
     @Override
@@ -64,12 +64,13 @@ public class HomeView extends AbstractView {
             if(date == null) date = new Date();
             List<Order> orders = mainFrame.model.getOrders(date);
             Object[][] ans = new Object[orders.size()][];
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             
             for(int i = 0; i < orders.size(); i++) {
                 Order order = orders.get(i);
                 ans[i] = new Object[]{
                         order.getClient(), order.getRegistrationNumber(), order.getCurrentStatus(),
-                        getState(order, date),
+                        df.format(order.getStartDate()),df.format(order.getFinishDate()),
                         order};
             }
             
