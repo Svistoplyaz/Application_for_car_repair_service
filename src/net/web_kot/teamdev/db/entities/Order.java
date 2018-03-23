@@ -256,9 +256,12 @@ public class Order extends AbstractEntity {
         return getPrice(this, getServices());
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public File formDocument(boolean finish) throws Exception {
-        File f = new File("orders/" + getId() + "-" +
-                getClient().getName().replace("", "") + ".txt");
+        String fileName = getId() + "-" + getClient().getName().replace(" ", "_");
+        if(!finish) fileName += "-предварительный";
+        
+        File f = new File("orders/" + fileName + ".txt");
         f.getParentFile().mkdirs();
 
         PrintWriter out = new PrintWriter(new FileWriter(f));

@@ -194,6 +194,7 @@ public class OrderForm extends AbstractEdit {
 
         //Таблица с услугами которых нет в заказе
         JTable tableServiceLeft = new JTable(new TableModel(new String[]{"Услуга", "Цена"}, getDataServiceLeft())) {
+            @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
                 Component c = super.prepareRenderer(renderer, row, column);
                 if (c instanceof JComponent) {
@@ -212,6 +213,7 @@ public class OrderForm extends AbstractEdit {
 
         //Таблица с услугами которые есть в заказе
         tableServiceRight = new JTable(new TableModel(new String[]{"Услуга", "Цена"}, getDataServiceRight())) {
+            @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
                 Component c = super.prepareRenderer(renderer, row, column);
                 if (c instanceof JComponent) {
@@ -390,17 +392,6 @@ public class OrderForm extends AbstractEdit {
         //Установка регистрационного номера
         order.setRegistrationNumber(numberText.getText());
 
-        printFile(Order.Status.PRELIMINARY);
-        //Установка статусов
-        for (Order.Status status : statusArrayList) {
-            try {
-                order.setStatus(status);
-                printFile(status);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
         //Установка конечной даты
         date = ((SpinnerDateModel) spinnerOut.getModel()).getDate();
         model = datePickerOut.getModel();
@@ -421,6 +412,8 @@ public class OrderForm extends AbstractEdit {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+        setStatuses();
     }
 
     @Override
@@ -429,16 +422,6 @@ public class OrderForm extends AbstractEdit {
 
         //Установка регистрационного номера
         order.setRegistrationNumber(numberText.getText());
-
-        //Установка статусов
-        for (Order.Status status : statusArrayList) {
-            try {
-                order.setStatus(status);
-                printFile(status);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
 
         //Установка начальной даты
         Date date;
@@ -468,6 +451,21 @@ public class OrderForm extends AbstractEdit {
             order.save();
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+
+        setStatuses();
+    }
+
+    //Установка статусов
+    private void setStatuses() {
+        Order order = (Order) data;
+        for (Order.Status status : statusArrayList) {
+            try {
+                order.setStatus(status);
+                printFile(status);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
