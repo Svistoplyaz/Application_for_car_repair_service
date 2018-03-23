@@ -517,7 +517,7 @@ public class OrderForm extends AbstractEdit {
         try {
             if (status == Order.Status.FINISHED)
                 Desktop.getDesktop().open(((Order)data).formDocument(true));
-            else if(status == Order.Status.PRELIMINARY)
+            else if(status == Order.Status.CONFIRMED)
                 Desktop.getDesktop().open(((Order)data).formDocument(false));
         } catch (Exception e) {
             e.printStackTrace();
