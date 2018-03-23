@@ -30,7 +30,7 @@ public class Order extends AbstractEntity {
         Status(String n) { name = n; }
     }
     
-    private static final DateFormat FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+    private static final DateFormat FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     
     private int idClient, idModel;
     private String number;
