@@ -142,7 +142,11 @@ public class Model {
         
         return getList(
                 Order.class, 
-                db.formatQuery("SELECT * FROM `Order` WHERE %d <= Start_date AND Start_date <= %d", start, end)
+                db.formatQuery(
+                        "SELECT * FROM `Order` WHERE (%d <= Start_date AND Start_date <= %d) " +
+                                "OR (%d <= Finish_date AND Finish_date <= %d)",
+                        start, end, start, end
+                )
         );
     }
     
