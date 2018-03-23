@@ -9,6 +9,7 @@ import org.jdatepicker.DateModel;
 import org.jdatepicker.JDatePicker;
 
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -182,7 +183,16 @@ public class OrderForm extends AbstractEdit {
         previous += 25;
 
         //Таблица с услугами которых нет в заказе
-        JTable tableServiceLeft = new JTable(new TableModel(new String[]{"Услуга", "Цена"}, getDataServiceLeft()));
+        JTable tableServiceLeft = new JTable(new TableModel(new String[]{"Услуга", "Цена"}, getDataServiceLeft())) {
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+                if (c instanceof JComponent) {
+                    JComponent jc = (JComponent) c;
+                    jc.setToolTipText(getValueAt(row, column).toString());
+                }
+                return c;
+            }
+        };
         JScrollPane scrollPaneServiceLeft = new JScrollPane(tableServiceLeft);
         scrollPaneServiceLeft.setBounds(thirdRow, previous, 190, 190);
         ((TableModel)tableServiceLeft.getModel()).addTableModelListener(e -> {
@@ -191,7 +201,16 @@ public class OrderForm extends AbstractEdit {
         add(scrollPaneServiceLeft);
 
         //Таблица с услугами которых нет в заказе
-        tableServiceRight = new JTable(new TableModel(new String[]{"Услуга", "Цена"}, getDataServiceRight()));
+        tableServiceRight = new JTable(new TableModel(new String[]{"Услуга", "Цена"}, getDataServiceRight())) {
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+                if (c instanceof JComponent) {
+                    JComponent jc = (JComponent) c;
+                    jc.setToolTipText(getValueAt(row, column).toString());
+                }
+                return c;
+            }
+        };
         JScrollPane scrollPaneServiceRight = new JScrollPane(tableServiceRight);
         scrollPaneServiceRight.setBounds(fourthRow, previous, 190, 190);
         add(scrollPaneServiceRight);
