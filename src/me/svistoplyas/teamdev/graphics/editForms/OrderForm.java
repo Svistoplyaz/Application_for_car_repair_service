@@ -9,6 +9,7 @@ import org.jdatepicker.DateModel;
 import org.jdatepicker.JDatePicker;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -184,6 +185,9 @@ public class OrderForm extends AbstractEdit {
         JTable tableServiceLeft = new JTable(new TableModel(new String[]{"Услуга", "Цена"}, getDataServiceLeft()));
         JScrollPane scrollPaneServiceLeft = new JScrollPane(tableServiceLeft);
         scrollPaneServiceLeft.setBounds(thirdRow, previous, 190, 190);
+        ((TableModel)tableServiceLeft.getModel()).addTableModelListener(e -> {
+            
+        });
         add(scrollPaneServiceLeft);
 
         //Таблица с услугами которых нет в заказе
@@ -376,6 +380,8 @@ public class OrderForm extends AbstractEdit {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+        printFile();
     }
 
     @Override
@@ -424,11 +430,22 @@ public class OrderForm extends AbstractEdit {
             ex.printStackTrace();
         }
 
+        printFile();
     }
 
     @Override
     public boolean allUnique() {
-        return false;
+        return true;
+    }
+
+    private void printFile(){
+        Order order = (Order)data;
+        try {
+            if (order.getCurrentStatus() == Order.Status.FINISHED)
+                Desktop.getDesktop().open(order.formDocument());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void changeMark() {
@@ -457,7 +474,7 @@ public class OrderForm extends AbstractEdit {
                 int i = 0;
                 for (Service service : services) {
                     if (!hasServices.contains(service)) {
-                        ans[i] = new Object[]{service.getName(), Converter.getInstance().convertPriceToStr(service.getPriceForOrder(order)), service};
+                        ans[i] = new Object[]{service.getName(), Converter.getInstance().convertPriceToStrOnlyRubbles(service.getPriceForOrder(order)), service};
                         i++;
                     }
                 }
@@ -468,7 +485,7 @@ public class OrderForm extends AbstractEdit {
 
                 int i = 0;
                 for (Service service : services) {
-                    ans[i] = new Object[]{service.getName(), Converter.getInstance().convertPriceToStr(service.getPrice()), service};
+                    ans[i] = new Object[]{service.getName(), Converter.getInstance().convertPriceToStrOnlyRubbles(service.getPrice()), service};
                     i++;
                 }
 
@@ -490,7 +507,7 @@ public class OrderForm extends AbstractEdit {
 
                 int i = 0;
                 for (Service service : hasServices) {
-                    ans[i] = new Object[]{service.getName(), Converter.getInstance().convertPriceToStr(service.getPriceForOrder(order)), service};
+                    ans[i] = new Object[]{service.getName(), Converter.getInstance().convertPriceToStrOnlyRubbles(service.getPriceForOrder(order)), service};
                     i++;
                 }
 

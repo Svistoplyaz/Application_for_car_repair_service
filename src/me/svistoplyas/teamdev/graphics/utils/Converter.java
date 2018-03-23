@@ -10,13 +10,13 @@ public class Converter {
         return instance;
     }
 
-    public String convertPriceToStr(int price){
+    public String convertPriceToStr(int price) {
         return price / 100 + "," + price % 100 + "";
 //        return price / 100 + " руб. " + price % 100 + " коп.";
     }
 
-    public String convertPriceToStrColon(int price){
-        return price / 100 + "," + price % 100 + "";
+    public String convertPriceToStrOnlyRubbles(int price) {
+        return price / 100 + "";
     }
 
 }

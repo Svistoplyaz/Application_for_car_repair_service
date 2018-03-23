@@ -42,12 +42,16 @@ public abstract class AbstractEdit extends JDialog {
                 }
                 redraw();
 
-                if (noBaddies() && allUnique()) {
-                    if (isEdit)
-                        performEdit();
-                    else
-                        performAdd();
-                    AbstractEdit.this.setVisible(false);
+                if (allUnique()) {
+                    if (noBaddies()) {
+                        if (isEdit)
+                            performEdit();
+                        else
+                            performAdd();
+                        AbstractEdit.this.setVisible(false);
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this, "Запись с таким именем уже существует!");
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
