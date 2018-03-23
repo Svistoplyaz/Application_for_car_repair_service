@@ -102,7 +102,7 @@ public class Database {
             if(args[i] == null)
                 nw[i] = "NULL";
             else if(args[i] instanceof String)
-                nw[i] = "\"" + ((String)args[i]).replace("'", "") + "\"";
+                nw[i] = "\"" + ((String)args[i]).replace("'", "").trim() + "\"";
             else
                 nw[i] = args[i];
         return nw;
