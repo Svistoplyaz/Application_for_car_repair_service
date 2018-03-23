@@ -390,6 +390,7 @@ public class OrderForm extends AbstractEdit {
         //Установка регистрационного номера
         order.setRegistrationNumber(numberText.getText());
 
+        printFile(Order.Status.PRELIMINARY);
         //Установка статусов
         for (Order.Status status : statusArrayList) {
             try {
@@ -514,7 +515,9 @@ public class OrderForm extends AbstractEdit {
     private void printFile(Order.Status status) {
         try {
             if (status == Order.Status.FINISHED)
-                Desktop.getDesktop().open(((Order) data).formDocument());
+                Desktop.getDesktop().open(((Order)data).formDocument(true));
+            else if(status == Order.Status.PRELIMINARY)
+                Desktop.getDesktop().open(((Order)data).formDocument(false));
         } catch (Exception e) {
             e.printStackTrace();
         }
