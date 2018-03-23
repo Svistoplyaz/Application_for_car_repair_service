@@ -19,7 +19,7 @@ public class Order extends AbstractEntity {
     
     public enum Status {
         PRELIMINARY("Предварительный"), CONFIRMED("Подтвержденный"), CANCELED("Отмененный"),
-        INWORK("В работе"), FINISHED("Завершенный"), CLOSED("Закрытый");
+        INWORK("В работе"), FINISHED("Завершенный"), CLOSED("Выданный");
         
         private final String name;
         public String getName() { return name; }
@@ -256,7 +256,7 @@ public class Order extends AbstractEntity {
         return getPrice(this, getServices());
     }
 
-    public File formDocument() throws Exception {
+    public File formDocument(boolean finish) throws Exception {
         File f = new File("orders/" + getId() + "-" +
                 getClient().getName().replace("", "") + ".txt");
         f.getParentFile().mkdirs();
@@ -265,6 +265,7 @@ public class Order extends AbstractEntity {
 
         out.print("Заказ №" + getId() + " / " + getClient().getName() + " / " + FORMAT.format(new Date()));
         out.println(" / " + getRegistrationNumber());
+        if(!finish) out.println(String.format("%40s", "Предварительная смета"));
         out.println();
 
         List<Service> services = getServices();

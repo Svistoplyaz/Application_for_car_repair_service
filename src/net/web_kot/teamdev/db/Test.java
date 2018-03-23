@@ -25,7 +25,7 @@ public class Test {
         Order o = model.createOrder(vasya, corolla, new Date()).setRegistrationNumber("А222МР777RUS").save();
         o.addService(s);
 
-        o.formDocument();
+        o.formDocument(true);
 
         //for(Order order : model.getOrders(new Date())) System.out.println(order);
 
