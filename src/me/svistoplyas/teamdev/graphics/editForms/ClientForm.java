@@ -59,7 +59,7 @@ public class ClientForm extends AbstractEdit {
     }
 
     @Override
-    public boolean allUnique() {
+    public boolean otherValidation() {
         return true;
     }
 }

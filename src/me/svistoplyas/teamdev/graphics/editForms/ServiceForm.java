@@ -73,7 +73,7 @@ public class ServiceForm extends AbstractEdit {
     }
 
     @Override
-    public boolean allUnique() {
+    public boolean otherValidation() {
         String name = nameText.getText().trim();
         try {
             List<Service> services = mainFrame.model.getServices();

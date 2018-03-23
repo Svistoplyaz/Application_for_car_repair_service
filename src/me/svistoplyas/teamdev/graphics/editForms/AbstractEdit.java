@@ -42,7 +42,7 @@ public abstract class AbstractEdit extends JDialog {
                 }
                 redraw();
 
-                if (allUnique()) {
+                if (otherValidation()) {
                     if (noBaddies()) {
                         if (isEdit)
                             performEdit();
@@ -78,7 +78,7 @@ public abstract class AbstractEdit extends JDialog {
 
     public abstract void performEdit() throws Exception;
 
-    public abstract boolean allUnique();
+    public abstract boolean otherValidation();
 
     private int isEmptyOrBadlyFilled(Pair<String, JComponent> pair) {
 

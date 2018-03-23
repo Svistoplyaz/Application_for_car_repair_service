@@ -155,11 +155,11 @@ public class OrderForm extends AbstractEdit {
         add(datePickerIn);
 
         try {
-            if (!(data == null || ((Order) data).getCurrentStatus() == Order.Status.PRELIMINARY)){
+            if (!(data == null || ((Order) data).getCurrentStatus() == Order.Status.PRELIMINARY)) {
                 spinnerIn.setEnabled(false);
                 datePickerIn.setEnabled(false);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         previous += 30;
@@ -203,8 +203,8 @@ public class OrderForm extends AbstractEdit {
         };
         JScrollPane scrollPaneServiceLeft = new JScrollPane(tableServiceLeft);
         scrollPaneServiceLeft.setBounds(thirdRow, previous, 190, 190);
-        ((TableModel)tableServiceLeft.getModel()).addTableModelListener(e -> {
-            
+        ((TableModel) tableServiceLeft.getModel()).addTableModelListener(e -> {
+
         });
         add(scrollPaneServiceLeft);
 
@@ -334,7 +334,7 @@ public class OrderForm extends AbstractEdit {
                 numberText.setText(order.getRegistrationNumber());
 
             modelCombo.removeAllItems();
-            if(markCombo.getItemCount() > 0) {
+            if (markCombo.getItemCount() > 0) {
                 for (VehicleModel model : ((Mark) markCombo.getSelectedItem()).getVehiclesModels())
                     modelCombo.addItem(model);
                 if (isEdit)
@@ -461,23 +461,59 @@ public class OrderForm extends AbstractEdit {
     }
 
     @Override
-    public boolean allUnique() {
+    public boolean otherValidation() {
+        Order order = (Order) data;
+
+        //Установка начальной даты
+        Date dateStart;
+        dateStart = ((SpinnerDateModel) spinnerIn.getModel()).getDate();
+        DateModel model = datePickerIn.getModel();
+        dateStart.setDate(model.getDay());
+        dateStart.setMonth(model.getMonth());
+        dateStart.setYear(model.getYear() - 1900);
+
+        //Установка конечной даты
+        Date dateFinish = ((SpinnerDateModel) spinnerOut.getModel()).getDate();
+        model = datePickerOut.getModel();
+        dateFinish.setDate(model.getDay());
+        dateFinish.setMonth(model.getMonth());
+        dateFinish.setYear(model.getYear() - 1900);
+
+        //order
+        if(order == null || order.getStartDate().getTime() / 1000 != dateStart.getTime() / 1000) {
+            if (dateStart.before(new Date())) {
+                JOptionPane.showMessageDialog(this, "Ориентировочная дата приема раньше текущей");
+                return false;
+            }
+        }
+
+        if(order == null || order.getFinishDate().getTime() / 1000 != dateFinish.getTime() / 1000)
+            if (dateFinish.before(new Date())) {
+                JOptionPane.showMessageDialog(this, "Ориентировочная дата выдачи раньше текущей");
+                return false;
+            }
+
+        if(dateFinish.before(dateStart)) {
+            JOptionPane.showMessageDialog(this, "Ориентировочная дата выдачи раньше приема");
+            return false;
+        }
+
         return true;
     }
 
-    private void printFile(){
-        Order order = (Order)data;
+    private void printFile() {
+        Order order = (Order) data;
         try {
             if (order.getCurrentStatus() == Order.Status.FINISHED || order.getCurrentStatus() == Order.Status.CLOSED)
                 Desktop.getDesktop().open(order.formDocument());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void changeMark() {
         try {
-            if(markCombo.getItemCount() > 0) {
+            if (markCombo.getItemCount() > 0) {
                 modelCombo.removeAllItems();
                 for (VehicleModel model : ((Mark) markCombo.getSelectedItem()).getVehiclesModels())
                     modelCombo.addItem(model);
@@ -490,7 +526,7 @@ public class OrderForm extends AbstractEdit {
     }
 
     private Object[][] getDataServiceLeft() {
-        Order order = (Order)data;
+        Order order = (Order) data;
         try {
             List<Service> services = mainFrame.model.getServices();
             if (isEdit) {
@@ -525,7 +561,7 @@ public class OrderForm extends AbstractEdit {
     }
 
     private Object[][] getDataServiceRight() {
-        Order order = (Order)data;
+        Order order = (Order) data;
         try {
             if (isEdit) {
                 List<Service> hasServices = ((Order) data).getServices();
