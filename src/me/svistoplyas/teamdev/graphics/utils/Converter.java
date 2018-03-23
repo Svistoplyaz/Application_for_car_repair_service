@@ -1,8 +1,14 @@
 package me.svistoplyas.teamdev.graphics.utils;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Converter {
     private static Converter instance;
+    private DateFormat dfM = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private DateFormat dfY = new SimpleDateFormat("dd/MM/yyyy");
 
     public static Converter getInstance() {
         if (instance == null)
@@ -17,6 +23,14 @@ public class Converter {
 
     public String convertPriceToStrOnlyRubbles(int price) {
         return price / 100 + "";
+    }
+
+    public String dateToStrWithTime(Date date){
+        return dfM.format(date);
+    }
+
+    public String dateToStr(Date date){
+        return dfY.format(date);
     }
 
 }
