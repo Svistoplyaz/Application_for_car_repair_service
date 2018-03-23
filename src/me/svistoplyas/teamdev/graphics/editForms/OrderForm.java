@@ -140,7 +140,10 @@ public class OrderForm extends AbstractEdit {
         inDateLabel.setBounds(firstRow, previous + 30, 120, 54);
         add(inDateLabel);
 
-        //Date date = registerDate;
+        // Не твой код
+        if(date.before(new Date()) || date.getTime() / 1000 == System.currentTimeMillis() / 1000)
+            date = new Date(System.currentTimeMillis() + 60 * 60 * 1000);
+
         SpinnerDateModel smIn = new SpinnerDateModel(date, null, null, Calendar.HOUR_OF_DAY);
         spinnerIn = new javax.swing.JSpinner(smIn);
         JSpinner.DateEditor deIn = new JSpinner.DateEditor(spinnerIn, "HH:mm:ss");
@@ -392,6 +395,7 @@ public class OrderForm extends AbstractEdit {
         for (Order.Status status : statusArrayList) {
             try {
                 order.setStatus(status);
+                printFile(status);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -417,8 +421,6 @@ public class OrderForm extends AbstractEdit {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-        printFile();
     }
 
     @Override
@@ -432,6 +434,7 @@ public class OrderForm extends AbstractEdit {
         for (Order.Status status : statusArrayList) {
             try {
                 order.setStatus(status);
+                printFile(status);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -466,8 +469,6 @@ public class OrderForm extends AbstractEdit {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-        printFile();
     }
 
     @Override
@@ -511,11 +512,10 @@ public class OrderForm extends AbstractEdit {
         return true;
     }
 
-    private void printFile() {
-        Order order = (Order) data;
+    private void printFile(Order.Status status) {
         try {
-            if (order.getCurrentStatus() == Order.Status.FINISHED || order.getCurrentStatus() == Order.Status.CLOSED)
-                Desktop.getDesktop().open(order.formDocument());
+            if (status == Order.Status.FINISHED)
+                Desktop.getDesktop().open(((Order)data).formDocument());
         } catch (Exception e) {
             e.printStackTrace();
         }
