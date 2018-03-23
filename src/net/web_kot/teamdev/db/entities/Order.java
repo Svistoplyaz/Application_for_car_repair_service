@@ -3,6 +3,9 @@ package net.web_kot.teamdev.db.entities;
 import net.web_kot.teamdev.db.Model;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,7 +30,7 @@ public class Order extends AbstractEntity {
         Status(String n) { name = n; }
     }
     
-    private static final DateFormat FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    private static final DateFormat FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     
     private int idClient, idModel;
     private String number;
@@ -240,5 +243,34 @@ public class Order extends AbstractEntity {
         if(getCurrentStatus() == Status.CLOSED) return finishCost;
         return getPrice(this, getServices());
     }
-    
+
+    public File formDocument() throws Exception {
+        File f = new File("orders/" + getId() + "-" +
+                getClient().getName().replace("", "") + ".txt");
+        f.getParentFile().mkdirs();
+
+        PrintWriter out = new PrintWriter(new FileWriter(f));
+
+        out.print("Заказ №" + getId() + " / " + getClient().getName() + " / " + FORMAT.format(new Date()));
+        out.println(" / " + getRegistrationNumber());
+        out.println();
+
+        List<Service> services = getServices();
+        for(int i = 0; i < services.size(); i++) {
+            Service s = services.get(i);
+
+            out.print(String.format("%3s", (i + 1) + ""));
+            out.print(". ");
+            out.print(String.format("%-60s", s.getName()));
+            out.println((s.getPrice() / 100D) + " р.");
+        }
+
+        out.println();
+        out.print(String.format("%64s", "Итого:"));
+        out.println(" " + (getPrice() / 100D) + " р.");
+
+        out.close();
+        return f;
+    }
+
 }

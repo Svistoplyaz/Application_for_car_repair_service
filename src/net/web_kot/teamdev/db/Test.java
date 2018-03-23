@@ -19,11 +19,16 @@ public class Test {
         
         Mark toyota = model.createMark("Toyota").save();
         VehicleModel corolla = model.createVehicleModel(toyota, "Corolla", 2012).save();
-        
+
+        Service s = model.createService("Замена масла").save().setPrice(100);
+
         Order o = model.createOrder(vasya, corolla, new Date()).setRegistrationNumber("А222МР777RUS").save();
-        
-        for(Order order : model.getOrders(new Date())) System.out.println(order);
-        
+        o.addService(s);
+
+        o.formDocument();
+
+        //for(Order order : model.getOrders(new Date())) System.out.println(order);
+
         db.close();
     }
     
