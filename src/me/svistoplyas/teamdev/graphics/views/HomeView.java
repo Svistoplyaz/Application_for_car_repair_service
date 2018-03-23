@@ -3,6 +3,7 @@ package me.svistoplyas.teamdev.graphics.views;
 import me.svistoplyas.teamdev.graphics.MainFrame;
 import me.svistoplyas.teamdev.graphics.editForms.AbstractEdit;
 import me.svistoplyas.teamdev.graphics.editForms.OrderForm;
+import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.entities.Order;
 import org.apache.commons.lang3.time.DateUtils;
 import org.jdatepicker.DateModel;
@@ -10,16 +11,12 @@ import org.jdatepicker.JDatePanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 public class HomeView extends AbstractView {
-
-    private static final DateFormat FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
     private Date date = new Date();
     private JLabel caption;
@@ -50,7 +47,7 @@ public class HomeView extends AbstractView {
     }
 
     private void updateCaption() {
-        caption.setText("Заказы на " + FORMAT.format(date));
+        caption.setText("Заказы на " + Converter.getInstance().dateToStr(date));
     }
 
     @Override
@@ -64,13 +61,13 @@ public class HomeView extends AbstractView {
             if(date == null) date = new Date();
             List<Order> orders = mainFrame.model.getOrders(date);
             Object[][] ans = new Object[orders.size()][];
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             
             for(int i = 0; i < orders.size(); i++) {
                 Order order = orders.get(i);
                 ans[i] = new Object[]{
                         order.getClient(), order.getRegistrationNumber(), order.getCurrentStatus(),
-                        df.format(order.getStartDate()),df.format(order.getFinishDate()),
+                        Converter.getInstance().dateToStrWithTime(order.getStartDate()),
+                        Converter.getInstance().dateToStrWithTime(order.getFinishDate()),
                         order};
             }
             

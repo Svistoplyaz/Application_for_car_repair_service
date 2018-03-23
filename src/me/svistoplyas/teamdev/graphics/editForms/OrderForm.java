@@ -1,6 +1,5 @@
 package me.svistoplyas.teamdev.graphics.editForms;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
 import me.svistoplyas.teamdev.graphics.TableModel;
 import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.entities.*;
@@ -141,12 +140,12 @@ public class OrderForm extends AbstractEdit {
         add(inDateLabel);
 
         // Не твой код
-        if(date.before(new Date()) || date.getTime() / 1000 == System.currentTimeMillis() / 1000)
+        if (date.before(new Date()) || date.getTime() / 1000 == System.currentTimeMillis() / 1000)
             date = new Date(System.currentTimeMillis() + 60 * 60 * 1000);
 
         SpinnerDateModel smIn = new SpinnerDateModel(date, null, null, Calendar.HOUR_OF_DAY);
         spinnerIn = new javax.swing.JSpinner(smIn);
-        JSpinner.DateEditor deIn = new JSpinner.DateEditor(spinnerIn, "HH:mm:ss");
+        JSpinner.DateEditor deIn = new JSpinner.DateEditor(spinnerIn, "HH:mm");
         spinnerIn.setEditor(deIn);
         spinnerIn.setBounds(secondRow, previous + 30, 200, 24);
         add(spinnerIn);
@@ -174,7 +173,7 @@ public class OrderForm extends AbstractEdit {
 
         SpinnerDateModel smOut = new SpinnerDateModel(date, null, null, Calendar.HOUR_OF_DAY);
         spinnerOut = new javax.swing.JSpinner(smOut);
-        JSpinner.DateEditor deOut = new JSpinner.DateEditor(spinnerOut, "HH:mm:ss");
+        JSpinner.DateEditor deOut = new JSpinner.DateEditor(spinnerOut, "HH:mm");
         spinnerOut.setEditor(deOut);
         spinnerOut.setBounds(secondRow, previous + 30, 200, 24);
         add(spinnerOut);
@@ -253,7 +252,7 @@ public class OrderForm extends AbstractEdit {
                         ((TableModel) tableServiceRight.getModel()).deleteData(row);
 //                        OrderForm.this.repaint();
                         setCurrentPrice();
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(this, "Нельзя отменить услугу!");
                     }
                 } catch (Exception ex) {
@@ -492,20 +491,20 @@ public class OrderForm extends AbstractEdit {
         dateFinish.setYear(model.getYear() - 1900);
 
         //order
-        if(order == null || order.getStartDate().getTime() / 1000 != dateStart.getTime() / 1000) {
+        if (order == null || order.getStartDate().getTime() / 1000 / 60 != dateStart.getTime() / 1000 / 60) {
             if (dateStart.before(new Date())) {
                 JOptionPane.showMessageDialog(this, "Ориентировочная дата приема раньше текущей");
                 return false;
             }
         }
 
-        if(order == null || order.getFinishDate().getTime() / 1000 != dateFinish.getTime() / 1000)
+        if (order == null || order.getFinishDate().getTime() / 1000 / 60 != dateFinish.getTime() / 1000 / 60)
             if (dateFinish.before(new Date())) {
                 JOptionPane.showMessageDialog(this, "Ориентировочная дата выдачи раньше текущей");
                 return false;
             }
 
-        if(dateFinish.before(dateStart)) {
+        if (dateFinish.before(dateStart)) {
             JOptionPane.showMessageDialog(this, "Ориентировочная дата выдачи раньше приема");
             return false;
         }

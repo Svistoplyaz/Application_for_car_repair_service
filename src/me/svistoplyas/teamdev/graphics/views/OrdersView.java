@@ -3,11 +3,9 @@ package me.svistoplyas.teamdev.graphics.views;
 import me.svistoplyas.teamdev.graphics.MainFrame;
 import me.svistoplyas.teamdev.graphics.editForms.AbstractEdit;
 import me.svistoplyas.teamdev.graphics.editForms.OrderForm;
-import net.web_kot.teamdev.db.entities.Client;
+import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.entities.Order;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +25,7 @@ public class OrdersView extends AbstractView {
         try {
             List<Order> orders = mainFrame.model.getOrders();
             Object[][] ans = new Object[orders.size()][];
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+//            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
             int i = 0;
             for (Order order : orders) {
@@ -35,10 +33,10 @@ public class OrdersView extends AbstractView {
 
                 String finishDate = "-";
                 Date d = order.getRealFinishDate();
-                if (d != null) finishDate = df.format(d);
+                if (d != null) finishDate = Converter.getInstance().dateToStr(d);
 
                 ans[i] = new Object[]{order.getClient(), worker, order.getRegistrationNumber(),
-                        df.format(order.getRealStartDate()), finishDate,
+                        Converter.getInstance().dateToStr(order.getRealStartDate()), finishDate,
                         order.getVehicleModel().getMark(), order.getVehicleModel(),
                         order.getCurrentStatus()};
                 i++;
