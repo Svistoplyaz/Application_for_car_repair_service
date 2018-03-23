@@ -78,8 +78,10 @@ public class ServiceForm extends AbstractEdit {
         try {
             List<Service> services = mainFrame.model.getServices();
             for (Service service : services)
-                if (service.getName().equals(name))
+                if (service.getName().equals(name)) {
+                    JOptionPane.showMessageDialog(this, "Запись с таким именем уже существует!");
                     return false;
+                }
         } catch (Exception e) {
             e.printStackTrace();
         }

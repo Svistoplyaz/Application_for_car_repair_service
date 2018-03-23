@@ -50,8 +50,6 @@ public abstract class AbstractEdit extends JDialog {
                             performAdd();
                         AbstractEdit.this.setVisible(false);
                     }
-                }else{
-                    JOptionPane.showMessageDialog(this, "Запись с таким именем уже существует!");
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
