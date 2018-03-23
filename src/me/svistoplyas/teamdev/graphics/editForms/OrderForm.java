@@ -242,10 +242,20 @@ public class OrderForm extends AbstractEdit {
         serviceToLeft.addActionListener(e -> {
             int row = tableServiceRight.getSelectedRow();
             if (row != -1) {
-                ((TableModel) tableServiceLeft.getModel()).addData(((TableModel) tableServiceRight.getModel()).getValueAt(row));
-                ((TableModel) tableServiceRight.getModel()).deleteData(row);
-//                OrderForm.this.repaint();
-                setCurrentPrice();
+                Service service = (Service) ((TableModel) tableServiceRight.getModel()).getValueAt(row)[2];
+                try {
+                    if (data == null || ((Order) data).getCurrentStatus() == Order.Status.PRELIMINARY ||
+                            !((Order) data).getServices().contains(service)) {
+                        ((TableModel) tableServiceLeft.getModel()).addData(((TableModel) tableServiceRight.getModel()).getValueAt(row));
+                        ((TableModel) tableServiceRight.getModel()).deleteData(row);
+//                        OrderForm.this.repaint();
+                        setCurrentPrice();
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Нельзя отменить услугу!");
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         add(serviceToLeft);
