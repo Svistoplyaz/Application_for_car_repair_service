@@ -460,7 +460,7 @@ public class OrderForm extends AbstractEdit {
     private void printFile(){
         Order order = (Order)data;
         try {
-            if (order.getCurrentStatus() == Order.Status.FINISHED)
+            if (order.getCurrentStatus() == Order.Status.FINISHED || order.getCurrentStatus() == Order.Status.CLOSED)
                 Desktop.getDesktop().open(order.formDocument());
         }catch (Exception e){
             e.printStackTrace();
