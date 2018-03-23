@@ -179,7 +179,19 @@ public class Order extends AbstractEntity {
             save();
         }
     }
-    
+
+    public HashMap<Status, Date> getHistoryMap() throws Exception {
+        HashMap<Status, Date> map = new HashMap<>();
+
+        ResultSet result = model.db().select("SELECT * FROM Status WHERE PK_Order = %d ORDER BY PK_Status ASC", id);
+        while(result.next()) {
+            Pair<Status, Date> pair = parseStatus(result);
+            map.put(pair.getLeft(), pair.getRight());
+        }
+
+        return map;
+    }
+
     public ArrayList<Pair<String, String>> getHistory() throws Exception {
         ArrayList<Pair<String, String>> list = new ArrayList<>();
         
@@ -271,6 +283,16 @@ public class Order extends AbstractEntity {
 
         out.close();
         return f;
+    }
+
+    public Date getRealStartDate() throws Exception {
+        HashMap<Status, Date> history = getHistoryMap();
+        return history.get(Status.PRELIMINARY);
+    }
+
+    public Date getRealFinishDate() throws Exception {
+        HashMap<Status, Date> history = getHistoryMap();
+        return history.get(Status.CLOSED);
     }
 
 }
