@@ -154,6 +154,14 @@ public class OrderForm extends AbstractEdit {
         datePickerIn.setBounds(secondRow, previous + 30, 200, 24);
         add(datePickerIn);
 
+        try {
+            if (!(data == null || ((Order) data).getCurrentStatus() == Order.Status.PRELIMINARY)){
+                spinnerIn.setEnabled(false);
+                datePickerIn.setEnabled(false);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         previous += 30;
 
         //Дата и время выдачи
