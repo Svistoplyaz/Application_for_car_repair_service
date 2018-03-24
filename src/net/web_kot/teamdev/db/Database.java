@@ -80,10 +80,10 @@ public class Database {
         return getLastInsertRowId();
     }
     
-    public void update(@Language("SQL")String sql, Object... args) throws SQLException {
+    public int update(@Language("SQL")String sql, Object... args) throws SQLException {
         String query = formatQuery(sql, args);
         if(debug) System.out.println("> " + query);
-        statement.executeUpdate(query);
+        return statement.executeUpdate(query);
     }
     
     public ResultSet select(@Language("SQL")String sql, Object... args) throws SQLException {
