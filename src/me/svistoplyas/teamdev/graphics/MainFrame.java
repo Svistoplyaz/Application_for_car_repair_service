@@ -45,14 +45,14 @@ public class MainFrame extends JFrame {
 
         if (type) {
             addButton(68, views.get("Services"));
-            addButton(322, views.get("Spares"));
+            addButton(146, views.get("Staff"));
             addButton(195, views.get("Stats"));
             addButton(244, views.get("Profit"));
+            addButton(322, views.get("Spares"));
         }
         addButton(10, views.get("Home"));
         addButton(39, views.get("Orders"));
         addButton(117, views.get("Clients"));
-        addButton(146, views.get("Staff"));
         addButton(351, views.get("Reserved"));
 
         setResizable(false);
