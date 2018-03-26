@@ -82,12 +82,10 @@ public abstract class AbstractView extends JPanel {
         }
 
         table = new JTable(new TableModel(getColumnNames(), getData()));
-//        table.setBounds(140, 140, 200, 200);
         table.setFillsViewportHeight(true);
         table.getTableHeader().setReorderingAllowed(false);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-//        table.getModel().addTableModelListener((e) -> TableAutoResizer.sizeColumnsToFit(table, 718 + 60));
         table.getSelectionModel().addListSelectionListener((e) -> {
 //            boolean dis = table.getSelectedRow() == -1 || (hasFakeRow() && table.getSelectedRow() == 0);
 //            if(Connection.isUserBuh()) {

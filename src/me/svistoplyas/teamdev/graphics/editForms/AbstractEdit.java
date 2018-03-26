@@ -3,8 +3,10 @@ package me.svistoplyas.teamdev.graphics.editForms;
 import javafx.util.Pair;
 import me.svistoplyas.teamdev.graphics.ImageLoader;
 import me.svistoplyas.teamdev.graphics.MainFrame;
+import me.svistoplyas.teamdev.graphics.utils.Converter;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,6 +17,7 @@ public abstract class AbstractEdit extends JDialog {
     HashMap<JComponent, JLabel> marks = new HashMap<>();
     MainFrame mainFrame;
     Object data;
+    boolean isNotSaving = true;
 
     public AbstractEdit(JFrame frame, boolean isEdit, Object _data) {
         super(frame, isEdit ? "Редактирование записи" : "Добавление записи", true);
@@ -27,29 +30,36 @@ public abstract class AbstractEdit extends JDialog {
         save.setBounds(10, this.getHeight() - 95, (this.getWidth() - 40) / 2, 60);
         save.addActionListener((e) -> {
             try {
-                baddies.clear();
-                for (Pair<String, JComponent> component : components) {
-                    switch (isEmptyOrBadlyFilled(component)) {
-                        case 0:
-                            //throw new RuntimeException("Все поля обязательны для заполнения");
-                        case 1:
-                            //throw new RuntimeException("Не все поля верно заполнены");
-                            baddies.put(component.getValue(), true);
-                            break;
-                        default:
-                            baddies.put(component.getValue(), false);
+                if(isNotSaving) {
+                    isNotSaving = false;
+                    disableAllComponents();
+                    baddies.clear();
+                    for (Pair<String, JComponent> component : components) {
+                        switch (isEmptyOrBadlyFilled(component)) {
+                            case 0:
+                                //throw new RuntimeException("Все поля обязательны для заполнения");
+                            case 1:
+                                //throw new RuntimeException("Не все поля верно заполнены");
+                                baddies.put(component.getValue(), true);
+                                break;
+                            default:
+                                baddies.put(component.getValue(), false);
+                        }
                     }
-                }
-                redraw();
+                    redrawValidationMarks();
 
-                if (otherValidation()) {
-                    if (noBaddies()) {
-                        if (isEdit)
-                            performEdit();
-                        else
-                            performAdd();
-                        AbstractEdit.this.setVisible(false);
+                    if (otherValidation()) {
+                        if (noBaddies()) {
+                            if (isEdit)
+                                performEdit();
+                            else
+                                performAdd();
+                            AbstractEdit.this.setVisible(false);
+                        }
                     }
+
+                    enableAllComponents();
+                    isNotSaving = true;
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -63,7 +73,7 @@ public abstract class AbstractEdit extends JDialog {
         add(exit);
 
         setResizable(false);
-        redraw();
+        redrawValidationMarks();
 //        pack();
         setLocationRelativeTo(frame);
     }
@@ -79,7 +89,6 @@ public abstract class AbstractEdit extends JDialog {
     public abstract boolean otherValidation();
 
     private int isEmptyOrBadlyFilled(Pair<String, JComponent> pair) {
-
         JComponent c = pair.getValue();
         String type = pair.getKey();
         if (c instanceof JTextField) {
@@ -101,25 +110,12 @@ public abstract class AbstractEdit extends JDialog {
                     }
                 }
                 case "Price": {
-                    //Проверяем что там есть запятая третьим символом с конца
-                    if (!(str.length() < 3 || !str.contains(",") || str.charAt(str.length() - 3) != ',')) {
-                        String[] arr = str.split(",");
-
-                        //Если вдруг есть несколько запятых в строке, то это ошибка
-                        if (arr.length != 2)
-                            return 1;
-
-                        //Проверяем что слева и справа от запятой числа
-                        try {
-                            Integer.parseInt(arr[0]);
-                            Integer.parseInt(arr[1]);
-
-                            return -1;
-                        } catch (Exception e) {
-                            return 1;
-                        }
-                    } else
+                    try{
+                        Converter.getInstance().convertStrToPrice(str);
+                        return -1;
+                    }catch(Exception ex){
                         return 1;
+                    }
                 }
                 default:
                     return -1;
@@ -134,7 +130,7 @@ public abstract class AbstractEdit extends JDialog {
 
     }
 
-    public void redraw() {
+    public void redrawValidationMarks() {
         for (JComponent component : baddies.keySet()) {
             Boolean filledWrong = baddies.get(component);
             String file;
@@ -173,4 +169,19 @@ public abstract class AbstractEdit extends JDialog {
         components.add(new Pair<>("", component));
     }
 
+    public void disableAllComponents(){
+        Component[] components = this.getComponents();
+        for(Component component : components){
+            component.setEnabled(false);
+        }
+        this.repaint();
+    }
+
+    public void enableAllComponents(){
+        Component[] components = this.getComponents();
+        for(Component component : components){
+            component.setEnabled(true);
+        }
+        this.repaint();
+    }
 }

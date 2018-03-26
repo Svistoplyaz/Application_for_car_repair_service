@@ -1,6 +1,6 @@
 package me.svistoplyas.teamdev.graphics.editForms;
 
-import net.web_kot.teamdev.db.entities.Client;
+import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.entities.Service;
 
 import javax.swing.*;
@@ -50,10 +50,7 @@ public class ServiceForm extends AbstractEdit {
 
         try {
             int price = object.getPrice();
-            String zero = "";
-            if (price % 100 < 10)
-                zero = "0";
-            priceText.setText(price / 100 + "," + zero + price % 100);
+            priceText.setText(Converter.getInstance().convertPriceToStr(price));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -61,20 +58,21 @@ public class ServiceForm extends AbstractEdit {
 
     @Override
     public void performAdd() throws Exception {
-        String[] str = priceText.getText().split(",");
-        mainFrame.model.createService(nameText.getText()).save().setPrice(Integer.parseInt(str[0]) * 100 + Integer.parseInt(str[1]));
+        mainFrame.model.createService(nameText.getText()).save().setPrice(Converter.getInstance().convertStrToPrice(priceText.getText()));
     }
 
     @Override
     public void performEdit() throws Exception {
         Service service = (Service) data;
-        String[] str = priceText.getText().split(",");
-        service.setName(nameText.getText()).save().setPrice(Integer.parseInt(str[0]) * 100 + Integer.parseInt(str[1]));
+        service.setName(nameText.getText()).save().setPrice(Converter.getInstance().convertStrToPrice(priceText.getText()));
     }
 
     @Override
     public boolean otherValidation() {
         String name = nameText.getText().trim();
+        if(data != null && ((Service)data).getName().equals(name))
+            return true;
+
         try {
             List<Service> services = mainFrame.model.getServices();
             for (Service service : services)
