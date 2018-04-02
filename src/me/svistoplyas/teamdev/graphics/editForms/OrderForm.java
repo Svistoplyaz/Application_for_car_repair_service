@@ -375,11 +375,7 @@ public class OrderForm extends AbstractEdit {
     @Override
     public void performAdd() {
         Date date;
-        date = ((SpinnerDateModel) spinnerIn.getModel()).getDate();
-        DateModel model = datePickerIn.getModel();
-        date.setDate(model.getDay());
-        date.setMonth(model.getMonth());
-        date.setYear(model.getYear() - 1900);
+        date = Converter.getInstance().convertSpinnerAndDataPicker(spinnerIn, datePickerIn);
 
         try {
             data = mainFrame.model.createOrder((Client) clientCombo.getSelectedItem(), (VehicleModel) modelCombo.getSelectedItem(), date).save();
@@ -393,11 +389,7 @@ public class OrderForm extends AbstractEdit {
         order.setRegistrationNumber(numberText.getText());
 
         //Установка конечной даты
-        date = ((SpinnerDateModel) spinnerOut.getModel()).getDate();
-        model = datePickerOut.getModel();
-        date.setDate(model.getDay());
-        date.setMonth(model.getMonth());
-        date.setYear(model.getYear() - 1900);
+        date = Converter.getInstance().convertSpinnerAndDataPicker(spinnerOut, datePickerOut);
         order.setFinishDate(date);
 
         //Услуги
@@ -425,19 +417,11 @@ public class OrderForm extends AbstractEdit {
 
         //Установка начальной даты
         Date date;
-        date = ((SpinnerDateModel) spinnerIn.getModel()).getDate();
-        DateModel model = datePickerIn.getModel();
-        date.setDate(model.getDay());
-        date.setMonth(model.getMonth());
-        date.setYear(model.getYear() - 1900);
+        date = Converter.getInstance().convertSpinnerAndDataPicker(spinnerIn, datePickerIn);
         order.setStartDate(date);
 
         //Установка конечной даты
-        date = ((SpinnerDateModel) spinnerOut.getModel()).getDate();
-        model = datePickerOut.getModel();
-        date.setDate(model.getDay());
-        date.setMonth(model.getMonth());
-        date.setYear(model.getYear() - 1900);
+        date = Converter.getInstance().convertSpinnerAndDataPicker(spinnerOut, datePickerOut);
         order.setFinishDate(date);
 
         //Услуги
@@ -547,7 +531,8 @@ public class OrderForm extends AbstractEdit {
                 int i = 0;
                 for (Service service : services) {
                     if (!hasServices.contains(service)) {
-                        ans[i] = new Object[]{service.getName(), Converter.getInstance().convertPriceToStrOnlyRubbles(service.getPriceForOrder(order)), service};
+                        ans[i] = new Object[]{service.getName(), Converter.getInstance().
+                                convertPriceToStrOnlyRubbles(service.getPriceForOrder(order)), service};
                         i++;
                     }
                 }
@@ -558,7 +543,8 @@ public class OrderForm extends AbstractEdit {
 
                 int i = 0;
                 for (Service service : services) {
-                    ans[i] = new Object[]{service.getName(), Converter.getInstance().convertPriceToStrOnlyRubbles(service.getPrice()), service};
+                    ans[i] = new Object[]{service.getName(), Converter.getInstance().
+                            convertPriceToStrOnlyRubbles(service.getPrice()), service};
                     i++;
                 }
 
