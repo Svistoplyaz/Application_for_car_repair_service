@@ -150,4 +150,32 @@ public class Model {
         );
     }
     
+    /* Position */
+    
+    public Position createPosition(String name) {
+        return new Position(this, name);
+    }
+    
+    public Position getPositionById(int id) throws Exception {
+        return getById(Position.class, db.formatQuery("SELECT * FROM Position WHERE PK_Position = %d", id));
+    }
+    
+    public List<Position> getPositions() throws Exception {
+        return getList(Position.class, "SELECT * FROM Position");
+    }
+    
+    /* Staff */
+    
+    public Staff createStaff(Position position, String name, String phone, Date birthday) {
+        return new Staff(this, position, name, phone, birthday);
+    }
+    
+    public Staff getStaffById(int id) throws Exception {
+        return getById(Staff.class, db.formatQuery("SELECT * FROM Staff WHERE PK_Staff = %d", id));
+    }
+    
+    public List<Staff> getStaff() throws Exception {
+        return getList(Staff.class, "SELECT * FROM Staff");
+    }
+    
 }

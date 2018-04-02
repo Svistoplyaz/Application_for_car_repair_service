@@ -15,20 +15,21 @@ public class Test {
         Database db = new Database(f).setDebug(true);
         Model model = db.getModel();
         
-        Client vasya = model.createClient("Vasya").setPhone("222222").save();
+        Position pos = model.createPosition("Механик").save();
+        Staff staff = model.createStaff(pos, "Vasya", "123456", new Date()).save();
         
-        Mark toyota = model.createMark("Toyota").save();
-        VehicleModel corolla = model.createVehicleModel(toyota, "Corolla", 2012).save();
-
-        Service s = model.createService("Замена масла").save().setPrice(100);
-
-        Order o = model.createOrder(vasya, corolla, new Date()).setRegistrationNumber("А222МР777RUS").save();
-        o.addService(s);
-
-        o.formDocument(true);
-
-        //for(Order order : model.getOrders(new Date())) System.out.println(order);
-
+        for(Staff s : model.getStaff()) System.out.println(s);
+        System.out.println();
+        
+        Client client = model.createClient("Client").save();
+        
+        Mark mark = model.createMark("Tesla").save();
+        VehicleModel vehicle = model.createVehicleModel(mark, "Model S", 2018).save();
+        
+        model.createOrder(client, vehicle, new Date()).setResponsible(staff).save();
+        
+        for(Order o : model.getOrders()) System.out.println(o + " / " + o.getResponsible());
+        
         db.close();
     }
     

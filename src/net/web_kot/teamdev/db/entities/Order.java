@@ -32,19 +32,19 @@ public class Order extends AbstractEntity {
     
     private static final DateFormat FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     
-    private int idClient, idModel;
+    private int idClient, idModel, idStaff;
     private String number;
     private Long start, finish;
     private int finishCost;
     
     public Order(Model model, Client client, VehicleModel vehicle, Date start) {
-        this(model, -1, client.getId(), null, start.getTime(), null, vehicle.getId(), -1);
+        this(model, -1, client.getId(), null, start.getTime(), null, vehicle.getId(), -1, -1);
     }
     
     @SelectConstructor
-    public Order(Model model, int id, int idClient, String number, long start, Long finish, int idModel, int cost) {
+    public Order(Model model, int id, int idClient, String number, long start, Long finish, int idModel, int cost, int idStaff) {
         super(model, "Order", "PK_Order");
-        this.id = id; this.idClient = idClient; this.number = number; 
+        this.id = id; this.idClient = idClient; this.number = number; this.idStaff = idStaff;
         this.start = start; this.finish = finish; this.idModel = idModel; this.finishCost = cost;
     }
 
@@ -52,15 +52,15 @@ public class Order extends AbstractEntity {
         if(id == -1) {
             id = model.db().insert(
                     "INSERT INTO `Order` (PK_Clients, Registration_number, Start_date, Finish_date, PK_Model, " +
-                            "Finish_cost) VALUES (%d, %s, %d, %s, %d, %d)",
-                    idClient, number, start, finish, idModel, finishCost
+                            "Finish_cost, PK_Staff) VALUES (%d, %s, %d, %s, %d, %d, %d)",
+                    idClient, number, start, finish, idModel, finishCost, idStaff
             );
             setStatus(Status.PRELIMINARY);
         } else
             model.db().update(
                     "UPDATE `Order` SET Registration_number = %s, Start_date = %d, Finish_date = %s, " +
-                            "PK_Model = %d, Finish_cost = %d WHERE PK_Order = %d",
-                    number, start, finish, idModel, finishCost, id
+                            "PK_Model = %d, Finish_cost = %d, PK_Staff = %d WHERE PK_Order = %d",
+                    number, start, finish, idModel, finishCost, idStaff, id
             );
         return this;
     }
@@ -106,6 +106,15 @@ public class Order extends AbstractEntity {
             finish = null;
         else
             finish = date.getTime();
+        return this;
+    }
+    
+    public Staff getResponsible() throws Exception {
+        return model.getStaffById(idStaff);
+    }
+    
+    public Order setResponsible(Staff staff) {
+        idStaff = staff.id;
         return this;
     }
     
