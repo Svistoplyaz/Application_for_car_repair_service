@@ -4,10 +4,7 @@ import me.svistoplyas.teamdev.graphics.LoginForm;
 import me.svistoplyas.teamdev.graphics.MainFrame;
 import net.web_kot.teamdev.db.Database;
 import net.web_kot.teamdev.db.Model;
-import net.web_kot.teamdev.db.entities.Client;
-import net.web_kot.teamdev.db.entities.Mark;
-import net.web_kot.teamdev.db.entities.Order;
-import net.web_kot.teamdev.db.entities.VehicleModel;
+import net.web_kot.teamdev.db.entities.*;
 
 import javax.swing.*;
 import java.io.File;
@@ -24,6 +21,7 @@ public class Main {
         Locale.setDefault(Locale.ENGLISH);
 
         File f = new File("myfile.db");
+        f.delete();
         boolean exists = f.exists();
         
         db = new Database(f);
@@ -31,6 +29,9 @@ public class Main {
         
         if(!exists) {
             /* Vehicles marks and models */
+            Position pos = model.createPosition("Механик").save();
+            model.createStaff(pos, "Vasya", "123456", new Date()).save();
+            Staff staff = model.createStaff(pos, "Leonid", "913041", new Date()).save();
             
             Mark toyota = model.createMark("Toyota").save();
             model.createVehicleModel(toyota, "Corolla", 2012).save();
@@ -47,7 +48,7 @@ public class Main {
             Mark kia = model.createMark("Kia").save();
             model.createVehicleModel(kia, "Rio", 2013).save();
             model.createVehicleModel(kia, "Cee'd", 2016).save();
-            model.createVehicleModel(kia, "Rio", 2010).save();
+            VehicleModel vModel = model.createVehicleModel(kia, "Rio", 2010).save();
             
             /* Services */
             
@@ -63,12 +64,14 @@ public class Main {
             
             /* Clients */
             
-            model.createClient("Лещёв Архип Эдуардович").setPhone("59756906919 ").save();
+            Client client = model.createClient("Лещёв Архип Эдуардович").setPhone("59756906919 ").save();
             model.createClient("Салтыкова Ирина Германовна").setPhone("0797932581").save();
             model.createClient("Мосин Игорь Евстафиевич").save();
             model.createClient("Бореева Оксана Потаповна").setPhone("48984769479").save();
             model.createClient("Лебедков Георгий Макарович").setPhone("50282926645").save();
             model.createClient("Антонов Валерий Епифанович ").setPhone("319342911").save();
+
+//            model.createOrder(client, vModel, new Date()).setResponsible(staff).save();
         }
 
         (new LoginForm()).show();

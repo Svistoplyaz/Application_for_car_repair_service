@@ -19,7 +19,7 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class OrderForm extends AbstractEdit {
     private JComboBox<Client> clientCombo;
-    private JComboBox<String> workerCombo;
+    private JComboBox<Staff> workerCombo;
     private JTextField numberText;
     private JComboBox<Mark> markCombo;
     private JComboBox<VehicleModel> modelCombo;
@@ -338,6 +338,12 @@ public class OrderForm extends AbstractEdit {
             if (isEdit)
                 clientCombo.setSelectedItem(order.getClient());
 
+            workerCombo.removeAllItems();
+            for (Staff person : mainFrame.model.getStaff())
+                workerCombo.addItem(person);
+            if (isEdit)
+                workerCombo.setSelectedItem(order.getResponsible());
+
             markCombo.removeAllItems();
             for (Mark mark : mainFrame.model.getMarks())
                 markCombo.addItem(mark);
@@ -378,12 +384,15 @@ public class OrderForm extends AbstractEdit {
         date = Converter.getInstance().convertSpinnerAndDataPicker(spinnerIn, datePickerIn);
 
         try {
-            data = mainFrame.model.createOrder((Client) clientCombo.getSelectedItem(), (VehicleModel) modelCombo.getSelectedItem(), date).save();
+            data = mainFrame.model.createOrder((Client) clientCombo.getSelectedItem(),
+                    (VehicleModel) modelCombo.getSelectedItem(), date).save();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         Order order = (Order) data;
+
+        order.setResponsible((Staff) workerCombo.getSelectedItem());
 
         //Установка регистрационного номера
         order.setRegistrationNumber(numberText.getText());
@@ -411,6 +420,8 @@ public class OrderForm extends AbstractEdit {
     @Override
     public void performEdit() {
         Order order = (Order) data;
+
+        order.setResponsible((Staff) workerCombo.getSelectedItem());
 
         //Установка регистрационного номера
         order.setRegistrationNumber(numberText.getText());
@@ -457,20 +468,10 @@ public class OrderForm extends AbstractEdit {
     public boolean otherValidation() {
         Order order = (Order) data;
 
-        //Установка начальной даты
         Date dateStart;
-        dateStart = ((SpinnerDateModel) spinnerIn.getModel()).getDate();
-        DateModel model = datePickerIn.getModel();
-        dateStart.setDate(model.getDay());
-        dateStart.setMonth(model.getMonth());
-        dateStart.setYear(model.getYear() - 1900);
+        dateStart = Converter.getInstance().convertSpinnerAndDataPicker(spinnerIn, datePickerIn);
 
-        //Установка конечной даты
-        Date dateFinish = ((SpinnerDateModel) spinnerOut.getModel()).getDate();
-        model = datePickerOut.getModel();
-        dateFinish.setDate(model.getDay());
-        dateFinish.setMonth(model.getMonth());
-        dateFinish.setYear(model.getYear() - 1900);
+        Date dateFinish = Converter.getInstance().convertSpinnerAndDataPicker(spinnerOut, datePickerOut);
 
         //order
         if (order == null || order.getStartDate().getTime() / 1000 / 60 != dateStart.getTime() / 1000 / 60) {
@@ -497,9 +498,9 @@ public class OrderForm extends AbstractEdit {
     private void printFile(Order.Status status) {
         try {
             if (status == Order.Status.FINISHED)
-                Desktop.getDesktop().open(((Order)data).formDocument(true));
-            else if(status == Order.Status.CONFIRMED)
-                Desktop.getDesktop().open(((Order)data).formDocument(false));
+                Desktop.getDesktop().open(((Order) data).formDocument(true));
+            else if (status == Order.Status.CONFIRMED)
+                Desktop.getDesktop().open(((Order) data).formDocument(false));
         } catch (Exception e) {
             e.printStackTrace();
         }

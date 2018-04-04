@@ -2,31 +2,29 @@ package me.svistoplyas.teamdev.graphics.views;
 
 import me.svistoplyas.teamdev.graphics.MainFrame;
 import me.svistoplyas.teamdev.graphics.editForms.AbstractEdit;
-import me.svistoplyas.teamdev.graphics.editForms.StaffForm;
-import me.svistoplyas.teamdev.graphics.utils.Converter;
-import net.web_kot.teamdev.db.entities.Staff;
+import me.svistoplyas.teamdev.graphics.editForms.VModelForm;
+import net.web_kot.teamdev.db.entities.VehicleModel;
 
 import java.util.List;
 
-public class StaffView extends AbstractView {
-
-    public StaffView(MainFrame _mainFrame) {
+public class VModelView extends AbstractView{
+    public VModelView(MainFrame _mainFrame) {
         super(_mainFrame);
     }
 
     @Override
     String[] getColumnNames() {
-        return new String[]{"ФИО", "Телефон", "Дата рождения", "Должность"};
+        return new String[]{"Название", "Марка"};
     }
 
     @Override
     Object[][] getData() {
         try {
-            List<Staff> staff = mainFrame.model.getStaff();
-            Object[][] ans = new Object[staff.size()][];
+            List<VehicleModel> vehiclesModels = mainFrame.model.getVehiclesModels();
+            Object[][] ans = new Object[vehiclesModels.size()][];
             int i = 0;
-            for (Staff person : staff) {
-                ans[i] = new Object[]{person.getName(), person.getPhone(), Converter.getInstance().dateToStr(person.getBirthday()), person.getPosition().getName()};
+            for (VehicleModel vehicleModel : vehiclesModels) {
+                ans[i] = new Object[]{vehicleModel.toString(), vehicleModel.getMark().getName()};
                 i++;
             }
 
@@ -40,7 +38,7 @@ public class StaffView extends AbstractView {
     @Override
     Object getObject(int row) {
         try {
-            return mainFrame.model.getStaff().get(row);
+            return mainFrame.model.getVehiclesModels().get(row);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -64,16 +62,16 @@ public class StaffView extends AbstractView {
 
     @Override
     void performDelete(int row) throws Exception {
-        mainFrame.model.getStaff().get(row).delete();
+        mainFrame.model.getVehiclesModels().get(row).delete();
     }
 
     @Override
     public AbstractEdit getEdit(boolean b, Object o) {
-        return new StaffForm(mainFrame, b, o);
+        return new VModelForm(mainFrame, b, o);
     }
 
     @Override
     public String toString() {
-        return "Персонал";
+        return "Модели автомобилей";
     }
 }
