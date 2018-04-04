@@ -26,7 +26,7 @@ public class Test {
         Mark mark = model.createMark("Tesla").save();
         VehicleModel vehicle = model.createVehicleModel(mark, "Model S", 2018).save();
         
-        model.createOrder(client, vehicle, new Date()).setResponsible(staff).save();
+        model.createOrder(client, staff, vehicle, new Date()).save();
         
         for(Order o : model.getOrders()) System.out.println(o + " / " + o.getResponsible());
         

@@ -128,8 +128,8 @@ public class Model {
     
     /* Order */
     
-    public Order createOrder(Client client, VehicleModel vehicle, Date start) {
-        return new Order(this, client, vehicle, start);
+    public Order createOrder(Client client, Staff staff, VehicleModel vehicle, Date start) {
+        return new Order(this, client, staff, vehicle, start);
     }
     
     public List<Order> getOrders() throws Exception {

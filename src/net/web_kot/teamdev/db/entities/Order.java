@@ -37,12 +37,12 @@ public class Order extends AbstractEntity {
     private Long start, finish;
     private int finishCost;
     
-    public Order(Model model, Client client, VehicleModel vehicle, Date start) {
-        this(model, -1, client.getId(), null, start.getTime(), null, vehicle.getId(), -1, -1);
+    public Order(Model model, Client client, Staff staff, VehicleModel vehicle, Date start) {
+        this(model, -1, client.getId(), staff.getId(), null, start.getTime(), null, vehicle.getId(), -1);
     }
     
     @SelectConstructor
-    public Order(Model model, int id, int idClient, String number, long start, Long finish, int idModel, int cost, int idStaff) {
+    public Order(Model model, int id, int idClient, int idStaff, String number, long start, Long finish, int idModel, int cost) {
         super(model, "Order", "PK_Order");
         this.id = id; this.idClient = idClient; this.number = number; this.idStaff = idStaff;
         this.start = start; this.finish = finish; this.idModel = idModel; this.finishCost = cost;
@@ -114,7 +114,7 @@ public class Order extends AbstractEntity {
     }
     
     public Order setResponsible(Staff staff) {
-        idStaff = staff.id;
+        idStaff = staff.getId();
         return this;
     }
     
