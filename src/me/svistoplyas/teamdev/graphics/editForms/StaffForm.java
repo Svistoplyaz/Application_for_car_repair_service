@@ -73,6 +73,7 @@ public class StaffForm extends AbstractEdit {
         Staff person = (Staff) data;
 
         try {
+            positionCombo.removeAllItems();
             for (Position client : mainFrame.model.getPositions())
                 positionCombo.addItem(client);
             if (isEdit)

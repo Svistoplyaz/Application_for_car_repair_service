@@ -19,7 +19,7 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class OrderForm extends AbstractEdit {
     private JComboBox<Client> clientCombo;
-    private JComboBox<String> workerCombo;
+    private JComboBox<Staff> workerCombo;
     private JTextField numberText;
     private JComboBox<Mark> markCombo;
     private JComboBox<VehicleModel> modelCombo;
@@ -338,6 +338,12 @@ public class OrderForm extends AbstractEdit {
             if (isEdit)
                 clientCombo.setSelectedItem(order.getClient());
 
+            workerCombo.removeAllItems();
+            for (Staff person : mainFrame.model.getStaff())
+                workerCombo.addItem(person);
+            if (isEdit)
+                workerCombo.setSelectedItem(order.getResponsible());
+
             markCombo.removeAllItems();
             for (Mark mark : mainFrame.model.getMarks())
                 markCombo.addItem(mark);
@@ -385,6 +391,8 @@ public class OrderForm extends AbstractEdit {
 
         Order order = (Order) data;
 
+        order.setResponsible((Staff)workerCombo.getSelectedItem());
+
         //Установка регистрационного номера
         order.setRegistrationNumber(numberText.getText());
 
@@ -411,6 +419,8 @@ public class OrderForm extends AbstractEdit {
     @Override
     public void performEdit() {
         Order order = (Order) data;
+
+        order.setResponsible((Staff)workerCombo.getSelectedItem());
 
         //Установка регистрационного номера
         order.setRegistrationNumber(numberText.getText());
