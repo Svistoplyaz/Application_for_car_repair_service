@@ -128,14 +128,6 @@ public class Order extends AbstractEntity {
         }
     }
     
-    @Override
-    public boolean equals(Object o) {
-        if(!(o instanceof Order)) return false;
-        Order other = (Order)o;
-        
-        return id == other.id;
-    }
-    
     public void addService(Service service) throws Exception {
         model.db().insert(
                 "INSERT INTO Order_Service (PK_Order, PK_Service, Date) VALUES (%d, %d, %d)",

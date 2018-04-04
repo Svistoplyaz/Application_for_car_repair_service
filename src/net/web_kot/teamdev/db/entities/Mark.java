@@ -47,14 +47,6 @@ public class Mark extends AbstractEntity {
         return String.format("%s", name);
     }
     
-    @Override
-    public boolean equals(Object o) {
-        if(!(o instanceof Mark)) return false;
-        Mark other = (Mark)o;
-        
-        return id == other.id;
-    }
-    
     public List<VehicleModel> getVehiclesModels() throws Exception {
         return model.getList(
                 VehicleModel.class, 

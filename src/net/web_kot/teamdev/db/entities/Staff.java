@@ -80,13 +80,5 @@ public class Staff extends AbstractEntity {
             return "ERROR";
         }
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if(!(o instanceof Staff)) return false;
-        Staff other = (Staff)o;
-        
-        return id == other.id;
-    }
     
 }

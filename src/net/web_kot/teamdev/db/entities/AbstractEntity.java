@@ -36,5 +36,12 @@ public abstract class AbstractEntity {
     @Target(value=ElementType.CONSTRUCTOR)
     @Retention(value=RetentionPolicy.RUNTIME)
     public @interface SelectConstructor { }
+
+    @Override
+    public boolean equals(Object o) {
+        if(!(o instanceof AbstractEntity)) return false;
+        AbstractEntity other = (AbstractEntity) o;
+        return other.getClass() == this.getClass() && id == other.id;
+    }
     
 }

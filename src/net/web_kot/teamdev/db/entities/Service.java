@@ -86,12 +86,4 @@ public class Service extends AbstractEntity {
         }
     }
     
-    @Override
-    public boolean equals(Object o) {
-        if(!(o instanceof Service)) return false;
-        Service other = (Service)o;
-        
-        return id == other.id;
-    }
-    
 }

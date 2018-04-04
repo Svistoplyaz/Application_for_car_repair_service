@@ -65,12 +65,4 @@ public class VehicleModel extends AbstractEntity {
         }
     }
     
-    @Override
-    public boolean equals(Object o) {
-        if(!(o instanceof VehicleModel)) return false;
-        VehicleModel other = (VehicleModel)o;
-        
-        return id == other.id && markId == other.markId;
-    }
-    
 }
