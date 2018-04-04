@@ -457,20 +457,10 @@ public class OrderForm extends AbstractEdit {
     public boolean otherValidation() {
         Order order = (Order) data;
 
-        //Установка начальной даты
         Date dateStart;
-        dateStart = ((SpinnerDateModel) spinnerIn.getModel()).getDate();
-        DateModel model = datePickerIn.getModel();
-        dateStart.setDate(model.getDay());
-        dateStart.setMonth(model.getMonth());
-        dateStart.setYear(model.getYear() - 1900);
+        dateStart = Converter.getInstance().convertSpinnerAndDataPicker(spinnerIn, datePickerIn);
 
-        //Установка конечной даты
-        Date dateFinish = ((SpinnerDateModel) spinnerOut.getModel()).getDate();
-        model = datePickerOut.getModel();
-        dateFinish.setDate(model.getDay());
-        dateFinish.setMonth(model.getMonth());
-        dateFinish.setYear(model.getYear() - 1900);
+        Date dateFinish = Converter.getInstance().convertSpinnerAndDataPicker(spinnerOut, datePickerOut);
 
         //order
         if (order == null || order.getStartDate().getTime() / 1000 / 60 != dateStart.getTime() / 1000 / 60) {
