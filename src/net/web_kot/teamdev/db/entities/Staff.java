@@ -29,7 +29,7 @@ public class Staff extends AbstractEntity {
             );
         else
             model.db().update(
-                    "UPDATE Position SET PK_Position = %d, Name = %s, Phone = %s, Birth_day = %d WHERE PK_Position = %d",
+                    "UPDATE Staff SET PK_Position = %d, Name = %s, Phone = %s, Birth_day = %d WHERE PK_Staff = %d",
                     idPosition, name, phone, birthday, id
             );
         return this;
