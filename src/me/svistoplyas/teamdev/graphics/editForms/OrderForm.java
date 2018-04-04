@@ -384,14 +384,15 @@ public class OrderForm extends AbstractEdit {
         date = Converter.getInstance().convertSpinnerAndDataPicker(spinnerIn, datePickerIn);
 
         try {
-            data = mainFrame.model.createOrder((Client) clientCombo.getSelectedItem(), (VehicleModel) modelCombo.getSelectedItem(), date).save();
+            data = mainFrame.model.createOrder((Client) clientCombo.getSelectedItem(),
+                    (VehicleModel) modelCombo.getSelectedItem(), date).save();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         Order order = (Order) data;
 
-        order.setResponsible((Staff)workerCombo.getSelectedItem());
+        order.setResponsible((Staff) workerCombo.getSelectedItem());
 
         //Установка регистрационного номера
         order.setRegistrationNumber(numberText.getText());
@@ -420,7 +421,7 @@ public class OrderForm extends AbstractEdit {
     public void performEdit() {
         Order order = (Order) data;
 
-        order.setResponsible((Staff)workerCombo.getSelectedItem());
+        order.setResponsible((Staff) workerCombo.getSelectedItem());
 
         //Установка регистрационного номера
         order.setRegistrationNumber(numberText.getText());
@@ -497,9 +498,9 @@ public class OrderForm extends AbstractEdit {
     private void printFile(Order.Status status) {
         try {
             if (status == Order.Status.FINISHED)
-                Desktop.getDesktop().open(((Order)data).formDocument(true));
-            else if(status == Order.Status.CONFIRMED)
-                Desktop.getDesktop().open(((Order)data).formDocument(false));
+                Desktop.getDesktop().open(((Order) data).formDocument(true));
+            else if (status == Order.Status.CONFIRMED)
+                Desktop.getDesktop().open(((Order) data).formDocument(false));
         } catch (Exception e) {
             e.printStackTrace();
         }
