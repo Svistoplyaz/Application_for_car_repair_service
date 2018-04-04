@@ -103,6 +103,8 @@ public class Database {
                 nw[i] = "NULL";
             else if(args[i] instanceof String)
                 nw[i] = "\"" + ((String)args[i]).replace("\"", "").trim() + "\"";
+            else if(args[i] instanceof Boolean)
+                nw[i] = (Boolean)args[i] ? 1 : 0;
             else
                 nw[i] = args[i];
         return nw;

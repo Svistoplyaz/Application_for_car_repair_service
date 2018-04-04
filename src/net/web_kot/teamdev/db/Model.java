@@ -60,6 +60,8 @@ public class Model {
             value = result.getInt(index);
         else if(clazz == long.class || clazz == Long.class)
             value = result.getLong(index);
+        else if(clazz == boolean.class)
+            value = result.getInt(index) != 0;
         else throw new Exception("Unknown field type " + clazz.getCanonicalName());
         
         if(result.wasNull()) return null;
