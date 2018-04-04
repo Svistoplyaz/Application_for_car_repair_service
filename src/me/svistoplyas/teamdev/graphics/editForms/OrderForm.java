@@ -384,15 +384,13 @@ public class OrderForm extends AbstractEdit {
         date = Converter.getInstance().convertSpinnerAndDataPicker(spinnerIn, datePickerIn);
 
         try {
-            data = mainFrame.model.createOrder((Client) clientCombo.getSelectedItem(),
+            data = mainFrame.model.createOrder((Client) clientCombo.getSelectedItem(), (Staff) workerCombo.getSelectedItem(),
                     (VehicleModel) modelCombo.getSelectedItem(), date).save();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         Order order = (Order) data;
-
-        order.setResponsible((Staff) workerCombo.getSelectedItem());
 
         //Установка регистрационного номера
         order.setRegistrationNumber(numberText.getText());
