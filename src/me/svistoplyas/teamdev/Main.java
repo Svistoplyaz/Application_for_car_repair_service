@@ -4,10 +4,7 @@ import me.svistoplyas.teamdev.graphics.LoginForm;
 import me.svistoplyas.teamdev.graphics.MainFrame;
 import net.web_kot.teamdev.db.Database;
 import net.web_kot.teamdev.db.Model;
-import net.web_kot.teamdev.db.entities.Client;
-import net.web_kot.teamdev.db.entities.Mark;
-import net.web_kot.teamdev.db.entities.Order;
-import net.web_kot.teamdev.db.entities.VehicleModel;
+import net.web_kot.teamdev.db.entities.*;
 
 import javax.swing.*;
 import java.io.File;
@@ -24,6 +21,7 @@ public class Main {
         Locale.setDefault(Locale.ENGLISH);
 
         File f = new File("myfile.db");
+        f.delete();
         boolean exists = f.exists();
         
         db = new Database(f);
@@ -31,6 +29,8 @@ public class Main {
         
         if(!exists) {
             /* Vehicles marks and models */
+            Position pos = model.createPosition("Механик").save();
+            Staff staff = model.createStaff(pos, "Vasya", "123456", new Date()).save();
             
             Mark toyota = model.createMark("Toyota").save();
             model.createVehicleModel(toyota, "Corolla", 2012).save();
