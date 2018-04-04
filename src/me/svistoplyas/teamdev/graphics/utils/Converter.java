@@ -73,4 +73,12 @@ public class Converter {
         return ans;
     }
 
+    public Date convertDataPicker(JDatePicker datePicker){
+        Date ans = new Date();
+        DateModel model = datePicker.getModel();
+        ans.setDate(model.getDay());
+        ans.setMonth(model.getMonth());
+        ans.setYear(model.getYear() - 1900);
+        return ans;
+    }
 }

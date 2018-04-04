@@ -25,8 +25,8 @@ public class StaffView extends AbstractView {
             List<Staff> staff = mainFrame.model.getStaff();
             Object[][] ans = new Object[staff.size()][];
             int i = 0;
-            for (Staff staff1 : staff) {
-                ans[i] = new Object[]{staff1.getName(), staff1.getPhone(), Converter.getInstance().dateToStr(staff1.getBirthday()), staff1.getPosition().getName()};
+            for (Staff person : staff) {
+                ans[i] = new Object[]{person.getName(), person.getPhone(), Converter.getInstance().dateToStr(person.getBirthday()), person.getPosition().getName()};
                 i++;
             }
 
