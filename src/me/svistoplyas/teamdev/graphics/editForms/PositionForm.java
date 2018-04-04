@@ -13,7 +13,7 @@ public class PositionForm extends AbstractEdit {
         super(frame, isEdit, data);
 
         //Название
-        JLabel nameLabel = new JLabel("Название услуги");
+        JLabel nameLabel = new JLabel("Название должности");
         nameLabel.setBounds(10, 20, 120, 24);
         add(nameLabel);
 
