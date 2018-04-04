@@ -50,6 +50,7 @@ public class MainFrame extends JFrame {
             addButton(244, views.get("Profit"));
             addButton(322, views.get("Spares"));
             addButton(380, views.get("Positions"));
+            addButton(409, views.get("Marks"));
         }
         addButton(10, views.get("Home"));
         addButton(39, views.get("Orders"));
@@ -109,5 +110,6 @@ public class MainFrame extends JFrame {
         views.put("Spares", new SparesView(this));
         views.put("Reserved", new ReservedView(this));
         views.put("Positions", new PositionView(this));
+        views.put("Marks", new MarkView(this));
     }
 }
