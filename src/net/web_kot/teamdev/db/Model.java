@@ -180,4 +180,14 @@ public class Model {
         return getList(Staff.class, "SELECT * FROM Staff");
     }
     
+    /* Spare parts */
+    
+    public SparePart createSparePart(String name, SparePart.Unit unit, boolean universal) {
+        return new SparePart(this, name, unit, universal);
+    }
+    
+    public List<SparePart> getSpareParts() throws Exception {
+        return getList(SparePart.class, "SELECT * FROM Spare_part");
+    }
+    
 }
