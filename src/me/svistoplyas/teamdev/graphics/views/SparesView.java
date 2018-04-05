@@ -2,6 +2,10 @@ package me.svistoplyas.teamdev.graphics.views;
 
 import me.svistoplyas.teamdev.graphics.MainFrame;
 import me.svistoplyas.teamdev.graphics.utils.Converter;
+import net.web_kot.teamdev.db.entities.SparePart;
+import net.web_kot.teamdev.db.entities.VehicleModel;
+
+import java.util.List;
 
 public class SparesView extends AbstractView {
 
@@ -11,40 +15,49 @@ public class SparesView extends AbstractView {
 
     @Override
     String[] getColumnNames() {
-        return new String[]{"Название", "Цена", "Количество", "Единиц", "Модели"};
+        return new String[]{"Название", "Цена", "Количество", "Единица измерения", "Совместимые модели"};
     }
 
     @Override
     Object[][] getData() {
 
-//        try {
-//            List<Order> orders = mainFrame.model.getOrders();
-//            Object[][] ans = new Object[orders.size()][];
-////            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-//
-//            int i = 0;
-//            for (Order order : orders) {
+        try {
+            List<SparePart> spareParts = mainFrame.model.getSpareParts();
+            Object[][] ans = new Object[spareParts.size()][];
+//            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+
+            int i = 0;
+            for (SparePart sparePart : spareParts) {
 //                String worker = "";
-//
+
+
 //                if (d != null) finishDate = Converter.getInstance().dateToStr(d);
-//
-//                ans[i] = new Object[]{order.getClient(), worker, order.getRegistrationNumber(),
-//                        Converter.getInstance().dateToStr(order.getRealStartDate()), finishDate,
-//                        order.getVehicleModel().getMark(), order.getVehicleModel(),
-//                        order.getCurrentStatus()};
-//                i++;
-//            }
-//
-//            return ans;
-//        } catch (Exception e) {
-//            e.printStackTrace();
+                List<VehicleModel> models = sparePart.getCompatibleModels();
+                StringBuilder modelList = new StringBuilder();
+                for(VehicleModel model : models)
+                    modelList.append(", ").append(model);
+                String modelStr = modelList.toString().substring(2);
+
+                ans[i] = new Object[]{sparePart.getName(), sparePart.getPrice(), sparePart.getQuantity(),
+                        sparePart.getUnit(), modelStr};
+                i++;
+            }
+
+            return ans;
+        } catch (Exception e) {
+            e.printStackTrace();
         return null;
-//        }
+        }
     }
 
     @Override
     Object getObject(int row) {
-        return null;
+        try {
+            return mainFrame.model.getSpareParts().get(row);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -64,7 +77,11 @@ public class SparesView extends AbstractView {
 
     @Override
     void performDelete(int row) {
-
+        try {
+            mainFrame.model.getSpareParts().get(row).delete();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
