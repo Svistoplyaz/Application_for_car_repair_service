@@ -17,7 +17,6 @@ public abstract class AbstractEdit extends JDialog {
     HashMap<JComponent, JLabel> marks = new HashMap<>();
     MainFrame mainFrame;
     Object data;
-    boolean isNotSaving = true;
     JButton save;
     JButton exit;
 
@@ -32,37 +31,32 @@ public abstract class AbstractEdit extends JDialog {
         save.setBounds(10, this.getHeight() - 95, (this.getWidth() - 40) / 2, 60);
         save.addActionListener((e) -> {
             try {
-                if (isNotSaving) {
-                    isNotSaving = false;
-                    disableAllComponents();
-                    baddies.clear();
-                    for (Pair<String, JComponent> component : components) {
-                        switch (isEmptyOrBadlyFilled(component)) {
-                            case 0:
-                                //throw new RuntimeException("Все поля обязательны для заполнения");
-                            case 1:
-                                //throw new RuntimeException("Не все поля верно заполнены");
-                                baddies.put(component.getValue(), true);
-                                break;
-                            default:
-                                baddies.put(component.getValue(), false);
-                        }
+                save.setEnabled(false);
+                baddies.clear();
+                for (Pair<String, JComponent> component : components) {
+                    switch (isEmptyOrBadlyFilled(component)) {
+                        case 0:
+                            //throw new RuntimeException("Все поля обязательны для заполнения");
+                        case 1:
+                            //throw new RuntimeException("Не все поля верно заполнены");
+                            baddies.put(component.getValue(), true);
+                            break;
+                        default:
+                            baddies.put(component.getValue(), false);
                     }
-                    redrawValidationMarks();
-
-                    if (otherValidation()) {
-                        if (noBaddies()) {
-                            if (isEdit)
-                                performEdit();
-                            else
-                                performAdd();
-                            AbstractEdit.this.setVisible(false);
-                        }
-                    }
-
-                    enableAllComponents();
-                    isNotSaving = true;
                 }
+                redrawValidationMarks();
+
+                if (otherValidation()) {
+                    if (noBaddies()) {
+                        if (isEdit)
+                            performEdit();
+                        else
+                            performAdd();
+                        AbstractEdit.this.setVisible(false);
+                    }
+                }
+                save.setEnabled(true);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -114,7 +108,7 @@ public abstract class AbstractEdit extends JDialog {
                 case "Price": {
                     try {
                         int test = Converter.getInstance().convertStrToPrice(str);
-                        if(test < 0)
+                        if (test < 0)
                             throw new Exception();
                         return -1;
                     } catch (Exception ex) {
@@ -145,7 +139,7 @@ public abstract class AbstractEdit extends JDialog {
 
             if (marks.get(component) == null) {
                 JLabel label = new JLabel(new ImageIcon(imageLoader.getImage(file)));
-                if(component.getName() != null && component.getName().equals("Left"))
+                if (component.getName() != null && component.getName().equals("Left"))
                     label.setBounds(component.getX() - 34, component.getY(), 24, 24);
                 else
                     label.setBounds(component.getX() + component.getWidth() + 10, component.getY(), 24, 24);
