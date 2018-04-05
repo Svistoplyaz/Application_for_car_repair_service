@@ -31,6 +31,7 @@ public abstract class AbstractEdit extends JDialog {
         save.setBounds(10, this.getHeight() - 95, (this.getWidth() - 40) / 2, 60);
         save.addActionListener((e) -> {
             try {
+                save.setEnabled(false);
                 baddies.clear();
                 for (Pair<String, JComponent> component : components) {
                     switch (isEmptyOrBadlyFilled(component)) {
@@ -55,7 +56,7 @@ public abstract class AbstractEdit extends JDialog {
                         AbstractEdit.this.setVisible(false);
                     }
                 }
-
+                save.setEnabled(true);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
