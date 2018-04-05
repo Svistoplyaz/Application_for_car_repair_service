@@ -1,15 +1,17 @@
 package me.svistoplyas.teamdev.graphics.views;
 
 import me.svistoplyas.teamdev.graphics.MainFrame;
+import me.svistoplyas.teamdev.graphics.editForms.AbstractEdit;
+import me.svistoplyas.teamdev.graphics.editForms.SpareForm;
 import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.entities.SparePart;
 import net.web_kot.teamdev.db.entities.VehicleModel;
 
 import java.util.List;
 
-public class SparesView extends AbstractView {
+public class SpareView extends AbstractView {
 
-    public SparesView(MainFrame _mainFrame) {
+    public SpareView(MainFrame _mainFrame) {
         super(_mainFrame);
     }
 
@@ -24,29 +26,29 @@ public class SparesView extends AbstractView {
         try {
             List<SparePart> spareParts = mainFrame.model.getSpareParts();
             Object[][] ans = new Object[spareParts.size()][];
-//            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
             int i = 0;
             for (SparePart sparePart : spareParts) {
-//                String worker = "";
+                String modelStr;
+                if (sparePart.isUniversal())
+                    modelStr = "Универсальная";
+                else {
+                    List<VehicleModel> models = sparePart.getCompatibleModels();
+                    StringBuilder modelList = new StringBuilder();
+                    for (VehicleModel model : models)
+                        modelList.append(", ").append(model);
+                    modelStr = modelList.toString().substring(2);
+                }
 
-
-//                if (d != null) finishDate = Converter.getInstance().dateToStr(d);
-                List<VehicleModel> models = sparePart.getCompatibleModels();
-                StringBuilder modelList = new StringBuilder();
-                for(VehicleModel model : models)
-                    modelList.append(", ").append(model);
-                String modelStr = modelList.toString().substring(2);
-
-                ans[i] = new Object[]{sparePart.getName(), sparePart.getPrice(), sparePart.getQuantity(),
-                        sparePart.getUnit(), modelStr};
+                ans[i] = new Object[]{sparePart.getName(), Converter.getInstance().convertPriceToStr(sparePart.getPrice()),
+                        sparePart.getBeautifulQuantity(), sparePart.getUnit(), modelStr};
                 i++;
             }
 
             return ans;
         } catch (Exception e) {
             e.printStackTrace();
-        return null;
+            return null;
         }
     }
 
@@ -62,26 +64,31 @@ public class SparesView extends AbstractView {
 
     @Override
     boolean canAdd() {
-        return false;
+        return mainFrame.type;
     }
 
     @Override
     boolean canEdit() {
-        return false;
+        return mainFrame.type;
     }
 
     @Override
     boolean canDelete() {
-        return false;
+        return mainFrame.type;
     }
 
     @Override
     void performDelete(int row) {
         try {
             mainFrame.model.getSpareParts().get(row).delete();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public AbstractEdit getEdit(boolean b, Object o) {
+        return new SpareForm(mainFrame, b, o);
     }
 
     @Override

@@ -108,7 +108,7 @@ public class MainFrame extends JFrame {
         views.put("Staff", new StaffView(this));
         views.put("Stats", new StatsView(this));
         views.put("Profit", new ProfitView(this));
-        views.put("Spares", new SparesView(this));
+        views.put("Spares", new SpareView(this));
         views.put("Reserved", new ReservedView(this));
         views.put("Positions", new PositionView(this));
         views.put("Marks", new MarkView(this));

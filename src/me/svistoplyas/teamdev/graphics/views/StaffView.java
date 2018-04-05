@@ -49,17 +49,17 @@ public class StaffView extends AbstractView {
 
     @Override
     boolean canAdd() {
-        return true;
+        return mainFrame.type;
     }
 
     @Override
     boolean canEdit() {
-        return true;
+        return mainFrame.type;
     }
 
     @Override
     boolean canDelete() {
-        return true;
+        return mainFrame.type;
     }
 
     @Override

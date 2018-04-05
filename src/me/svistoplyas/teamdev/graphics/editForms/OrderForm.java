@@ -229,7 +229,7 @@ public class OrderForm extends AbstractEdit {
 
         //
         JButton serviceToRight = new JButton("->");
-        serviceToRight.setBounds(thirdRow + scrollPaneServiceLeft.getWidth() + 5, previous, 50, 90);
+        serviceToRight.setBounds(scrollPaneServiceLeft.getX() + scrollPaneServiceLeft.getWidth() + 5, previous, 50, 90);
         serviceToRight.addActionListener(e -> {
             int row = tableServiceLeft.getSelectedRow();
             if (row != -1) {
@@ -242,7 +242,7 @@ public class OrderForm extends AbstractEdit {
         add(serviceToRight);
 
         JButton serviceToLeft = new JButton("<-");
-        serviceToLeft.setBounds(thirdRow + scrollPaneServiceLeft.getWidth() + 5, previous + 100, 50, 90);
+        serviceToLeft.setBounds(scrollPaneServiceLeft.getX() + scrollPaneServiceLeft.getWidth() + 5, previous + 100, 50, 90);
         serviceToLeft.addActionListener(e -> {
             int row = tableServiceRight.getSelectedRow();
             if (row != -1) {
@@ -286,7 +286,7 @@ public class OrderForm extends AbstractEdit {
 
         //
         JButton SparesToRight = new JButton("->");
-        SparesToRight.setBounds(thirdRow + scrollPaneSparesLeft.getWidth() + 5, previous, 50, 90);
+        SparesToRight.setBounds(scrollPaneSparesLeft.getX() + scrollPaneSparesLeft.getWidth() + 5, previous, 50, 90);
         SparesToRight.addActionListener(e -> {
             int row = tableSparesLeft.getSelectedRow();
             if (row != -1) {
@@ -299,7 +299,7 @@ public class OrderForm extends AbstractEdit {
         add(SparesToRight);
 
         JButton SparesToLeft = new JButton("<-");
-        SparesToLeft.setBounds(thirdRow + scrollPaneSparesLeft.getWidth() + 5, previous + 100, 50, 90);
+        SparesToLeft.setBounds(scrollPaneSparesLeft.getX() + scrollPaneSparesLeft.getWidth() + 5, previous + 100, 50, 90);
         SparesToLeft.addActionListener(e -> {
             int row = tableSparesRight.getSelectedRow();
             if (row != -1) {
@@ -333,6 +333,7 @@ public class OrderForm extends AbstractEdit {
         Order order = (Order) data;
 
         try {
+            clientCombo.removeAllItems();
             for (Client client : mainFrame.model.getClients())
                 clientCombo.addItem(client);
             if (isEdit)
@@ -523,7 +524,7 @@ public class OrderForm extends AbstractEdit {
         try {
             List<Service> services = mainFrame.model.getServices();
             if (isEdit) {
-                List<Service> hasServices = ((Order) data).getServices();
+                List<Service> hasServices = order.getServices();
 
                 Object[][] ans = new Object[services.size() - hasServices.size()][];
 
@@ -559,7 +560,7 @@ public class OrderForm extends AbstractEdit {
         Order order = (Order) data;
         try {
             if (isEdit) {
-                List<Service> hasServices = ((Order) data).getServices();
+                List<Service> hasServices = order.getServices();
 
                 Object[][] ans = new Object[hasServices.size()][];
 

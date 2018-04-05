@@ -21,10 +21,10 @@ public class Main {
         Locale.setDefault(Locale.ENGLISH);
 
         File f = new File("myfile.db");
-        f.delete();
         boolean exists = f.exists();
 
         db = new Database(f);
+//        db.setDebug(true);
         model = db.getModel();
 
         if (!exists) {
