@@ -102,6 +102,7 @@ public class SpareForm extends AbstractEdit {
                 return c;
             }
         };
+        tableModelLeft.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPaneServiceLeft = new JScrollPane(tableModelLeft);
         scrollPaneServiceLeft.setBounds(firstRow, previous, 165, 190);
         add(scrollPaneServiceLeft);
@@ -118,6 +119,7 @@ public class SpareForm extends AbstractEdit {
                 return c;
             }
         };
+        tableModelRight.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPaneServiceRight = new JScrollPane(tableModelRight);
         scrollPaneServiceRight.setBounds(235, previous, 165, 190);
         add(scrollPaneServiceRight);
