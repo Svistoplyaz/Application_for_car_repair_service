@@ -36,7 +36,7 @@ public class OrderForm extends AbstractEdit {
     private JTable tableServiceRight;
     private JLabel finalPrice;
 
-    private int firstRow = 10, secondRow = 170, thirdRow = 420, fourthRow = 670;
+    private int firstRow = 10, secondRow = 170, thirdRow = 420, fourthRow = 770;
     private int previous;
 
     public OrderForm(JFrame frame, boolean _isEdit, Object data, Date date) {
@@ -205,10 +205,11 @@ public class OrderForm extends AbstractEdit {
             }
         };
         JScrollPane scrollPaneServiceLeft = new JScrollPane(tableServiceLeft);
-        scrollPaneServiceLeft.setBounds(thirdRow, previous, 190, 190);
+        scrollPaneServiceLeft.setBounds(thirdRow, previous, 290, 190);
         ((TableModel) tableServiceLeft.getModel()).addTableModelListener(e -> {
 
         });
+        tableServiceLeft.getColumnModel().getColumn(1).setMaxWidth(50);
         add(scrollPaneServiceLeft);
 
         //Таблица с услугами которые есть в заказе
@@ -224,7 +225,8 @@ public class OrderForm extends AbstractEdit {
             }
         };
         JScrollPane scrollPaneServiceRight = new JScrollPane(tableServiceRight);
-        scrollPaneServiceRight.setBounds(fourthRow, previous, 190, 190);
+        scrollPaneServiceRight.setBounds(fourthRow, previous, 290, 190);
+        tableServiceRight.getColumnModel().getColumn(1).setMaxWidth(50);
         add(scrollPaneServiceRight);
 
         //
@@ -273,15 +275,19 @@ public class OrderForm extends AbstractEdit {
         previous += 25;
 
         //Таблица с зап. частями которых нет в заказе
-        JTable tableSparesLeft = new JTable(new TableModel(new String[]{"Зап. часть", "Количество", "Цена"}, getDataSparesLeft()));
+        JTable tableSparesLeft = new JTable(new TableModel(new String[]{"Запасная часть", "Цена", "Cклад"}, getDataSparesLeft()));
         JScrollPane scrollPaneSparesLeft = new JScrollPane(tableSparesLeft);
-        scrollPaneSparesLeft.setBounds(thirdRow, previous, 190, 190);
+        scrollPaneSparesLeft.setBounds(thirdRow, previous, 290, 190);
+        tableSparesLeft.getColumnModel().getColumn(1).setMaxWidth(50);
+        tableSparesLeft.getColumnModel().getColumn(2).setMaxWidth(50);
         add(scrollPaneSparesLeft);
 
         //Таблица с зап. частями которые есть в заказе
-        JTable tableSparesRight = new JTable(new TableModel(new String[]{"Зап. часть", "Количество", "Цена"}, getDataSparesRight()));
+        JTable tableSparesRight = new JTable(new TableModel(new String[]{"Запасная часть", "Кол-во", "Стоим."}, getDataSparesRight()));
         JScrollPane scrollPaneSparesRight = new JScrollPane(tableSparesRight);
-        scrollPaneSparesRight.setBounds(fourthRow, previous, 190, 190);
+        scrollPaneSparesRight.setBounds(fourthRow, previous, 290, 190);
+        tableSparesRight.getColumnModel().getColumn(1).setMaxWidth(50);
+        tableSparesRight.getColumnModel().getColumn(2).setMaxWidth(50);
         add(scrollPaneSparesRight);
 
         //
@@ -325,7 +331,7 @@ public class OrderForm extends AbstractEdit {
 
     @Override
     void setSize() {
-        this.setSize(900, 600);
+        this.setSize(1100, 600);
     }
 
     @Override
