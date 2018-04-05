@@ -64,7 +64,7 @@ public class StaffForm extends AbstractEdit {
     }
 
     @Override
-    void setSize() {
+    public void setSize() {
         this.setSize(385 + 35, 250);
     }
 

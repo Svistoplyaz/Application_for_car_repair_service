@@ -18,7 +18,7 @@ public abstract class AbstractView extends JPanel {
         setLayout(null);
 
         JLabel caption = new JLabel("Форма \"" + this.toString() + "\"");
-        caption.setBounds(20, 20, 170, 24);
+        caption.setBounds(20, 20, 270, 24);
         add(caption);
 
         if (canAdd()) {

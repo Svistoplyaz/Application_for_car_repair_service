@@ -3,16 +3,32 @@ package me.svistoplyas.teamdev.graphics.views;
 import me.svistoplyas.teamdev.graphics.MainFrame;
 import me.svistoplyas.teamdev.graphics.editForms.AbstractEdit;
 import me.svistoplyas.teamdev.graphics.editForms.SpareForm;
+import me.svistoplyas.teamdev.graphics.otherFrames.SpareRefill;
 import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.entities.SparePart;
 import net.web_kot.teamdev.db.entities.VehicleModel;
 
+import javax.swing.*;
+import java.util.Date;
 import java.util.List;
 
 public class SpareView extends AbstractView {
 
     public SpareView(MainFrame _mainFrame) {
         super(_mainFrame);
+
+        JButton refill = new JButton("Пополнить количество зап. частей");
+        refill.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if(row != -1) {
+                JDialog dialog = new SpareRefill(mainFrame, (SparePart) getObject(row));
+                dialog.setVisible(true);
+                updateTable();
+            }else
+                JOptionPane.showMessageDialog(this, "Выберите элемент из таблицы для изменения");
+        });
+        refill.setBounds(558, 10, 230, 40);
+        add(refill);
     }
 
     @Override
@@ -29,7 +45,7 @@ public class SpareView extends AbstractView {
 
             int i = 0;
             for (SparePart sparePart : spareParts) {
-                String modelStr;
+                String modelStr = "Не указаны";
                 if (sparePart.isUniversal())
                     modelStr = "Универсальная";
                 else {
@@ -37,10 +53,11 @@ public class SpareView extends AbstractView {
                     StringBuilder modelList = new StringBuilder();
                     for (VehicleModel model : models)
                         modelList.append(", ").append(model);
-                    modelStr = modelList.toString().substring(2);
+                    if(!modelList.toString().equals("") && modelList.toString().charAt(0) == ',')
+                        modelStr = modelList.toString().substring(2);
                 }
 
-                ans[i] = new Object[]{sparePart.getName(), Converter.getInstance().convertPriceToStr(sparePart.getPrice()),
+                ans[i] = new Object[]{sparePart.getName(), Converter.getInstance().convertPriceToStr(sparePart.getPrice(new Date())),
                         sparePart.getBeautifulQuantity(), sparePart.getUnit(), modelStr};
                 i++;
             }
@@ -93,6 +110,6 @@ public class SpareView extends AbstractView {
 
     @Override
     public String toString() {
-        return "Зап. части";
+        return "Запасные части";
     }
 }

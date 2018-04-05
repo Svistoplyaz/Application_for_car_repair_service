@@ -78,7 +78,7 @@ public abstract class AbstractEdit extends JDialog {
         setLocationRelativeTo(frame);
     }
 
-    abstract void setSize();
+    public abstract void setSize();
 
     public abstract void fillFields();
 
@@ -111,7 +111,9 @@ public abstract class AbstractEdit extends JDialog {
                 }
                 case "Price": {
                     try {
-                        Converter.getInstance().convertStrToPrice(str);
+                        int test = Converter.getInstance().convertStrToPrice(str);
+                        if(test < 0)
+                            throw new Exception();
                         return -1;
                     } catch (Exception ex) {
                         return 1;
@@ -141,7 +143,10 @@ public abstract class AbstractEdit extends JDialog {
 
             if (marks.get(component) == null) {
                 JLabel label = new JLabel(new ImageIcon(imageLoader.getImage(file)));
-                label.setBounds(component.getX() + component.getWidth() + 10, component.getY(), 24, 24);
+                if(component.getName() != null && component.getName().equals("Left"))
+                    label.setBounds(component.getX() - 34, component.getY(), 24, 24);
+                else
+                    label.setBounds(component.getX() + component.getWidth() + 10, component.getY(), 24, 24);
                 add(label);
                 marks.put(component, label);
             } else {

@@ -11,6 +11,7 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.rmi.Naming;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SpareForm extends AbstractEdit {
@@ -29,7 +30,7 @@ public class SpareForm extends AbstractEdit {
 
         int previous = 20;
         int firstRow = 10;
-        int secondRow = 190;
+        int secondRow = 175;
 
         //Название
         JLabel nameLabel = new JLabel("Название запасной части");
@@ -62,6 +63,7 @@ public class SpareForm extends AbstractEdit {
 
         quantText = new JTextField();
         quantText.setBounds(secondRow, previous, 145, 24);
+        quantText.setName("Left");
         add(quantText);
         addMark(quantText, "Price");
 
@@ -150,7 +152,7 @@ public class SpareForm extends AbstractEdit {
                 tableModelRight.setEnabled(false);
                 modelToLeft.setEnabled(false);
                 modelToRight.setEnabled(false);
-            }else{
+            } else {
                 tableModelLeft.setEnabled(true);
                 tableModelRight.setEnabled(true);
                 modelToLeft.setEnabled(true);
@@ -162,7 +164,7 @@ public class SpareForm extends AbstractEdit {
     }
 
     @Override
-    void setSize() {
+    public void setSize() {
         this.setSize(385 + 35, 460);
     }
 
@@ -170,33 +172,33 @@ public class SpareForm extends AbstractEdit {
     public void fillFields() {
         SparePart sparePart = (SparePart) data;
 
-        try{
+        try {
             quantCombo.removeAllItems();
             SparePart.Unit[] units = SparePart.Unit.values();
-            for(SparePart.Unit unit : units){
+            for (SparePart.Unit unit : units) {
                 quantCombo.addItem(unit);
             }
-            if(isEdit){
+            if (isEdit) {
                 quantCombo.setSelectedItem(sparePart.getUnit());
                 quantCombo.setEnabled(false);
             }
 
-            if(isEdit){
+            if (isEdit) {
                 nameText.setText(sparePart.getName());
 
-                priceText.setText(Converter.getInstance().convertPriceToStr(sparePart.getPrice()));
+                priceText.setText(Converter.getInstance().convertPriceToStr(sparePart.getPrice(new Date())));
 
                 quantText.setText(sparePart.getBeautifulQuantity());
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     @Override
-    public void performAdd() throws Exception{
+    public void performAdd() throws Exception {
         //Создание новой детали
-        data = mainFrame.model.createSparePart(nameText.getText(),(SparePart.Unit) quantCombo.getSelectedItem(),
+        data = mainFrame.model.createSparePart(nameText.getText(), (SparePart.Unit) quantCombo.getSelectedItem(),
                 universalCheck.isSelected());
 
         SparePart sparePart = (SparePart) data;
@@ -251,6 +253,16 @@ public class SpareForm extends AbstractEdit {
 
     @Override
     public boolean otherValidation() {
+        if (quantCombo.getSelectedItem() == SparePart.Unit.pieces)
+            try {
+                int quant = Converter.getInstance().convertStrToPrice(quantText.getText());
+                if(quant%100 != 0) {
+                    JOptionPane.showMessageDialog(this, "Введите целое число штук");
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         return true;
     }
 
