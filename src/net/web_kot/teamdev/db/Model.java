@@ -60,7 +60,7 @@ public class Model {
             value = result.getInt(index);
         else if (clazz == long.class || clazz == Long.class)
             value = result.getLong(index);
-        else if(clazz == boolean.class)
+        else if (clazz == boolean.class)
             value = result.getInt(index) != 0;
         else throw new Exception("Unknown field type " + clazz.getCanonicalName());
 
@@ -129,7 +129,7 @@ public class Model {
     }
 
     /* Order */
-    
+
     public Order createOrder(Client client, Staff staff, VehicleModel vehicle, Date start) {
         return new Order(this, client, staff, vehicle, start);
     }
@@ -179,15 +179,15 @@ public class Model {
     public List<Staff> getStaff() throws Exception {
         return getList(Staff.class, "SELECT * FROM Staff");
     }
-    
+
     /* Spare parts */
-    
+
     public SparePart createSparePart(String name, SparePart.Unit unit, boolean universal) {
         return new SparePart(this, name, unit, universal);
     }
-    
+
     public List<SparePart> getSpareParts() throws Exception {
         return getList(SparePart.class, "SELECT * FROM Spare_part");
     }
-    
+
 }

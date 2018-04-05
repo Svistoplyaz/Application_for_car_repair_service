@@ -30,7 +30,7 @@ public class VehicleModel extends AbstractEntity {
             );
         else
             model.db().update(
-                    "UPDATE Model SET Name = %s, Year = %d, PK_Mark = %d WHERE PK_Model = %d", 
+                    "UPDATE Model SET Name = %s, Year = %d, PK_Mark = %d WHERE PK_Model = %d",
                     name, year, markId, id
             );
         return this;
@@ -67,5 +67,5 @@ public class VehicleModel extends AbstractEntity {
             return "ERROR";
         }
     }
-    
+
 }

@@ -38,7 +38,7 @@ public class SparesView extends AbstractView {
 //            return ans;
 //        } catch (Exception e) {
 //            e.printStackTrace();
-//            return null;
+        return null;
 //        }
     }
 

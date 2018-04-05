@@ -43,7 +43,7 @@ public class Order extends AbstractEntity {
     private String number;
     private Long start, finish;
     private int finishCost;
-    
+
     public Order(Model model, Client client, Staff staff, VehicleModel vehicle, Date start) {
         this(model, -1, client.getId(), staff.getId(), null, start.getTime(), null, vehicle.getId(), -1);
     }
@@ -140,7 +140,7 @@ public class Order extends AbstractEntity {
             return "ERROR";
         }
     }
-    
+
     public void addService(Service service) throws Exception {
         model.db().insert(
                 "INSERT INTO Order_Service (PK_Order, PK_Service, Date) VALUES (%d, %d, %d)",

@@ -101,10 +101,10 @@ public class Database {
         for (int i = 0; i < args.length; i++)
             if (args[i] == null)
                 nw[i] = "NULL";
-            else if(args[i] instanceof String)
-                nw[i] = "\"" + ((String)args[i]).replace("\"", "").trim() + "\"";
-            else if(args[i] instanceof Boolean)
-                nw[i] = (Boolean)args[i] ? 1 : 0;
+            else if (args[i] instanceof String)
+                nw[i] = "\"" + ((String) args[i]).replace("\"", "").trim() + "\"";
+            else if (args[i] instanceof Boolean)
+                nw[i] = (Boolean) args[i] ? 1 : 0;
             else
                 nw[i] = args[i];
         return nw;

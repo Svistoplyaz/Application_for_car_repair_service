@@ -47,5 +47,5 @@ public class Position extends AbstractEntity {
     public String toString() {
         return String.format("%s", name);
     }
-    
+
 }

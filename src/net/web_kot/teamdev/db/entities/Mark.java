@@ -47,7 +47,7 @@ public class Mark extends AbstractEntity {
     public String toString() {
         return String.format("%s", name);
     }
-    
+
     public List<VehicleModel> getVehiclesModels() throws Exception {
         return model.getList(
                 VehicleModel.class,
