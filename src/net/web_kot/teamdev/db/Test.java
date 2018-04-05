@@ -1,6 +1,7 @@
 package net.web_kot.teamdev.db;
 
 import net.web_kot.teamdev.db.entities.*;
+import net.web_kot.teamdev.db.wrapper.OrderSpareParts;
 
 import java.io.File;
 import java.util.Date;
@@ -13,57 +14,44 @@ public class Test {
         File f = new File("test.db");
         f.delete();
         
-        Database db = new Database(f).setDebug(true);
+        Database db = new Database(f).setDebug(false);
         Model model = db.getModel();
         
-        SparePart part = model.createSparePart("Воздушный фильтр", SparePart.Unit.liters, false).save();
-        SparePart other = model.createSparePart("Масло", SparePart.Unit.pieces, true).save();
+        SparePart part = model.createSparePart("Воздушный фильтр", SparePart.Unit.liters, false).save().setPrice(100);
+        SparePart other = model.createSparePart("Масло", SparePart.Unit.pieces, true).save().setPrice(200);
         
-        for(SparePart p : model.getSpareParts()) System.out.println(p);
+        Position pos = model.createPosition("Механик").save();
+        Staff staff = model.createStaff(pos, "Vasya", "123456", new Date()).save();
         
-        part.setQuantity(1000).save();
-        System.out.println(part.getQuantity());
-        System.out.println();
+        Client client = model.createClient("Client").save();
         
-        part.setPrice(100);
-        Thread.sleep(1000);
+        Mark mark = model.createMark("Tesla").save();
+        VehicleModel vehicle = model.createVehicleModel(mark, "Model S", 2018).save();
         
-        part.setPrice(200);
-        long time = System.currentTimeMillis();
-        Thread.sleep(1000);
+        Order order = model.createOrder(client, staff, vehicle, new Date()).save();
+        
+        /* ----- */
+
+        OrderSpareParts wrapper = order.getSpareParts();
+        wrapper.addSparePart(part, 200);
+        wrapper.addSparePart(other, 312);
+        order.setSpareParts(wrapper);
+        
+        wrapper = order.getSpareParts();
+        wrapper.addSparePart(other, 3000);
+        order.setSpareParts(wrapper);
         
         part.setPrice(300);
-        Thread.sleep(1000);
+        Thread.sleep(100);
         
-        System.out.println(part.getPrice());
-        System.out.println(part.getPrice(new Date(time + 500)));
-        System.out.println();
+        wrapper = order.getSpareParts();
+        wrapper.removeSparePart(part, 20);
+        wrapper.addSparePart(part, 100);
+        order.setSpareParts(wrapper);
         
-        Mark mark = model.createMark("Toyota").save();
-        VehicleModel model1 = model.createVehicleModel(mark, "Corolla", 2012).save();
-        VehicleModel model2 = model.createVehicleModel(mark, "Corolla", 2014).save();
-        VehicleModel model3 = model.createVehicleModel(mark, "Mark II", 1998).save();
+        order.getSpareParts().print();
         
-        part.addCompatibleModel(model1);
-        part.addCompatibleModel(model2);
-        part.addCompatibleModel(model3);
-        part.removeCompatibleModel(model2);
-        
-        other.addCompatibleModel(model2);
-        
-        for(VehicleModel m : part.getCompatibleModels()) System.out.println(m);
-        System.out.println();
-        
-        List<VehicleModel> list = part.getCompatibleModels();
-        list.add(model2);
-        list.remove(model3);
-        part.setCompatibleModels(list);
-
-        for(VehicleModel m : part.getCompatibleModels()) System.out.println(m);
-        System.out.println();
-        
-        for(VehicleModel m : model.getVehiclesModels())
-            System.out.println(part.isCompatibleWith(m) + " " + other.isCompatibleWith(m));
+        /* ----- */
         
         db.close();
     }

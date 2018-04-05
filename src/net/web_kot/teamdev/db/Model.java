@@ -186,6 +186,10 @@ public class Model {
         return new SparePart(this, name, unit, universal);
     }
     
+    public SparePart getSparePartById(int id) throws Exception {
+        return getById(SparePart.class, db.formatQuery("SELECT * FROM Spare_part WHERE PK_Spare_part = %d", id));
+    }
+    
     public List<SparePart> getSpareParts() throws Exception {
         return getList(SparePart.class, "SELECT * FROM Spare_part");
     }

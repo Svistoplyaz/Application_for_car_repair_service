@@ -1,6 +1,7 @@
 package net.web_kot.teamdev.db.entities;
 
 import net.web_kot.teamdev.db.Model;
+import net.web_kot.teamdev.db.wrapper.OrderSpareParts;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
@@ -298,6 +299,26 @@ public class Order extends AbstractEntity {
     public Date getRealFinishDate() throws Exception {
         HashMap<Status, Date> history = getHistoryMap();
         return history.get(Status.CLOSED);
+    }
+    
+    public OrderSpareParts getSpareParts() throws Exception {
+        OrderSpareParts wrapper = new OrderSpareParts(model);
+        
+        ResultSet result = model.db().select(
+                "SELECT PK_Spare_part_Order, PK_Spare_part, `Date`, Quantity FROM Spare_part_Order WHERE PK_Order = %d",
+                id
+        );
+        
+        ArrayList<Object[]> tmp = new ArrayList<>();
+        while(result.next())
+            tmp.add(new Object[] { result.getInt(1), result.getInt(2), result.getLong(3), result.getInt(4) });
+        
+        for(Object[] data : tmp) wrapper.addCurrent((int)data[0], (int)data[1], (long)data[2], (int)data[3]);
+        return wrapper;
+    }
+    
+    public void setSpareParts(OrderSpareParts wrapper) throws Exception {
+        wrapper.saveFor(id);
     }
 
 }
