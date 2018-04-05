@@ -57,8 +57,14 @@ public class SpareView extends AbstractView {
                         modelStr = modelList.toString().substring(2);
                 }
 
-                ans[i] = new Object[]{sparePart.getName(), Converter.getInstance().convertPriceToStr(sparePart.getPrice(new Date())),
-                        sparePart.getBeautifulQuantity(), sparePart.getUnit(), modelStr};
+                ans[i] = new Object[]{
+                        sparePart.getName(), 
+                        Converter.getInstance().convertPriceToStr(sparePart.getPrice(new Date())),
+                        Converter.getInstance().beautifulQuantity(sparePart.getRealQuantity(), sparePart.getUnit()),
+                        //sparePart.getBeautifulQuantity(), 
+                        sparePart.getUnit(), 
+                        modelStr
+                };
                 i++;
             }
 

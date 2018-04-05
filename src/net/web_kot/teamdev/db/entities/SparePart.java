@@ -66,8 +66,22 @@ public class SparePart extends AbstractEntity {
         return quantity;
     }
     
+    public int getRealQuantity() throws Exception {
+        return getRealQuantity(-1);
+    }
+    
+    // TODO: Ignore spare parts in cancelled orders
+    public int getRealQuantity(int ignored) throws Exception {
+        ResultSet result = model.db().select(
+                "SELECT SUM(Quantity) FROM Spare_part_Order WHERE PK_Spare_part = %d AND PK_Order <> %d",
+                id, ignored
+        );
+        result.next();
+        return quantity - result.getInt(1);
+    }
+    
     public String getBeautifulQuantity() {
-        return Converter.getInstance().beautifulQuantity(quantity, Unit.pieces);
+        return Converter.getInstance().beautifulQuantity(quantity, getUnit());
     }
     
     public SparePart setQuantity(int q) {

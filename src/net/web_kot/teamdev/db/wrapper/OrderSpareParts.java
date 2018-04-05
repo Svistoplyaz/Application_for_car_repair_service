@@ -2,8 +2,10 @@ package net.web_kot.teamdev.db.wrapper;
 
 import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.Model;
+import net.web_kot.teamdev.db.entities.Service;
 import net.web_kot.teamdev.db.entities.SparePart;
 
+import java.io.PrintWriter;
 import java.util.*;
 
 @SuppressWarnings("SqlResolve")
@@ -55,8 +57,10 @@ public class OrderSpareParts {
         }
         
         if(quantity == original) throw new Exception("Невозможно удалить данную запасную часть!");
-        if(quantity != 0) throw new Exception("Было удалено только " + (original - quantity) + " " +
-                part.getUnit() + " данной запасной части!");
+        if(quantity != 0) {
+            String q = Converter.getInstance().beautifulQuantity(original - quantity, part.getUnit());
+            throw new Exception("Было удалено только " + q + " " + part.getUnit() + " данной запасной части!");
+        }
     }
     
     public void addSparePart(SparePart part, int quantity) throws Exception {
@@ -100,17 +104,25 @@ public class OrderSpareParts {
             for(Map.Entry<Integer, PartPriceWrapper> e : entry.getValue().entrySet()) {
                 PartPriceWrapper wrapper = e.getValue();
                 
-                if(wrapper.identifier != -1)
-                    model.db().update(
-                            "UPDATE Spare_part_Order SET Quantity = %d WHERE PK_Spare_part_Order = %d", 
-                            wrapper.amount, wrapper.identifier
-                    );
-                else
-                    model.db().insert(
-                            "INSERT INTO Spare_part_Order (PK_Spare_part, PK_Order, `Date`, Quantity) " +
-                                    "VALUES (%d, %d, %d, %d)",
-                            entry.getKey(), idOrder, System.currentTimeMillis(), wrapper.amount
-                    );
+                if(wrapper.identifier != -1) {
+                    if(wrapper.amount != 0)
+                        model.db().update(
+                                "UPDATE Spare_part_Order SET Quantity = %d WHERE PK_Spare_part_Order = %d",
+                                wrapper.amount, wrapper.identifier
+                        );
+                    else 
+                        model.db().exec(
+                                "DELETE FROM Spare_part_Order WHERE PK_Spare_part_Order = %d", 
+                                wrapper.identifier
+                        );
+                } else {
+                    if(wrapper.amount != 0) 
+                        model.db().insert(
+                                "INSERT INTO Spare_part_Order (PK_Spare_part, PK_Order, `Date`, Quantity) " + 
+                                        "VALUES (%d, %d, %d, %d)", 
+                                entry.getKey(), idOrder, System.currentTimeMillis(), wrapper.amount
+                        );
+                }
             }
         }
     }
@@ -125,8 +137,7 @@ public class OrderSpareParts {
     }
     
     public Object[][] getData() throws Exception {
-        Object[][] result = new Object[data.size()][];
-        int i = 0;
+        ArrayList<Object[]> result = new ArrayList<>(data.size());
         for(Map.Entry<Integer, TreeMap<Integer, PartPriceWrapper>> entry : data.entrySet()) {
             int count = 0;
             long price = 0;
@@ -136,17 +147,69 @@ public class OrderSpareParts {
                 count += wrapper.amount;
                 price += wrapper.amount * e.getKey();
             }
+            if(count == 0) continue;
             
             SparePart part = model.getSparePartById(entry.getKey());
-            result[i] = new Object[] {
+            result.add(new Object[] {
                     part.getName(), 
                     Converter.getInstance().beautifulQuantity(count, part.getUnit()) + " " + part.getUnit(),
                     Converter.getInstance().convertPriceToStr((int)(price / 100)),
-                    part
-            };
+                    part,
+                    count
+            });
+        }
+        
+        Object[][] ret = new Object[result.size()][];
+        for(int i = 0; i < result.size(); i++) ret[i] = result.get(i);
+        return ret;
+    }
+    
+    public int getPrice() {
+        long price = 0;
+        for(Map.Entry<Integer, TreeMap<Integer, PartPriceWrapper>> entry : data.entrySet())
+            for(Map.Entry<Integer, PartPriceWrapper> e : entry.getValue().entrySet()) {
+                PartPriceWrapper wrapper = e.getValue();
+                price += wrapper.amount * e.getKey();
+            }
+        return (int)(price / 100);
+    }
+    
+    public int getAmount(SparePart part) {
+        if(!data.containsKey(part.getId())) return 0;
+        
+        int amount = 0;
+        for(Map.Entry<Integer, PartPriceWrapper> e : data.get(part.getId()).entrySet())
+            amount += e.getValue().amount;
+        
+        return amount;
+    }
+    
+    public int writeToDocument(PrintWriter out) throws Exception {
+        int i = 0;
+        long total = 0;
+        for(Map.Entry<Integer, TreeMap<Integer, PartPriceWrapper>> entry : data.entrySet()) {
+            SparePart part = model.getSparePartById(entry.getKey());
+
+            out.print(String.format("%3s", (i + 1) + ""));
+            out.print(". ");
+            out.print(String.format("%-40s", part.getName()));
+            
+            int j = 0;
+            for(Map.Entry<Integer, PartPriceWrapper> e : entry.getValue().entrySet()) {
+                if(j != 0) out.print(String.format("%-45s", ""));
+                
+                out.print(String.format("%8s", Converter.getInstance().beautifulQuantity(e.getValue().amount, part.getUnit())));
+                out.print(" x ");
+                out.print(String.format("%-14s", (e.getKey() / 100D) + " p."));
+                
+                out.println(((e.getValue().amount * e.getKey() / 100) / 100D) + " р.");
+                
+                total += e.getValue().amount * e.getKey();
+                j++;
+            }
             i++;
         }
-        return result;
+        return (int)(total / 100);
     }
     
     private static class PartPriceWrapper {

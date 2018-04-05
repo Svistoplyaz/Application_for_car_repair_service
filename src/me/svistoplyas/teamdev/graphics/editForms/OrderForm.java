@@ -5,7 +5,6 @@ import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.entities.*;
 import net.web_kot.teamdev.db.wrapper.OrderSpareParts;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jdatepicker.DateModel;
 import org.jdatepicker.JDatePicker;
 
 import javax.swing.*;
@@ -39,6 +38,7 @@ public class OrderForm extends AbstractEdit {
     
     private JTable tableSparesLeft, tableSparesRight;
     private OrderSpareParts orderParts;
+    private List<SparePart> compatible = null;
     
     private int firstRow = 10, secondRow = 170, thirdRow = 420, fourthRow = 770;
     private int previous;
@@ -114,7 +114,7 @@ public class OrderForm extends AbstractEdit {
         add(modelCombo);
         if (isEdit)
             modelCombo.setEnabled(false);
-        modelCombo.addActionListener(e -> changeModel());
+        modelCombo.addActionListener(e -> updateCompatibleParts(true));
         addMark(modelCombo);
 
         previous += 30;
@@ -286,11 +286,11 @@ public class OrderForm extends AbstractEdit {
         previous += 25;
 
         //Таблица с зап. частями которых нет в заказе
-        tableSparesLeft = new JTable(new TableModel(new String[]{"Запасная часть", "Цена", "Cклад"}, getDataSparesLeft()));
+        tableSparesLeft = new JTable(new TableModel(new String[]{"Запасная часть", "Цена", "Cклад"}, getDataSparesLeft(false)));
         JScrollPane scrollPaneSparesLeft = new JScrollPane(tableSparesLeft);
         scrollPaneSparesLeft.setBounds(thirdRow, previous, 290, 190);
-        tableSparesLeft.getColumnModel().getColumn(1).setMaxWidth(50);
-        tableSparesLeft.getColumnModel().getColumn(2).setMaxWidth(50);
+        tableSparesLeft.getColumnModel().getColumn(1).setMaxWidth(60);
+        tableSparesLeft.getColumnModel().getColumn(2).setMaxWidth(60);
         tableSparesLeft.getTableHeader().setReorderingAllowed(false);
         tableSparesLeft.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         add(scrollPaneSparesLeft);
@@ -299,8 +299,8 @@ public class OrderForm extends AbstractEdit {
         tableSparesRight = new JTable(new TableModel(new String[]{"Запасная часть", "Кол-во", "Стоим."}, getDataSparesRight()));
         JScrollPane scrollPaneSparesRight = new JScrollPane(tableSparesRight);
         scrollPaneSparesRight.setBounds(fourthRow, previous, 290, 190);
-        tableSparesRight.getColumnModel().getColumn(1).setMaxWidth(50);
-        tableSparesRight.getColumnModel().getColumn(2).setMaxWidth(50);
+        tableSparesRight.getColumnModel().getColumn(1).setMaxWidth(60);
+        tableSparesRight.getColumnModel().getColumn(2).setMaxWidth(60);
         tableSparesRight.getTableHeader().setReorderingAllowed(false);
         tableSparesRight.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         add(scrollPaneSparesRight);
@@ -311,7 +311,8 @@ public class OrderForm extends AbstractEdit {
         SparesToRight.addActionListener(e -> {
             int row = tableSparesLeft.getSelectedRow();
             if (row != -1) {
-                addSparePart((SparePart)tableSparesLeft.getModel().getValueAt(row, 3));
+                javax.swing.table.TableModel model = tableSparesLeft.getModel();
+                addSparePart((SparePart)model.getValueAt(row, 3), (int)model.getValueAt(row, 4));
                 setCurrentPrice();
             }
         });
@@ -322,7 +323,8 @@ public class OrderForm extends AbstractEdit {
         SparesToLeft.addActionListener(e -> {
             int row = tableSparesRight.getSelectedRow();
             if (row != -1) {
-                removeSparePart((SparePart)tableSparesLeft.getModel().getValueAt(row, 3));
+                javax.swing.table.TableModel model = tableSparesRight.getModel();
+                removeSparePart((SparePart)model.getValueAt(row, 3), (int)model.getValueAt(row, 4));
                 setCurrentPrice();
             }
         });
@@ -332,10 +334,11 @@ public class OrderForm extends AbstractEdit {
 
         finalPrice = new JLabel();
         finalPrice.setBounds(thirdRow, previous, 370, 24);
-        setCurrentPrice();
         add(finalPrice);
 
         fillFields();
+        setCurrentPrice();
+        updateCompatibleParts(false);
 
         generated = true;
     }
@@ -409,6 +412,7 @@ public class OrderForm extends AbstractEdit {
             }
             
             orderParts = order == null ? new OrderSpareParts(mainFrame.model) : order.getSpareParts();
+            ((TableModel) tableSparesRight.getModel()).setData(getDataSparesRight());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -448,6 +452,12 @@ public class OrderForm extends AbstractEdit {
             ex.printStackTrace();
         }
 
+        try {
+            ((Order) data).setSpareParts(orderParts);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
         setStatuses();
     }
 
@@ -480,6 +490,12 @@ public class OrderForm extends AbstractEdit {
             order.save();
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+
+        try {
+            ((Order) data).setSpareParts(orderParts);
+        } catch(Exception e) {
+            e.printStackTrace();
         }
 
         setStatuses();
@@ -554,8 +570,8 @@ public class OrderForm extends AbstractEdit {
         }
     }
     
-    private void changeModel() {
-        ((TableModel) tableSparesLeft.getModel()).setData(getDataSparesLeft());
+    private void updateCompatibleParts(boolean force) {
+        ((TableModel) tableSparesLeft.getModel()).setData(getDataSparesLeft(force));
     }
 
     private Object[][] getDataServiceLeft() {
@@ -619,24 +635,32 @@ public class OrderForm extends AbstractEdit {
         }
     }
 
-    private Object[][] getDataSparesLeft() {
+    private Object[][] getDataSparesLeft(boolean force) {
         VehicleModel vehicleModel = (VehicleModel)modelCombo.getSelectedItem();
         if(vehicleModel == null) return new Object[0][];
         
         try {
-            List<SparePart> compatible = mainFrame.model.getCompatibleSpareParts(vehicleModel);
-            Object[][] data = new Object[compatible.size()][];
+            if(compatible == null || force) compatible = mainFrame.model.getCompatibleSpareParts(vehicleModel);
+            ArrayList<Object[]> data = new ArrayList<>();
             
-            for(int i = 0; i < data.length; i++) {
-                SparePart part = compatible.get(i);
-                data[i] = new Object[]{ 
+            for(SparePart part : compatible) {
+                int real = part.getRealQuantity(this.data == null ? -1 : ((Order)this.data).getId());
+                
+                int quantity = real - (orderParts == null ? 0 : orderParts.getAmount(part));
+                if(quantity <= 0) continue;
+                
+                data.add(new Object[] {
                         part.getName(), 
                         Converter.getInstance().convertPriceToStr(part.getPrice()), 
-                        part.getBeautifulQuantity() + " " + part.getUnit(), 
-                        part
-                };
+                        Converter.getInstance().beautifulQuantity(quantity, part.getUnit()) + " " + part.getUnit(), 
+                        part,
+                        quantity
+                });
             }
-            return data;
+            
+            Object[][] result = new Object[data.size()][];
+            for(int i = 0; i < result.length; i++) result[i] = data.get(i);
+            return result;
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -650,14 +674,16 @@ public class OrderForm extends AbstractEdit {
         return new Object[0][];
     }
     
-    private int requestQuantity(SparePart part) {
-        String result = JOptionPane.showInputDialog(
+    private int requestQuantity(SparePart part, int maximum) {
+        Object rr = JOptionPane.showInputDialog(
                 this,
-                "Введите количество добавляемых \"" + part.getName() + "\"",
+                "Введите количество \"" + part.getName() + "\" (максимум: " + 
+                        Converter.getInstance().beautifulQuantity(maximum, part.getUnit()) + " " + part.getUnit() + ")",
                 "Количество",
                 JOptionPane.QUESTION_MESSAGE, null, null, "1"
-        ).toString();
-        if(result == null) return -1;
+        );
+        if(rr == null) return -1;
+        String result = rr.toString();
         
         int quantity;
         try {
@@ -671,11 +697,16 @@ public class OrderForm extends AbstractEdit {
             return -1;
         }
         
+        if(quantity > maximum) {
+            JOptionPane.showMessageDialog(this, "Введено деталей больше доступного количества");
+            return -1;
+        }
+        
         return quantity;
     }
     
-    private void addSparePart(SparePart part) {
-        int quantity = requestQuantity(part);
+    private void addSparePart(SparePart part, int maximum) {
+        int quantity = requestQuantity(part, maximum);
         if(quantity == -1) return;
         
         try {
@@ -684,18 +715,27 @@ public class OrderForm extends AbstractEdit {
         } catch(Exception e) {
             e.printStackTrace();
         }
+        
+        updateCompatibleParts(false);
     }
     
-    private void removeSparePart(SparePart part) {
-        int quantity = requestQuantity(part);
+    private void removeSparePart(SparePart part, int maximum) {
+        int quantity = requestQuantity(part, maximum);
         if(quantity == -1) return;
 
         try {
-            orderParts.removeSparePart(part, quantity);
+            try {
+                orderParts.removeSparePart(part, quantity);
+            } catch(Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+            
             ((TableModel) tableSparesRight.getModel()).setData(getDataSparesRight());
         } catch(Exception e) {
             e.printStackTrace();
         }
+
+        updateCompatibleParts(false);
     }
 
     private void setStatusLabel(Order.Status status) {
@@ -806,11 +846,12 @@ public class OrderForm extends AbstractEdit {
     }
 
     private void setCurrentPrice() {
-        finalPrice.setText("Стоимость заказа: " + Converter.getInstance().convertPriceToStr(getCurrentPrice()));
+        int price = getCurrentServicesPrice() + (orderParts == null ? 0 : orderParts.getPrice());
+        finalPrice.setText("Стоимость заказа: " + Converter.getInstance().convertPriceToStr(price));
         repaint();
     }
 
-    private int getCurrentPrice() {
+    private int getCurrentServicesPrice() {
         Object[][] tableData = ((TableModel) tableServiceRight.getModel()).getData();
         int len = tableData.length;
 

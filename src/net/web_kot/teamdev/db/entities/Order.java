@@ -273,19 +273,24 @@ public class Order extends AbstractEntity {
         if(!finish) out.println(String.format("%40s", "Предварительная смета"));
         out.println();
 
+        out.println("Услуги:");
         List<Service> services = getServices();
         for(int i = 0; i < services.size(); i++) {
             Service s = services.get(i);
 
             out.print(String.format("%3s", (i + 1) + ""));
             out.print(". ");
-            out.print(String.format("%-60s", s.getName()));
+            out.print(String.format("%-65s", s.getName()));
             out.println((s.getPrice() / 100D) + " р.");
         }
+        
+        out.println();
+        out.println("Расходные материалы и запасные части:");
+        int total = getSpareParts().writeToDocument(out);
 
         out.println();
-        out.print(String.format("%64s", "Итого:"));
-        out.println(" " + (getPrice() / 100D) + " р.");
+        out.print(String.format("%69s", "Итого:"));
+        out.println(" " + ((total + getPrice()) / 100D) + " р.");
 
         out.close();
         return f;
@@ -302,7 +307,10 @@ public class Order extends AbstractEntity {
     }
     
     public OrderSpareParts getSpareParts() throws Exception {
-        OrderSpareParts wrapper = new OrderSpareParts(model);
+        Status status = getCurrentStatus();
+        boolean editable = status == Status.PRELIMINARY || status == Status.CONFIRMED;
+        
+        OrderSpareParts wrapper = new OrderSpareParts(model, !editable);
         
         ResultSet result = model.db().select(
                 "SELECT PK_Spare_part_Order, PK_Spare_part, `Date`, Quantity FROM Spare_part_Order WHERE PK_Order = %d",

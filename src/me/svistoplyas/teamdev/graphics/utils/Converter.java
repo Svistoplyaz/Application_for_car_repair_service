@@ -30,7 +30,7 @@ public class Converter {
             if (price % 100 < 10)
                 str = price / 100 + ",0" + price % 100 + "";
             else if (price % 100 % 10 == 0)
-                str = price / 100 + "," + price % 100 % 10 + "";
+                str = price / 100 + "," + price % 100 / 10 + "";
             else
                 str = price / 100 + "," + price % 100 + "";
         }

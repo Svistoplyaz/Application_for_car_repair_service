@@ -74,6 +74,12 @@ public class SpareForm extends AbstractEdit {
         quantCombo.setBounds(quantText.getX() + quantText.getWidth() + 5, previous, 50, 24);
         add(quantCombo);
         addMark(quantCombo);
+        
+        if(isEdit) {
+            quantLabel.setVisible(false);
+            quantText.setVisible(false);
+            quantCombo.setVisible(false);
+        }
 
         previous += 30;
 
