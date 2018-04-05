@@ -5,6 +5,7 @@ import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.entities.SparePart;
 
 import javax.swing.*;
+import java.util.Date;
 
 public class SpareRefill extends AbstractEdit {
     private SparePart data;
@@ -63,12 +64,20 @@ public class SpareRefill extends AbstractEdit {
 
     @Override
     public boolean otherValidation() {
-        if (quantCombo.getSelectedItem() == SparePart.Unit.pieces)
+
             try {
-                int quant = Converter.getInstance().convertStrToPrice(quantText.getText());
-                if(quant%100 != 0) {
-                    JOptionPane.showMessageDialog(this, "Введите целое число штук");
+                int overflow = Converter.getInstance().convertStrToPrice(quantText.getText());
+                if(overflow + data.getPrice(new Date()) < 0 || overflow < 0){
+                    JOptionPane.showMessageDialog(this, "Введено слишком большое число");
                     return false;
+                }
+
+                if (quantCombo.getSelectedItem() == SparePart.Unit.pieces) {
+                    int quant = Converter.getInstance().convertStrToPrice(quantText.getText());
+                    if (quant % 100 != 0) {
+                        JOptionPane.showMessageDialog(this, "Введите целое число штук");
+                        return false;
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();

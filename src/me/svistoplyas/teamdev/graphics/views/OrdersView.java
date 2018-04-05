@@ -25,7 +25,6 @@ public class OrdersView extends AbstractView {
         try {
             List<Order> orders = mainFrame.model.getOrders();
             Object[][] ans = new Object[orders.size()][];
-//            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
             int i = 0;
             for (Order order : orders) {

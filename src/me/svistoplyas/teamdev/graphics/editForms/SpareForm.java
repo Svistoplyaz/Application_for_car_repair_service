@@ -233,7 +233,7 @@ public class SpareForm extends AbstractEdit {
         sparePart.setPrice(Converter.getInstance().convertStrToPrice(priceText.getText()));
     }
 
-    public void duplicateCode(SparePart sparePart) {
+    private void duplicateCode(SparePart sparePart) {
         //Подходящие модели
         Object[][] tableData = ((TableModel) tableModelRight.getModel()).getData();
         ArrayList<VehicleModel> vehicleModels = new ArrayList<>();
