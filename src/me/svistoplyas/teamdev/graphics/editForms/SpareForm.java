@@ -11,6 +11,7 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.rmi.Naming;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SpareForm extends AbstractEdit {
@@ -185,7 +186,7 @@ public class SpareForm extends AbstractEdit {
             if (isEdit) {
                 nameText.setText(sparePart.getName());
 
-                priceText.setText(Converter.getInstance().convertPriceToStr(sparePart.getPrice()));
+                priceText.setText(Converter.getInstance().convertPriceToStr(sparePart.getPrice(new Date())));
 
                 quantText.setText(sparePart.getBeautifulQuantity());
             }

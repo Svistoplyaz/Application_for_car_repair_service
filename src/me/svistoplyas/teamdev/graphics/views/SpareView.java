@@ -9,6 +9,7 @@ import net.web_kot.teamdev.db.entities.SparePart;
 import net.web_kot.teamdev.db.entities.VehicleModel;
 
 import javax.swing.*;
+import java.util.Date;
 import java.util.List;
 
 public class SpareView extends AbstractView {
@@ -56,7 +57,7 @@ public class SpareView extends AbstractView {
                         modelStr = modelList.toString().substring(2);
                 }
 
-                ans[i] = new Object[]{sparePart.getName(), Converter.getInstance().convertPriceToStr(sparePart.getPrice()),
+                ans[i] = new Object[]{sparePart.getName(), Converter.getInstance().convertPriceToStr(sparePart.getPrice(new Date())),
                         sparePart.getBeautifulQuantity(), sparePart.getUnit(), modelStr};
                 i++;
             }
@@ -109,6 +110,6 @@ public class SpareView extends AbstractView {
 
     @Override
     public String toString() {
-        return "Запапсные части";
+        return "Запасные части";
     }
 }
