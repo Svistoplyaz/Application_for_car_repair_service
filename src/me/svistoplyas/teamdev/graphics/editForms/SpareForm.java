@@ -199,25 +199,14 @@ public class SpareForm extends AbstractEdit {
     public void performAdd() throws Exception {
         //Создание новой детали
         data = mainFrame.model.createSparePart(nameText.getText(), (SparePart.Unit) quantCombo.getSelectedItem(),
-                universalCheck.isSelected());
+                universalCheck.isSelected()).save();
 
         SparePart sparePart = (SparePart) data;
 
         //Установка количества
         sparePart.setQuantity(Converter.getInstance().convertStrToPrice(quantText.getText()));
 
-        //Подходящие модели
-        Object[][] tableData = ((TableModel) tableModelRight.getModel()).getData();
-        ArrayList<VehicleModel> vehicleModels = new ArrayList<>();
-        for (Object[] objects : tableData) {
-            vehicleModels.add((VehicleModel) objects[1]);
-        }
-        try {
-            sparePart.setCompatibleModels(vehicleModels);
-            sparePart.save();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        duplicateCode(sparePart);
 
         sparePart.setPrice(Converter.getInstance().convertStrToPrice(priceText.getText()));
     }
@@ -235,6 +224,12 @@ public class SpareForm extends AbstractEdit {
         //Установка количества
         sparePart.setQuantity(Converter.getInstance().convertStrToPrice(quantText.getText()));
 
+        duplicateCode(sparePart);
+
+        sparePart.setPrice(Converter.getInstance().convertStrToPrice(priceText.getText()));
+    }
+
+    public void duplicateCode(SparePart sparePart) {
         //Подходящие модели
         Object[][] tableData = ((TableModel) tableModelRight.getModel()).getData();
         ArrayList<VehicleModel> vehicleModels = new ArrayList<>();
@@ -242,13 +237,11 @@ public class SpareForm extends AbstractEdit {
             vehicleModels.add((VehicleModel) objects[1]);
         }
         try {
-            sparePart.setCompatibleModels(vehicleModels);
             sparePart.save();
+            sparePart.setCompatibleModels(vehicleModels);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-        sparePart.setPrice(Converter.getInstance().convertStrToPrice(priceText.getText()));
     }
 
     @Override
@@ -256,7 +249,7 @@ public class SpareForm extends AbstractEdit {
         if (quantCombo.getSelectedItem() == SparePart.Unit.pieces)
             try {
                 int quant = Converter.getInstance().convertStrToPrice(quantText.getText());
-                if(quant%100 != 0) {
+                if (quant % 100 != 0) {
                     JOptionPane.showMessageDialog(this, "Введите целое число штук");
                     return false;
                 }
