@@ -63,6 +63,16 @@ public class SpareRefill extends AbstractEdit {
 
     @Override
     public boolean otherValidation() {
+        if (quantCombo.getSelectedItem() == SparePart.Unit.pieces)
+            try {
+                int quant = Converter.getInstance().convertStrToPrice(quantText.getText());
+                if(quant%100 != 0) {
+                    JOptionPane.showMessageDialog(this, "Введите целое число штук");
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         return true;
     }
 }

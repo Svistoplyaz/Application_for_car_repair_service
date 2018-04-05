@@ -44,7 +44,7 @@ public class SpareView extends AbstractView {
 
             int i = 0;
             for (SparePart sparePart : spareParts) {
-                String modelStr;
+                String modelStr = "Не указаны";
                 if (sparePart.isUniversal())
                     modelStr = "Универсальная";
                 else {
@@ -52,7 +52,8 @@ public class SpareView extends AbstractView {
                     StringBuilder modelList = new StringBuilder();
                     for (VehicleModel model : models)
                         modelList.append(", ").append(model);
-                    modelStr = modelList.toString().substring(2);
+                    if(!modelList.toString().equals("") && modelList.toString().charAt(0) == ',')
+                        modelStr = modelList.toString().substring(2);
                 }
 
                 ans[i] = new Object[]{sparePart.getName(), Converter.getInstance().convertPriceToStr(sparePart.getPrice()),
