@@ -65,6 +65,11 @@ public class SparePart extends AbstractEntity {
         return quantity;
     }
     
+    public String getBeautifulQuantity() {
+        if(unit == Unit.pieces) return (quantity / 100) + "";
+        return (quantity / 100) + "," + (quantity % 100);
+    }
+    
     public SparePart setQuantity(int q) {
         this.quantity = q; 
         return this;
