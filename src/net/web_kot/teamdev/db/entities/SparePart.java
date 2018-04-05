@@ -1,5 +1,6 @@
 package net.web_kot.teamdev.db.entities;
 
+import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.Model;
 
 import java.sql.ResultSet;
@@ -66,8 +67,7 @@ public class SparePart extends AbstractEntity {
     }
     
     public String getBeautifulQuantity() {
-        if(unit == Unit.pieces) return (quantity / 100) + "";
-        return (quantity / 100) + "," + (quantity % 100);
+        return Converter.getInstance().beautifulQuantity(quantity, Unit.pieces);
     }
     
     public SparePart setQuantity(int q) {

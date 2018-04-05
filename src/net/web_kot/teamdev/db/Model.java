@@ -6,10 +6,7 @@ import org.intellij.lang.annotations.Language;
 
 import java.lang.reflect.Constructor;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("SqlResolve")
 public class Model {
@@ -192,6 +189,18 @@ public class Model {
     
     public List<SparePart> getSpareParts() throws Exception {
         return getList(SparePart.class, "SELECT * FROM Spare_part");
+    }
+    
+    public List<SparePart> getCompatibleSpareParts(VehicleModel model) throws Exception {
+        Set<SparePart> set = new HashSet<>();
+        set.addAll(getList(SparePart.class, 
+                "SELECT * FROM Spare_part WHERE Universal <> 0"
+        ));
+        set.addAll(getList(SparePart.class, db.formatQuery(
+                "SELECT p.PK_Spare_part, p.Name, p.Quantity, p.Unit, p.Universal FROM Spare_part p, Model_Spare_part m" +
+                        " WHERE p.PK_Spare_part = m.PK_Spare_part AND m.PK_Model = %d", model.getId()
+        )));
+        return new ArrayList<>(set);
     }
     
 }

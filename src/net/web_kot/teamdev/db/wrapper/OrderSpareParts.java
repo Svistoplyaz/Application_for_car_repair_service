@@ -1,5 +1,6 @@
 package net.web_kot.teamdev.db.wrapper;
 
+import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.Model;
 import net.web_kot.teamdev.db.entities.SparePart;
 
@@ -121,6 +122,31 @@ public class OrderSpareParts {
             for(Map.Entry<Integer, PartPriceWrapper> e : entry.getValue().entrySet())
                 System.out.println("-- " + e.getKey() + " x " + e.getValue().amount);
         }
+    }
+    
+    public Object[][] getData() throws Exception {
+        Object[][] result = new Object[data.size()][];
+        int i = 0;
+        for(Map.Entry<Integer, TreeMap<Integer, PartPriceWrapper>> entry : data.entrySet()) {
+            int count = 0;
+            long price = 0;
+            for(Map.Entry<Integer, PartPriceWrapper> e : entry.getValue().entrySet()) {
+                PartPriceWrapper wrapper = e.getValue();
+                
+                count += wrapper.amount;
+                price += wrapper.amount * e.getKey();
+            }
+            
+            SparePart part = model.getSparePartById(entry.getKey());
+            result[i] = new Object[] {
+                    part.getName(), 
+                    Converter.getInstance().beautifulQuantity(count, part.getUnit()) + " " + part.getUnit(),
+                    Converter.getInstance().convertPriceToStr((int)(price / 100)),
+                    part
+            };
+            i++;
+        }
+        return result;
     }
     
     private static class PartPriceWrapper {

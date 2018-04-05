@@ -1,6 +1,7 @@
 package me.svistoplyas.teamdev.graphics.utils;
 
 
+import net.web_kot.teamdev.db.entities.SparePart;
 import org.jdatepicker.DateModel;
 import org.jdatepicker.JDatePicker;
 
@@ -85,4 +86,10 @@ public class Converter {
         ans.setYear(model.getYear() - 1900);
         return ans;
     }
+    
+    public String beautifulQuantity(int quantity, SparePart.Unit unit) {
+        if(unit == SparePart.Unit.pieces) return (quantity / 100) + "";
+        return (quantity / 100) + "," + (quantity % 100);
+    }
+    
 }
