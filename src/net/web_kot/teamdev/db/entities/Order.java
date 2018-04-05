@@ -43,13 +43,13 @@ public class Order extends AbstractEntity {
     private String number;
     private Long start, finish;
     private int finishCost;
-
-    public Order(Model model, Client client, VehicleModel vehicle, Date start) {
-        this(model, -1, client.getId(), null, start.getTime(), null, vehicle.getId(), -1, -1);
+    
+    public Order(Model model, Client client, Staff staff, VehicleModel vehicle, Date start) {
+        this(model, -1, client.getId(), staff.getId(), null, start.getTime(), null, vehicle.getId(), -1);
     }
 
     @SelectConstructor
-    public Order(Model model, int id, int idClient, String number, long start, Long finish, int idModel, int cost, int idStaff) {
+    public Order(Model model, int id, int idClient, int idStaff, String number, long start, Long finish, int idModel, int cost) {
         super(model, "Order", "PK_Order");
         this.id = id;
         this.idClient = idClient;
@@ -127,7 +127,7 @@ public class Order extends AbstractEntity {
     }
 
     public Order setResponsible(Staff staff) {
-        idStaff = staff.id;
+        idStaff = staff.getId();
         return this;
     }
 
@@ -140,15 +140,7 @@ public class Order extends AbstractEntity {
             return "ERROR";
         }
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Order)) return false;
-        Order other = (Order) o;
-
-        return id == other.id;
-    }
-
+    
     public void addService(Service service) throws Exception {
         model.db().insert(
                 "INSERT INTO Order_Service (PK_Order, PK_Service, Date) VALUES (%d, %d, %d)",

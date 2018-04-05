@@ -33,10 +33,16 @@ public abstract class AbstractEntity {
     public int hashCode() {
         return id;
     }
+    
+    @Target(value=ElementType.CONSTRUCTOR)
+    @Retention(value=RetentionPolicy.RUNTIME)
+    public @interface SelectConstructor { }
 
-    @Target(value = ElementType.CONSTRUCTOR)
-    @Retention(value = RetentionPolicy.RUNTIME)
-    public @interface SelectConstructor {
+    @Override
+    public boolean equals(Object o) {
+        if(!(o instanceof AbstractEntity)) return false;
+        AbstractEntity other = (AbstractEntity) o;
+        return other.getClass() == this.getClass() && id == other.id;
     }
-
+    
 }

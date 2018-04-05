@@ -55,13 +55,5 @@ public class Client extends AbstractEntity {
     public String toString() {
         return String.format("%s (%s)", name, phone);
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Client)) return false;
-        Client other = (Client) o;
-
-        return id == other.id;
-    }
-
+    
 }

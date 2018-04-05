@@ -47,13 +47,5 @@ public class Position extends AbstractEntity {
     public String toString() {
         return String.format("%s", name);
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Position)) return false;
-        Position other = (Position) o;
-
-        return id == other.id;
-    }
-
+    
 }

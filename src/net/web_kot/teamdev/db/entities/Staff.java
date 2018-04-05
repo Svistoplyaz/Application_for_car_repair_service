@@ -33,7 +33,7 @@ public class Staff extends AbstractEntity {
             );
         else
             model.db().update(
-                    "UPDATE Position SET PK_Position = %d, Name = %s, Phone = %s, Birth_day = %d WHERE PK_Position = %d",
+                    "UPDATE Staff SET PK_Position = %d, Name = %s, Phone = %s, Birth_day = %d WHERE PK_Staff = %d",
                     idPosition, name, phone, birthday, id
             );
         return this;
@@ -84,13 +84,5 @@ public class Staff extends AbstractEntity {
             return "ERROR";
         }
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Staff)) return false;
-        Staff other = (Staff) o;
-
-        return id == other.id;
-    }
-
+    
 }
