@@ -181,14 +181,15 @@ public class SpareForm extends AbstractEdit {
             if (isEdit) {
                 quantCombo.setSelectedItem(sparePart.getUnit());
                 quantCombo.setEnabled(false);
-            }
 
-            if (isEdit) {
                 nameText.setText(sparePart.getName());
 
                 priceText.setText(Converter.getInstance().convertPriceToStr(sparePart.getPrice(new Date())));
 
                 quantText.setText(sparePart.getBeautifulQuantity());
+
+                if(sparePart.isUniversal())
+                    universalCheck.setSelected(true);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
