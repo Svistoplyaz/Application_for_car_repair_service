@@ -20,7 +20,10 @@ public class SpareForm extends AbstractEdit {
     private JTextField quantText;
     private JComboBox<SparePart.Unit> quantCombo;
     private JCheckBox universalCheck;
+    private JTable tableModelLeft;
     private JTable tableModelRight;
+    private JButton modelToLeft;
+    private JButton modelToRight;
 
     private boolean isEdit;
 
@@ -88,7 +91,7 @@ public class SpareForm extends AbstractEdit {
         previous += 25;
 
         //Таблица с услугами которых нет в заказе
-        JTable tableModelLeft = new JTable(new TableModel(new String[]{"Название"}, getDataModelLeft())) {
+        tableModelLeft = new JTable(new TableModel(new String[]{"Название"}, getDataModelLeft())) {
             @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
                 Component c = super.prepareRenderer(renderer, row, column);
@@ -99,6 +102,7 @@ public class SpareForm extends AbstractEdit {
                 return c;
             }
         };
+        tableModelLeft.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPaneServiceLeft = new JScrollPane(tableModelLeft);
         scrollPaneServiceLeft.setBounds(firstRow, previous, 165, 190);
         add(scrollPaneServiceLeft);
@@ -115,12 +119,13 @@ public class SpareForm extends AbstractEdit {
                 return c;
             }
         };
+        tableModelRight.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPaneServiceRight = new JScrollPane(tableModelRight);
         scrollPaneServiceRight.setBounds(235, previous, 165, 190);
         add(scrollPaneServiceRight);
 
         //
-        JButton modelToRight = new JButton("->");
+        modelToRight = new JButton("->");
         modelToRight.setBounds(scrollPaneServiceLeft.getX() + scrollPaneServiceLeft.getWidth() + 5, previous, 50, 90);
         modelToRight.addActionListener(e -> {
             int row = tableModelLeft.getSelectedRow();
@@ -131,7 +136,7 @@ public class SpareForm extends AbstractEdit {
         });
         add(modelToRight);
 
-        JButton modelToLeft = new JButton("<-");
+        modelToLeft = new JButton("<-");
         modelToLeft.setBounds(scrollPaneServiceLeft.getX() + scrollPaneServiceLeft.getWidth() + 5, previous + 100, 50, 90);
         modelToLeft.addActionListener(e -> {
             int row = tableModelRight.getSelectedRow();
@@ -146,17 +151,17 @@ public class SpareForm extends AbstractEdit {
         });
         add(modelToLeft);
 
+        if (universalCheck.isSelected()) {
+            setTableEnable(false);
+        } else {
+            setTableEnable(true);
+        }
+
         universalCheck.addActionListener(e -> {
             if (universalCheck.isSelected()) {
-                tableModelLeft.setEnabled(false);
-                tableModelRight.setEnabled(false);
-                modelToLeft.setEnabled(false);
-                modelToRight.setEnabled(false);
+                setTableEnable(false);
             } else {
-                tableModelLeft.setEnabled(true);
-                tableModelRight.setEnabled(true);
-                modelToLeft.setEnabled(true);
-                modelToRight.setEnabled(true);
+                setTableEnable(true);
             }
         });
 
@@ -181,14 +186,15 @@ public class SpareForm extends AbstractEdit {
             if (isEdit) {
                 quantCombo.setSelectedItem(sparePart.getUnit());
                 quantCombo.setEnabled(false);
-            }
 
-            if (isEdit) {
                 nameText.setText(sparePart.getName());
 
                 priceText.setText(Converter.getInstance().convertPriceToStr(sparePart.getPrice(new Date())));
 
                 quantText.setText(sparePart.getBeautifulQuantity());
+
+                if(sparePart.isUniversal())
+                    universalCheck.setSelected(true);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -229,7 +235,7 @@ public class SpareForm extends AbstractEdit {
         sparePart.setPrice(Converter.getInstance().convertStrToPrice(priceText.getText()));
     }
 
-    public void duplicateCode(SparePart sparePart) {
+    private void duplicateCode(SparePart sparePart) {
         //Подходящие модели
         Object[][] tableData = ((TableModel) tableModelRight.getModel()).getData();
         ArrayList<VehicleModel> vehicleModels = new ArrayList<>();
@@ -257,6 +263,13 @@ public class SpareForm extends AbstractEdit {
                 e.printStackTrace();
             }
         return true;
+    }
+
+    private void setTableEnable(boolean value){
+        tableModelLeft.setEnabled(value);
+        tableModelRight.setEnabled(value);
+        modelToLeft.setEnabled(value);
+        modelToRight.setEnabled(value);
     }
 
     private Object[][] getDataModelLeft() {

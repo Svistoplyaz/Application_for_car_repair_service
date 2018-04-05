@@ -57,7 +57,6 @@ public class Main {
             model.createService("Замена подшипника ступицы").save().setPrice(80000);
             model.createService("Ремонт радиатора системы охлаждения").save().setPrice(100000);
             model.createService("Промывка инжектора").save().setPrice(100000);
-            model.createService("Промывка инжектора").save().setPrice(100000);
             model.createService("Регулировка троса ручного тормоза").save().setPrice(30000);
             model.createService("Диагностика двигателя").save().setPrice(80000);
             model.createService("Установка противотуманных фар").save().setPrice(150000);
@@ -66,7 +65,6 @@ public class Main {
 
             Client client = model.createClient("Лещёв Архип Эдуардович").setPhone("59756906919 ").save();
             model.createClient("Салтыкова Ирина Германовна").setPhone("0797932581").save();
-            model.createClient("Мосин Игорь Евстафиевич").save();
             model.createClient("Бореева Оксана Потаповна").setPhone("48984769479").save();
             model.createClient("Лебедков Георгий Макарович").setPhone("50282926645").save();
             model.createClient("Антонов Валерий Епифанович ").setPhone("319342911").save();

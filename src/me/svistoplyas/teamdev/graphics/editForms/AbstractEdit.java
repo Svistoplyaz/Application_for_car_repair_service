@@ -18,6 +18,8 @@ public abstract class AbstractEdit extends JDialog {
     MainFrame mainFrame;
     Object data;
     boolean isNotSaving = true;
+    JButton save;
+    JButton exit;
 
     public AbstractEdit(JFrame frame, boolean isEdit, Object _data) {
         super(frame, isEdit ? "Редактирование записи" : "Добавление записи", true);
@@ -26,7 +28,7 @@ public abstract class AbstractEdit extends JDialog {
         this.setLayout(null);
         setSize();
 
-        JButton save = new JButton(isEdit ? "Сохранить изменения" : "Добавить запись");
+        save = new JButton(isEdit ? "Сохранить изменения" : "Добавить запись");
         save.setBounds(10, this.getHeight() - 95, (this.getWidth() - 40) / 2, 60);
         save.addActionListener((e) -> {
             try {
@@ -67,7 +69,7 @@ public abstract class AbstractEdit extends JDialog {
         });
         add(save);
 
-        JButton exit = new JButton("Отмена");
+        exit = new JButton("Отмена");
         exit.setBounds(this.getWidth() - (this.getWidth() - 40) / 2 - 15, this.getHeight() - 95, (this.getWidth() - 40) / 2, 60);
         exit.addActionListener((e) -> AbstractEdit.this.setVisible(false));
         add(exit);
@@ -94,7 +96,7 @@ public abstract class AbstractEdit extends JDialog {
         if (c instanceof JTextField) {
             String str = ((JTextField) c).getText().trim();
 
-            if (str.equals(""))
+            if (str.equals("") || str.length() > 100)
                 return 0;
 
             switch (type) {

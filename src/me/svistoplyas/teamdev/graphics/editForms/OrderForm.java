@@ -391,6 +391,22 @@ public class OrderForm extends AbstractEdit {
                     datePickerOut.getModel().setDate(1900 + date.getYear(), date.getMonth(), date.getDate());
                 }
             }
+
+            if(order != null) {
+                Order.Status cur = order.getCurrentStatus();
+                if (cur == Order.Status.CANCELED || cur == Order.Status.CLOSED || cur == Order.Status.FINISHED) {
+                    for (Component comp : getAllComponents(this)) {
+                        comp.setEnabled(false);
+                    }
+                    if (cur == Order.Status.FINISHED) {
+                        back.setEnabled(true);
+                        spinnerOut.setEnabled(true);
+                        datePickerOut.setEnabled(true);
+                        save.setEnabled(true);
+                    }
+                    exit.setEnabled(true);
+                }
+            }
             
             orderParts = order == null ? new OrderSpareParts(mainFrame.model) : order.getSpareParts();
         } catch (Exception e) {
@@ -534,7 +550,7 @@ public class OrderForm extends AbstractEdit {
                 repaint();
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
     
@@ -811,5 +827,16 @@ public class OrderForm extends AbstractEdit {
         } catch (Exception e) {
             return 0;
         }
+    }
+
+    public static List<Component> getAllComponents(final Container c) {
+        Component[] comps = c.getComponents();
+        List<Component> compList = new ArrayList<Component>();
+        for (Component comp : comps) {
+            compList.add(comp);
+            if (comp instanceof Container)
+                compList.addAll(getAllComponents((Container) comp));
+        }
+        return compList;
     }
 }
