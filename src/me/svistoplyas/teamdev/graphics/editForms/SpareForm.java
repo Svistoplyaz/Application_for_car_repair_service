@@ -260,7 +260,7 @@ public class SpareForm extends AbstractEdit {
                     return false;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                return false;
             }
         return true;
     }
