@@ -66,7 +66,6 @@ public class Main {
 
             Client client = model.createClient("Лещёв Архип Эдуардович").setPhone("59756906919 ").save();
             model.createClient("Салтыкова Ирина Германовна").setPhone("0797932581").save();
-            model.createClient("Мосин Игорь Евстафиевич").save();
             model.createClient("Бореева Оксана Потаповна").setPhone("48984769479").save();
             model.createClient("Лебедков Георгий Макарович").setPhone("50282926645").save();
             model.createClient("Антонов Валерий Епифанович ").setPhone("319342911").save();

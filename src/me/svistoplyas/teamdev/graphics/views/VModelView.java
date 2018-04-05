@@ -14,7 +14,7 @@ public class VModelView extends AbstractView {
 
     @Override
     String[] getColumnNames() {
-        return new String[]{"Название", "Марка"};
+        return new String[]{"Название"};
     }
 
     @Override
@@ -24,7 +24,7 @@ public class VModelView extends AbstractView {
             Object[][] ans = new Object[vehiclesModels.size()][];
             int i = 0;
             for (VehicleModel vehicleModel : vehiclesModels) {
-                ans[i] = new Object[]{vehicleModel.getName(), vehicleModel.getMark().getName()};
+                ans[i] = new Object[]{vehicleModel};
                 i++;
             }
 

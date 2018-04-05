@@ -17,7 +17,7 @@ public class OrdersView extends AbstractView {
 
     @Override
     String[] getColumnNames() {
-        return new String[]{"Клиент", "Работник", "Регистрационный номер", "Начат", "Закрыт", "Марка", "Модель", "Статус"};
+        return new String[]{"Клиент", "Работник", "Регистрационный номер", "Начат", "Закрыт", "Модель", "Статус"};
     }
 
     @Override
@@ -35,8 +35,7 @@ public class OrdersView extends AbstractView {
 
                 ans[i] = new Object[]{order.getClient(), order.getResponsible(), order.getRegistrationNumber(),
                         Converter.getInstance().dateToStr(order.getRealStartDate()), finishDate,
-                        order.getVehicleModel().getMark(), order.getVehicleModel().getName(),
-                        order.getCurrentStatus()};
+                        order.getVehicleModel(), order.getCurrentStatus()};
                 i++;
             }
 
