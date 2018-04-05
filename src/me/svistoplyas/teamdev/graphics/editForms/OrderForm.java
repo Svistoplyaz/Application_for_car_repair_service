@@ -324,7 +324,7 @@ public class OrderForm extends AbstractEdit {
     }
 
     @Override
-    void setSize() {
+    public void setSize() {
         this.setSize(900, 600);
     }
 

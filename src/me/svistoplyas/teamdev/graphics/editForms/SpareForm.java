@@ -29,7 +29,7 @@ public class SpareForm extends AbstractEdit {
 
         int previous = 20;
         int firstRow = 10;
-        int secondRow = 190;
+        int secondRow = 175;
 
         //Название
         JLabel nameLabel = new JLabel("Название запасной части");
@@ -62,6 +62,7 @@ public class SpareForm extends AbstractEdit {
 
         quantText = new JTextField();
         quantText.setBounds(secondRow, previous, 145, 24);
+        quantText.setName("Left");
         add(quantText);
         addMark(quantText, "Price");
 
@@ -162,7 +163,7 @@ public class SpareForm extends AbstractEdit {
     }
 
     @Override
-    void setSize() {
+    public void setSize() {
         this.setSize(385 + 35, 460);
     }
 

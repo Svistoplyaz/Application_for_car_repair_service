@@ -3,16 +3,31 @@ package me.svistoplyas.teamdev.graphics.views;
 import me.svistoplyas.teamdev.graphics.MainFrame;
 import me.svistoplyas.teamdev.graphics.editForms.AbstractEdit;
 import me.svistoplyas.teamdev.graphics.editForms.SpareForm;
+import me.svistoplyas.teamdev.graphics.otherFrames.SpareRefill;
 import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.entities.SparePart;
 import net.web_kot.teamdev.db.entities.VehicleModel;
 
+import javax.swing.*;
 import java.util.List;
 
 public class SpareView extends AbstractView {
 
     public SpareView(MainFrame _mainFrame) {
         super(_mainFrame);
+
+        JButton refill = new JButton("Пополнить количество зап. частей");
+        refill.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if(row != -1) {
+                JDialog dialog = new SpareRefill(mainFrame, (SparePart) getObject(row));
+                dialog.setVisible(true);
+                updateTable();
+            }else
+                JOptionPane.showMessageDialog(this, "Выберите элемент из таблицы для изменения");
+        });
+        refill.setBounds(558, 10, 230, 40);
+        add(refill);
     }
 
     @Override
@@ -93,6 +108,6 @@ public class SpareView extends AbstractView {
 
     @Override
     public String toString() {
-        return "Зап. части";
+        return "Запапсные части";
     }
 }
