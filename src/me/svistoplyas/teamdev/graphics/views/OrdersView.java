@@ -29,8 +29,6 @@ public class OrdersView extends AbstractView {
 
             int i = 0;
             for (Order order : orders) {
-                String worker = "";
-
                 String finishDate = "-";
                 Date d = order.getRealFinishDate();
                 if (d != null) finishDate = Converter.getInstance().dateToStr(d);

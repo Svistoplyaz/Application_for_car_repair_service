@@ -41,12 +41,12 @@ public class Main {
             model.createVehicleModel(toyota, "Camry", 2018).save();
 
             Mark nissan = model.createMark("Nissan").save();
-            model.createVehicleModel(nissan, "Passat", 2008).save();
+            VehicleModel model1 = model.createVehicleModel(nissan, "Passat", 2008).save();
             model.createVehicleModel(nissan, "Almera", 2018).save();
             model.createVehicleModel(nissan, "X-Trail", 2007).save();
 
             Mark kia = model.createMark("Kia").save();
-            model.createVehicleModel(kia, "Rio", 2013).save();
+            VehicleModel model2 = model.createVehicleModel(kia, "Rio", 2013).save();
             model.createVehicleModel(kia, "Cee'd", 2016).save();
             VehicleModel vModel = model.createVehicleModel(kia, "Rio", 2010).save();
 
@@ -71,7 +71,17 @@ public class Main {
             model.createClient("Лебедков Георгий Макарович").setPhone("50282926645").save();
             model.createClient("Антонов Валерий Епифанович ").setPhone("319342911").save();
 
-//            model.createOrder(client, vModel, new Date()).setResponsible(staff).save();
+            SparePart part = model.createSparePart("Воздушный фильтр", SparePart.Unit.liters, false).save();
+            SparePart other = model.createSparePart("Масло", SparePart.Unit.pieces, true).save();
+
+            part.setQuantity(1000).save();
+            part.setPrice(100);
+            part.addCompatibleModel(model1);
+            part.addCompatibleModel(model2);
+
+            other.addCompatibleModel(model2);
+
+            model.createOrder(client, staff, vModel, new Date()).setResponsible(staff).setRegistrationNumber("456789").save();
         }
 
         (new LoginForm()).show();

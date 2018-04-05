@@ -64,10 +64,11 @@ public class HomeView extends AbstractView {
 
             for (int i = 0; i < orders.size(); i++) {
                 Order order = orders.get(i);
+
                 ans[i] = new Object[]{
                         order.getClient(), order.getRegistrationNumber(), order.getCurrentStatus(),
                         Converter.getInstance().dateToStrWithTime(order.getStartDate()),
-                        Converter.getInstance().dateToStrWithTime(order.getFinishDate()),
+                        order.getFinishDate() == null ? "-" : Converter.getInstance().dateToStrWithTime(order.getFinishDate()),
                         order};
             }
 
