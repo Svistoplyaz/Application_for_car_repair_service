@@ -57,7 +57,6 @@ public class Main {
             model.createService("Замена подшипника ступицы").save().setPrice(80000);
             model.createService("Ремонт радиатора системы охлаждения").save().setPrice(100000);
             model.createService("Промывка инжектора").save().setPrice(100000);
-            model.createService("Промывка инжектора").save().setPrice(100000);
             model.createService("Регулировка троса ручного тормоза").save().setPrice(30000);
             model.createService("Диагностика двигателя").save().setPrice(80000);
             model.createService("Установка противотуманных фар").save().setPrice(150000);

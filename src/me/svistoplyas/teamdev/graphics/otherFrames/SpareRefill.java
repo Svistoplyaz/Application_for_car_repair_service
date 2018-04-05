@@ -67,7 +67,7 @@ public class SpareRefill extends AbstractEdit {
 
             try {
                 int overflow = Converter.getInstance().convertStrToPrice(quantText.getText());
-                if(overflow + data.getPrice(new Date()) < 0 || overflow < 0){
+                if(overflow + data.getQuantity() < 0 || overflow < 0){
                     JOptionPane.showMessageDialog(this, "Введено слишком большое число");
                     return false;
                 }
