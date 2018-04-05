@@ -96,7 +96,7 @@ public abstract class AbstractEdit extends JDialog {
         if (c instanceof JTextField) {
             String str = ((JTextField) c).getText().trim();
 
-            if (str.equals(""))
+            if (str.equals("") || str.length() > 100)
                 return 0;
 
             switch (type) {
