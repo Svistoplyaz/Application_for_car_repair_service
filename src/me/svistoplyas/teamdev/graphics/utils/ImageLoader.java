@@ -1,8 +1,7 @@
-package me.svistoplyas.teamdev.graphics;
+package me.svistoplyas.teamdev.graphics.utils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.HashMap;
 
 public class ImageLoader {

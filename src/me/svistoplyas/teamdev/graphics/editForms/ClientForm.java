@@ -48,12 +48,12 @@ public class ClientForm extends AbstractEdit {
     }
 
     @Override
-    public void performAdd() throws Exception{
+    public void performAdd() throws Exception {
         mainFrame.model.createClient(fioText.getText()).setPhone(phoneText.getText()).save();
     }
 
     @Override
-    public void performEdit() throws Exception{
+    public void performEdit() throws Exception {
         Client client = (Client) data;
         client.setName(fioText.getText()).setPhone(phoneText.getText()).save();
     }

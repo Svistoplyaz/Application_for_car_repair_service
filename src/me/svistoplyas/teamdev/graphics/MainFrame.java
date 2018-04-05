@@ -1,9 +1,9 @@
 package me.svistoplyas.teamdev.graphics;
 
+import me.svistoplyas.teamdev.graphics.utils.ImageLoader;
 import me.svistoplyas.teamdev.graphics.views.*;
 import net.web_kot.teamdev.db.Model;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ public class MainFrame extends JFrame {
         super("Автомастерская");
         try {
             setIconImage(ImageLoader.getInstance().getImage("/images/screwYouPunk.png"));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

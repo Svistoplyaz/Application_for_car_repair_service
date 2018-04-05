@@ -62,7 +62,7 @@ public class TableModel extends AbstractTableModel {
         }
 
         for (int i = row + 1; i < len; i++) {
-            updatedData[i-1] = data[i];
+            updatedData[i - 1] = data[i];
         }
         setData(updatedData);
     }

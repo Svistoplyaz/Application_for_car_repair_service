@@ -78,14 +78,14 @@ public class StaffForm extends AbstractEdit {
                 positionCombo.addItem(client);
             if (isEdit)
                 positionCombo.setSelectedItem(person.getPosition());
-            else{
+            else {
                 positionCombo.setSelectedIndex(0);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(isEdit){
+        if (isEdit) {
             fioText.setText(person.getName());
 
             phoneText.setText(person.getPhone());
@@ -106,7 +106,7 @@ public class StaffForm extends AbstractEdit {
         Staff person = (Staff) data;
         person.setName(fioText.getText()).setPhone(phoneText.getText())
                 .setBirthday(Converter.getInstance().convertDataPicker(birthday))
-                .setPosition((Position)positionCombo.getSelectedItem()).save();
+                .setPosition((Position) positionCombo.getSelectedItem()).save();
     }
 
     @Override

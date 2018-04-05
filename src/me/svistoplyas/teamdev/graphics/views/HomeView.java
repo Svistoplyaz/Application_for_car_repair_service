@@ -23,21 +23,21 @@ public class HomeView extends AbstractView {
 
     public HomeView(MainFrame _mainFrame) {
         super(_mainFrame);
-        
-        for(Component c : this.getComponents()) {
-            if(c instanceof JScrollPane) c.setBounds(10, 54, 718 + 60 - 220, 378);
-            if(c instanceof JLabel) caption = (JLabel) c;
+
+        for (Component c : this.getComponents()) {
+            if (c instanceof JScrollPane) c.setBounds(10, 54, 718 + 60 - 220, 378);
+            if (c instanceof JLabel) caption = (JLabel) c;
         }
 
         JDatePanel panel = new JDatePanel();
         panel.setBounds(583, 54, 200, 180);
-        
+
         panel.addActionListener((e) -> {
             DateModel<?> model = panel.getModel();
-            
+
             GregorianCalendar calendar = new GregorianCalendar(model.getYear(), model.getMonth(), model.getDay(), 12, 0);
             date = calendar.getTime();
-            
+
             updateTable();
             updateCaption();
         });
@@ -58,11 +58,11 @@ public class HomeView extends AbstractView {
     @Override
     Object[][] getData() {
         try {
-            if(date == null) date = new Date();
+            if (date == null) date = new Date();
             List<Order> orders = mainFrame.model.getOrders(date);
             Object[][] ans = new Object[orders.size()][];
-            
-            for(int i = 0; i < orders.size(); i++) {
+
+            for (int i = 0; i < orders.size(); i++) {
                 Order order = orders.get(i);
                 ans[i] = new Object[]{
                         order.getClient(), order.getRegistrationNumber(), order.getCurrentStatus(),
@@ -70,7 +70,7 @@ public class HomeView extends AbstractView {
                         Converter.getInstance().dateToStrWithTime(order.getFinishDate()),
                         order};
             }
-            
+
             return ans;
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,15 +83,15 @@ public class HomeView extends AbstractView {
         Date end = DateUtils.ceiling(date, Calendar.DATE);
 
         Date check = order.getStartDate();
-        if(check.after(start) && check.before(end)) return "Прием";
+        if (check.after(start) && check.before(end)) return "Прием";
         return "Выдача";
     }
 
     @Override
     Object getObject(int row) {
         try {
-            return (Order)mainFrame.getView("Home").table.getModel().getValueAt(row, 5);
-        }catch (Exception e){
+            return (Order) mainFrame.getView("Home").table.getModel().getValueAt(row, 5);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -114,7 +114,7 @@ public class HomeView extends AbstractView {
 
     @Override
     void performDelete(int row) throws Exception {
-        ((Order)mainFrame.getView("Home").table.getModel().getValueAt(row, 5)).delete();
+        ((Order) mainFrame.getView("Home").table.getModel().getValueAt(row, 5)).delete();
 //        mainFrame.model.getOrders().get(row).delete();
     }
 

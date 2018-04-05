@@ -5,7 +5,7 @@ import net.web_kot.teamdev.db.entities.Mark;
 import javax.swing.*;
 import java.util.List;
 
-public class MarkForm extends AbstractEdit{
+public class MarkForm extends AbstractEdit {
     private JTextField nameText;
 
     public MarkForm(JFrame frame, boolean isEdit, Object data) {
@@ -51,7 +51,7 @@ public class MarkForm extends AbstractEdit{
     @Override
     public boolean otherValidation() {
         String name = nameText.getText().trim();
-        if(data != null && ((Mark)data).getName().equals(name))
+        if (data != null && ((Mark) data).getName().equals(name))
             return true;
 
         try {

@@ -1,7 +1,7 @@
 package me.svistoplyas.teamdev.graphics.editForms;
 
 import javafx.util.Pair;
-import me.svistoplyas.teamdev.graphics.ImageLoader;
+import me.svistoplyas.teamdev.graphics.utils.ImageLoader;
 import me.svistoplyas.teamdev.graphics.MainFrame;
 import me.svistoplyas.teamdev.graphics.utils.Converter;
 
@@ -30,7 +30,7 @@ public abstract class AbstractEdit extends JDialog {
         save.setBounds(10, this.getHeight() - 95, (this.getWidth() - 40) / 2, 60);
         save.addActionListener((e) -> {
             try {
-                if(isNotSaving) {
+                if (isNotSaving) {
                     isNotSaving = false;
                     disableAllComponents();
                     baddies.clear();
@@ -110,10 +110,10 @@ public abstract class AbstractEdit extends JDialog {
                     }
                 }
                 case "Price": {
-                    try{
+                    try {
                         Converter.getInstance().convertStrToPrice(str);
                         return -1;
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         return 1;
                     }
                 }
@@ -169,17 +169,17 @@ public abstract class AbstractEdit extends JDialog {
         components.add(new Pair<>("", component));
     }
 
-    public void disableAllComponents(){
+    public void disableAllComponents() {
         Component[] components = this.getComponents();
-        for(Component component : components){
+        for (Component component : components) {
             component.setEnabled(false);
         }
         this.repaint();
     }
 
-    public void enableAllComponents(){
+    public void enableAllComponents() {
         Component[] components = this.getComponents();
-        for(Component component : components){
+        for (Component component : components) {
             component.setEnabled(true);
         }
         this.repaint();

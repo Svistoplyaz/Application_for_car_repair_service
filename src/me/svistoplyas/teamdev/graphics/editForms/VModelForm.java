@@ -46,7 +46,7 @@ public class VModelForm extends AbstractEdit {
         markCombo.setBounds(170, 50 + 30, 200, 24);
         add(markCombo);
         addMark(markCombo);
-        if(isEdit)
+        if (isEdit)
             markCombo.setEnabled(false);
 
         fillFields();
@@ -63,12 +63,12 @@ public class VModelForm extends AbstractEdit {
 
         try {
             yearCombo.removeAllItems();
-            int currentYear = new Date().getYear()+1900;
+            int currentYear = new Date().getYear() + 1900;
             for (int i = currentYear; i > 1917; i--)
                 yearCombo.addItem(i);
             if (isEdit)
                 yearCombo.setSelectedItem(vModel.getYear());
-            else{
+            else {
                 yearCombo.setSelectedIndex(0);
             }
         } catch (Exception e) {
@@ -81,27 +81,27 @@ public class VModelForm extends AbstractEdit {
                 markCombo.addItem(mark);
             if (isEdit)
                 markCombo.setSelectedItem(vModel.getMark());
-            else{
+            else {
                 markCombo.setSelectedIndex(0);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(isEdit){
+        if (isEdit) {
             nameText.setText(vModel.getName());
         }
     }
 
     @Override
     public void performAdd() throws Exception {
-        mainFrame.model.createVehicleModel((Mark)markCombo.getSelectedItem(), nameText.getText(), (Integer)yearCombo.getSelectedItem()).save();
+        mainFrame.model.createVehicleModel((Mark) markCombo.getSelectedItem(), nameText.getText(), (Integer) yearCombo.getSelectedItem()).save();
     }
 
     @Override
     public void performEdit() throws Exception {
         VehicleModel vModel = (VehicleModel) data;
-        vModel.setName(nameText.getText()).setYear((Integer)yearCombo.getSelectedItem()).save();
+        vModel.setName(nameText.getText()).setYear((Integer) yearCombo.getSelectedItem()).save();
     }
 
     @Override

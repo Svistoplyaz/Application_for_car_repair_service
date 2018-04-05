@@ -1,6 +1,7 @@
 package me.svistoplyas.teamdev.graphics.views;
 
 import me.svistoplyas.teamdev.graphics.MainFrame;
+import me.svistoplyas.teamdev.graphics.utils.Converter;
 
 public class SparesView extends AbstractView {
 
@@ -10,12 +11,35 @@ public class SparesView extends AbstractView {
 
     @Override
     String[] getColumnNames() {
-        return new String[0];
+        return new String[]{"Название", "Цена", "Количество", "Единиц", "Модели"};
     }
 
     @Override
     Object[][] getData() {
-        return new Object[0][];
+
+//        try {
+//            List<Order> orders = mainFrame.model.getOrders();
+//            Object[][] ans = new Object[orders.size()][];
+////            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+//
+//            int i = 0;
+//            for (Order order : orders) {
+//                String worker = "";
+//
+//                if (d != null) finishDate = Converter.getInstance().dateToStr(d);
+//
+//                ans[i] = new Object[]{order.getClient(), worker, order.getRegistrationNumber(),
+//                        Converter.getInstance().dateToStr(order.getRealStartDate()), finishDate,
+//                        order.getVehicleModel().getMark(), order.getVehicleModel(),
+//                        order.getCurrentStatus()};
+//                i++;
+//            }
+//
+//            return ans;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
     }
 
     @Override

@@ -38,15 +38,15 @@ public class Converter {
         return price / 100 + "";
     }
 
-    public int convertStrToPrice(String price) throws Exception{
+    public int convertStrToPrice(String price) throws Exception {
         String[] str = price.split(",");
         switch (str.length) {
             case 1:
                 return Integer.parseInt(str[0]) * 100;
             case 2:
-                if(str[1].length() == 2)
+                if (str[1].length() == 2)
                     return Integer.parseInt(str[0]) * 100 + Integer.parseInt(str[1]);
-                else if(str[1].length() == 1)
+                else if (str[1].length() == 1)
                     return Integer.parseInt(str[0]) * 100 + Integer.parseInt(str[1]) * 10;
                 else
                     throw new Exception("Wrong format");
@@ -56,15 +56,15 @@ public class Converter {
 
     }
 
-    public String dateToStrWithTime(Date date){
+    public String dateToStrWithTime(Date date) {
         return dfM.format(date);
     }
 
-    public String dateToStr(Date date){
+    public String dateToStr(Date date) {
         return dfY.format(date);
     }
 
-    public Date convertSpinnerAndDataPicker(JSpinner spinner, JDatePicker datePicker){
+    public Date convertSpinnerAndDataPicker(JSpinner spinner, JDatePicker datePicker) {
         Date ans = ((SpinnerDateModel) spinner.getModel()).getDate();
         DateModel model = datePicker.getModel();
         ans.setDate(model.getDay());
@@ -73,7 +73,7 @@ public class Converter {
         return ans;
     }
 
-    public Date convertDataPicker(JDatePicker datePicker){
+    public Date convertDataPicker(JDatePicker datePicker) {
         Date ans = new Date();
         DateModel model = datePicker.getModel();
         ans.setDate(model.getDay());

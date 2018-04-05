@@ -7,7 +7,7 @@ import net.web_kot.teamdev.db.entities.VehicleModel;
 
 import java.util.List;
 
-public class VModelView extends AbstractView{
+public class VModelView extends AbstractView {
     public VModelView(MainFrame _mainFrame) {
         super(_mainFrame);
     }

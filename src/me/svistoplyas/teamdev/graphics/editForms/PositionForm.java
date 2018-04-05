@@ -52,7 +52,7 @@ public class PositionForm extends AbstractEdit {
     @Override
     public boolean otherValidation() {
         String name = nameText.getText().trim();
-        if(data != null && ((Position)data).getName().equals(name))
+        if (data != null && ((Position) data).getName().equals(name))
             return true;
 
         try {

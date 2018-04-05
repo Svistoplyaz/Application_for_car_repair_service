@@ -70,7 +70,7 @@ public class ServiceForm extends AbstractEdit {
     @Override
     public boolean otherValidation() {
         String name = nameText.getText().trim();
-        if(data != null && ((Service)data).getName().equals(name))
+        if (data != null && ((Service) data).getName().equals(name))
             return true;
 
         try {

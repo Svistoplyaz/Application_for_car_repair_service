@@ -41,7 +41,7 @@ public class ClientsView extends AbstractView {
     Object getObject(int row) {
         try {
             return mainFrame.model.getClients().get(row);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
