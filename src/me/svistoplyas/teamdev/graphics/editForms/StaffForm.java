@@ -32,7 +32,7 @@ public class StaffForm extends AbstractEdit {
         addMark(fioText);
 
         //Телефон
-        JLabel phoneLabel = new JLabel("Телефон клиента");
+        JLabel phoneLabel = new JLabel("Телефон работника");
         phoneLabel.setBounds(10, 20 + 30, 120, 24);
         add(phoneLabel);
 
