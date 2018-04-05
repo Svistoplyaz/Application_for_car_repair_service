@@ -9,6 +9,7 @@ import org.jdatepicker.JDatePicker;
 import javax.swing.*;
 import java.util.Date;
 
+@SuppressWarnings("All")
 public class StaffForm extends AbstractEdit {
     private JTextField fioText;
     private JTextField phoneText;

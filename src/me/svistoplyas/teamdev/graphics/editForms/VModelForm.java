@@ -6,6 +6,7 @@ import net.web_kot.teamdev.db.entities.VehicleModel;
 import javax.swing.*;
 import java.util.Date;
 
+@SuppressWarnings("All")
 public class VModelForm extends AbstractEdit {
     private JTextField nameText;
     private JComboBox<Integer> yearCombo;
