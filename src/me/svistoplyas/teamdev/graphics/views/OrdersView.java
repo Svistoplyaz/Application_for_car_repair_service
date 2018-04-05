@@ -35,9 +35,9 @@ public class OrdersView extends AbstractView {
                 Date d = order.getRealFinishDate();
                 if (d != null) finishDate = Converter.getInstance().dateToStr(d);
 
-                ans[i] = new Object[]{order.getClient(), worker, order.getRegistrationNumber(),
+                ans[i] = new Object[]{order.getClient(), order.getResponsible(), order.getRegistrationNumber(),
                         Converter.getInstance().dateToStr(order.getRealStartDate()), finishDate,
-                        order.getVehicleModel().getMark(), order.getVehicleModel(),
+                        order.getVehicleModel().getMark(), order.getVehicleModel().getName(),
                         order.getCurrentStatus()};
                 i++;
             }

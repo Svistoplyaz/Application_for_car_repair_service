@@ -24,7 +24,7 @@ public class VModelView extends AbstractView {
             Object[][] ans = new Object[vehiclesModels.size()][];
             int i = 0;
             for (VehicleModel vehicleModel : vehiclesModels) {
-                ans[i] = new Object[]{vehicleModel.toString(), vehicleModel.getMark().getName()};
+                ans[i] = new Object[]{vehicleModel.getName(), vehicleModel.getMark().getName()};
                 i++;
             }
 
