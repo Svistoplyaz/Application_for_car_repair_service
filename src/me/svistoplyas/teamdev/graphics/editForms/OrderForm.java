@@ -286,7 +286,17 @@ public class OrderForm extends AbstractEdit {
         previous += 25;
 
         //Таблица с зап. частями которых нет в заказе
-        tableSparesLeft = new JTable(new TableModel(new String[]{"Запасная часть", "Цена", "Cклад"}, getDataSparesLeft(false)));
+        tableSparesLeft = new JTable(new TableModel(new String[]{"Запасная часть", "Цена", "Cклад"}, getDataSparesLeft(false))) {
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+                if (c instanceof JComponent) {
+                    JComponent jc = (JComponent) c;
+                    jc.setToolTipText(getValueAt(row, column).toString());
+                }
+                return c;
+            }
+        };
         JScrollPane scrollPaneSparesLeft = new JScrollPane(tableSparesLeft);
         scrollPaneSparesLeft.setBounds(thirdRow, previous, 290, 190);
         tableSparesLeft.getColumnModel().getColumn(1).setMaxWidth(60);
@@ -296,7 +306,17 @@ public class OrderForm extends AbstractEdit {
         add(scrollPaneSparesLeft);
 
         //Таблица с зап. частями которые есть в заказе
-        tableSparesRight = new JTable(new TableModel(new String[]{"Запасная часть", "Кол-во", "Стоим."}, getDataSparesRight()));
+        tableSparesRight = new JTable(new TableModel(new String[]{"Запасная часть", "Кол-во", "Стоим."}, getDataSparesRight())) {
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+                if (c instanceof JComponent) {
+                    JComponent jc = (JComponent) c;
+                    jc.setToolTipText(getValueAt(row, column).toString());
+                }
+                return c;
+            }
+        };
         JScrollPane scrollPaneSparesRight = new JScrollPane(tableSparesRight);
         scrollPaneSparesRight.setBounds(fourthRow, previous, 290, 190);
         tableSparesRight.getColumnModel().getColumn(1).setMaxWidth(60);
