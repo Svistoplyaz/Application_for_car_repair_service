@@ -30,8 +30,9 @@ public class Main {
         if (!exists) {
             /* Vehicles marks and models */
             Position pos = model.createPosition("Механик").save();
-            model.createStaff(pos, "Vasya", "123456", new Date()).save();
-            Staff staff = model.createStaff(pos, "Leonid", "913041", new Date()).save();
+            Date today = new Date();
+            model.createStaff(pos, "Vasya", "123456", new Date(today.getTime() - 1000000000000L)).save();
+            Staff staff = model.createStaff(pos, "Leonid", "913041", new Date(today.getTime() - 1050000000000L)).save();
 
             Mark toyota = model.createMark("Toyota").save();
             model.createVehicleModel(toyota, "Corolla", 2012).save();
