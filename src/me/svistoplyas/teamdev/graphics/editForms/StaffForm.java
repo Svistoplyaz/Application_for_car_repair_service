@@ -1,6 +1,5 @@
 package me.svistoplyas.teamdev.graphics.editForms;
 
-import javafx.geometry.Pos;
 import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.entities.Position;
 import net.web_kot.teamdev.db.entities.Staff;
