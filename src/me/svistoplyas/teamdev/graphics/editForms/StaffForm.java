@@ -8,6 +8,7 @@ import org.jdatepicker.JDatePicker;
 
 import javax.swing.*;
 import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("All")
 public class StaffForm extends AbstractEdit {
@@ -113,8 +114,20 @@ public class StaffForm extends AbstractEdit {
     @Override
     public boolean otherValidation() {
         if (!Converter.getInstance().convertDataPicker(birthday).before(new Date())) {
-            JOptionPane.showMessageDialog(this, "Дата рождения позже текущей");
+            JOptionPane.showMessageDialog(this, "Дата рождения позже текущей!");
             return false;
+        }
+
+        try {
+            List<Staff> staff = mainFrame.model.getStaff();
+            for (Staff person : staff)
+                if(person.getName().equals(fioText.getText().trim()) &&
+                        person.getPhone().equals(phoneText.getText().trim())) {
+                    JOptionPane.showMessageDialog(this, "Такая запись уже существует!");
+                    return false;
+                }
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
         return true;
