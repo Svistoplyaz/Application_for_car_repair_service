@@ -701,6 +701,11 @@ public class OrderForm extends AbstractEdit {
             JOptionPane.showMessageDialog(this, "Введено деталей больше доступного количества");
             return -1;
         }
+
+        if(quantity <= 0) {
+            JOptionPane.showMessageDialog(this, "Введено отрицательно число или 0");
+            return -1;
+        }
         
         return quantity;
     }
