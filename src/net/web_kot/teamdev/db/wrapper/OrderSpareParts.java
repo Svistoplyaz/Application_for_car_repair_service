@@ -145,7 +145,7 @@ public class OrderSpareParts {
                 PartPriceWrapper wrapper = e.getValue();
                 
                 count += wrapper.amount;
-                price += wrapper.amount * e.getKey();
+                price += (long)wrapper.amount * e.getKey();
             }
             if(count == 0) continue;
             
@@ -169,7 +169,7 @@ public class OrderSpareParts {
         for(Map.Entry<Integer, TreeMap<Integer, PartPriceWrapper>> entry : data.entrySet())
             for(Map.Entry<Integer, PartPriceWrapper> e : entry.getValue().entrySet()) {
                 PartPriceWrapper wrapper = e.getValue();
-                price += wrapper.amount * e.getKey();
+                price += (long)wrapper.amount * e.getKey();
             }
         return (int)(price / 100);
     }
@@ -202,9 +202,9 @@ public class OrderSpareParts {
                 out.print(" x ");
                 out.print(String.format("%-14s", (e.getKey() / 100D) + " p."));
                 
-                out.println(((e.getValue().amount * e.getKey() / 100) / 100D) + " р.");
+                out.println((((long)e.getValue().amount * e.getKey() / 100) / 100D) + " р.");
                 
-                total += e.getValue().amount * e.getKey();
+                total += (long)e.getValue().amount * e.getKey();
                 j++;
             }
             i++;
