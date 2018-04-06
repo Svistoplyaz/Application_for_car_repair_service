@@ -10,7 +10,8 @@ import javax.swing.*;
 import java.util.Date;
 import java.util.List;
 
-@SuppressWarnings("All")
+//@SuppressWarnings("All")
+@SuppressWarnings("deprecation")
 public class StaffForm extends AbstractEdit {
     private JTextField fioText;
     private JTextField phoneText;
@@ -120,12 +121,14 @@ public class StaffForm extends AbstractEdit {
 
         try {
             List<Staff> staff = mainFrame.model.getStaff();
-            for (Staff person : staff)
-                if(person.getName().equals(fioText.getText().trim()) &&
+            for (Staff person : staff) {
+                if(data != null && person.getId() == ((Staff)data).getId()) continue;
+                if (person.getName().equals(fioText.getText().trim()) &&
                         person.getPhone().equals(phoneText.getText().trim())) {
                     JOptionPane.showMessageDialog(this, "Такая запись уже существует!");
                     return false;
                 }
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
