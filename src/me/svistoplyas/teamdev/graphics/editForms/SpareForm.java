@@ -268,6 +268,22 @@ public class SpareForm extends AbstractEdit {
             } catch (Exception e) {
                 return false;
             }
+
+        String name = nameText.getText().trim();
+        if (data != null && ((SparePart) data).getName().equals(name))
+            return true;
+
+        try {
+            List<SparePart> parts = mainFrame.model.getSpareParts();
+            for (SparePart part : parts)
+                if (part.getName().equals(name)) {
+                    JOptionPane.showMessageDialog(this, "Запись с таким именем уже существует!");
+                    return false;
+                }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return true;
     }
 
