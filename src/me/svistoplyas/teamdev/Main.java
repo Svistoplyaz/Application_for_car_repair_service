@@ -73,7 +73,7 @@ public class Main {
             SparePart part = model.createSparePart("Воздушный фильтр", SparePart.Unit.pieces, false).save();
             SparePart other = model.createSparePart("Масло", SparePart.Unit.liters, true).save();
 
-            part.setQuantity(1000).save();
+            part.purchase(1000, 95);
             part.setPrice(100);
             part.addCompatibleModel(model1);
             part.addCompatibleModel(model2);

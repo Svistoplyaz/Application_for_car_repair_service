@@ -2,21 +2,20 @@ package me.svistoplyas.teamdev.graphics.editForms;
 
 import me.svistoplyas.teamdev.graphics.TableModel;
 import me.svistoplyas.teamdev.graphics.utils.Converter;
-import net.web_kot.teamdev.db.entities.Mark;
 import net.web_kot.teamdev.db.entities.SparePart;
 import net.web_kot.teamdev.db.entities.VehicleModel;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
-import java.rmi.Naming;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class SpareForm extends AbstractEdit {
     private JTextField nameText;
-    private JTextField priceText;
+    private JTextField priceBuyText;
+    private JTextField priceSellText;
     private JTextField quantText;
     private JComboBox<SparePart.Unit> quantCombo;
     private JCheckBox universalCheck;
@@ -47,15 +46,27 @@ public class SpareForm extends AbstractEdit {
 
         previous += 30;
 
-        //Цена
-        JLabel priceLabel = new JLabel("Цена");
-        priceLabel.setBounds(firstRow, previous, 140, 24);
-        add(priceLabel);
+        //Цена закупки
+        JLabel priceBuyLabel = new JLabel("Цена закупки");
+        priceBuyLabel.setBounds(firstRow, previous, 140, 24);
+        add(priceBuyLabel);
 
-        priceText = new JTextField();
-        priceText.setBounds(secondRow, previous, 200, 24);
-        add(priceText);
-        addMark(priceText, "Price");
+        priceBuyText = new JTextField();
+        priceBuyText.setBounds(secondRow, previous, 200, 24);
+        add(priceBuyText);
+        addMark(priceBuyText, "Price");
+
+        previous += 30;
+
+        //Цена продажи
+        JLabel priceSellLabel = new JLabel("Цена продажи");
+        priceSellLabel.setBounds(firstRow, previous, 140, 24);
+        add(priceSellLabel);
+
+        priceSellText = new JTextField();
+        priceSellText.setBounds(secondRow, previous, 200, 24);
+        add(priceSellText);
+        addMark(priceSellText, "Price");
 
         previous += 30;
 
@@ -74,8 +85,8 @@ public class SpareForm extends AbstractEdit {
         quantCombo.setBounds(quantText.getX() + quantText.getWidth() + 5, previous, 50, 24);
         add(quantCombo);
         addMark(quantCombo);
-        
-        if(isEdit) {
+
+        if (isEdit) {
             quantLabel.setVisible(false);
             quantText.setVisible(false);
             quantCombo.setVisible(false);
@@ -176,7 +187,7 @@ public class SpareForm extends AbstractEdit {
 
     @Override
     public void setSize() {
-        this.setSize(385 + 35, 460);
+        this.setSize(385 + 35, 490);
     }
 
     @Override
@@ -195,11 +206,11 @@ public class SpareForm extends AbstractEdit {
 
                 nameText.setText(sparePart.getName());
 
-                priceText.setText(Converter.getInstance().convertPriceToStr(sparePart.getPrice(new Date())));
+                priceSellText.setText(Converter.getInstance().convertPriceToStr(sparePart.getPrice(new Date())));
 
                 quantText.setText(Converter.getInstance().beautifulQuantity(sparePart.getRealQuantity(), sparePart.getUnit()));
 
-                if(sparePart.isUniversal())
+                if (sparePart.isUniversal())
                     universalCheck.setSelected(true);
             }
         } catch (Exception ex) {
@@ -215,12 +226,13 @@ public class SpareForm extends AbstractEdit {
 
         SparePart sparePart = (SparePart) data;
 
-        //Установка количества
-        sparePart.setQuantity(Converter.getInstance().convertStrToPrice(quantText.getText()));
+        //Закупка
+        sparePart.purchase(Converter.getInstance().convertStrToPrice(quantText.getText()),
+                Converter.getInstance().convertStrToPrice(priceBuyText.getText()));
 
         duplicateCode(sparePart);
 
-        sparePart.setPrice(Converter.getInstance().convertStrToPrice(priceText.getText()));
+        sparePart.setPrice(Converter.getInstance().convertStrToPrice(priceSellText.getText()));
     }
 
     @Override
@@ -233,12 +245,13 @@ public class SpareForm extends AbstractEdit {
         //Универсальность
         sparePart.setUniversal(universalCheck.isSelected());
 
-        //Установка количества
-        sparePart.setQuantity(Converter.getInstance().convertStrToPrice(quantText.getText()));
+        //Закупка
+        sparePart.purchase(Converter.getInstance().convertStrToPrice(quantText.getText()),
+                Converter.getInstance().convertStrToPrice(priceBuyText.getText()));
 
         duplicateCode(sparePart);
 
-        sparePart.setPrice(Converter.getInstance().convertStrToPrice(priceText.getText()));
+        sparePart.setPrice(Converter.getInstance().convertStrToPrice(priceSellText.getText()));
     }
 
     private void duplicateCode(SparePart sparePart) {
@@ -287,7 +300,7 @@ public class SpareForm extends AbstractEdit {
         return true;
     }
 
-    private void setTableEnable(boolean value){
+    private void setTableEnable(boolean value) {
         tableModelLeft.setEnabled(value);
         tableModelRight.setEnabled(value);
         modelToLeft.setEnabled(value);
