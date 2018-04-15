@@ -142,9 +142,10 @@ public class Model {
         return getList(
                 Order.class, 
                 db.formatQuery(
-                        "SELECT * FROM `Order` WHERE (%d <= Start_date AND Start_date <= %d) " +
-                                "OR (%d <= Finish_date AND Finish_date <= %d)",
-                        start, end, start, end
+                        "SELECT * FROM `Order` WHERE ((%d <= Start_date AND Start_date <= %d) " +
+                                "OR (%d <= Finish_date AND Finish_date <= %d)) AND PK_Order NOT IN " +
+                                "(SELECT o.PK_Order FROM `Order` o, Status s WHERE s.Type = %d AND s.PK_Order = o.PK_Order)",
+                        start, end, start, end, Order.Status.CANCELED.ordinal()
                 )
         );
     }
