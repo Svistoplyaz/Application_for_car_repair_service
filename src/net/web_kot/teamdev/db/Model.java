@@ -202,7 +202,11 @@ public class Model {
     }
     
     public List<SparePart> getSpareParts() throws Exception {
-        return getList(SparePart.class, "SELECT * FROM Spare_part");
+        List<SparePart> list = getList(SparePart.class, "SELECT * FROM Spare_part");
+        ArrayList<SparePart> result = new ArrayList<>();
+        for(SparePart part : list) 
+            if(!part.isHidden()) result.add(part);
+        return result;
     }
     
     public List<SparePart> getCompatibleSpareParts(VehicleModel model) throws Exception {

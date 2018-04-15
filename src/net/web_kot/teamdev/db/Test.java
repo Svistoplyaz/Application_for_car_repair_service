@@ -16,11 +16,14 @@ public class Test {
         Database db = new Database(f).setDebug(false);
         Model model = db.getModel();
         
-        SparePart other = model.createSparePart("Воздушный фильтр", SparePart.Unit.pieces, true).save().setPrice(200);
-        other.purchase(100, 127);
-        other.purchase(12, 100);
+        SparePart part = model.createSparePart("Воздушный фильтр", SparePart.Unit.pieces, true).save().setPrice(200);
+        SparePart other = model.createSparePart("Другая запчасть", SparePart.Unit.pieces, true).save().setPrice(200);
         
-        System.out.println(other.getRealQuantity());
+        for(SparePart p : model.getSpareParts()) System.out.println(">> " + p);
+        System.out.println();
+        
+        part.setHidden(true).save();
+        for(SparePart p : model.getSpareParts()) System.out.println(">> " + p);
         
         db.close();
     }

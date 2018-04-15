@@ -23,31 +23,30 @@ public class SparePart extends AbstractEntity {
     }
     
     private String name;
-    private int quantity;
     private Unit unit;
-    private boolean universal;
+    private boolean universal, hidden;
     
     public SparePart(Model model, String name, Unit unit, boolean universal) {
-        this(model, -1, name, 0, unit.ordinal(), universal);
+        this(model, -1, name, false, unit.ordinal(), universal);
     }
     
     @SelectConstructor
-    public SparePart(Model model, int id, String name, int quantity, int unit, boolean universal) {
+    public SparePart(Model model, int id, String name, boolean hidden, int unit, boolean universal) {
         super(model, "Spare_part", "PK_Spare_part");
-        this.id = id; this.name = name; this.quantity = quantity; 
+        this.id = id; this.name = name; this.hidden = hidden; 
         this.unit = Unit.values()[unit]; this.universal = universal;
     }
 
     public SparePart save() throws Exception {
         if(id == -1)
             id = model.db().insert(
-                    "INSERT INTO Spare_part (Name, Quantity, Unit, Universal) VALUES (%s, %d, %d, %d)",
-                    name, quantity, unit.ordinal(), universal
+                    "INSERT INTO Spare_part (Name, Hidden, Unit, Universal) VALUES (%s, %d, %d, %d)",
+                    name, hidden, unit.ordinal(), universal
             );
         else
             model.db().update(
-                    "UPDATE Spare_part SET Name = %s, Quantity = %d, Unit = %d, Universal = %d WHERE PK_Spare_part = %d",
-                    name, quantity, unit.ordinal(), universal, id
+                    "UPDATE Spare_part SET Name = %s, Hidden = %d, Unit = %d, Universal = %d WHERE PK_Spare_part = %d",
+                    name, hidden, unit.ordinal(), universal, id
             );
         return this;
     }
@@ -61,9 +60,18 @@ public class SparePart extends AbstractEntity {
         return this;
     }
     
+    public boolean isHidden() {
+        return hidden;
+    }
+    
+    public SparePart setHidden(boolean value) {
+        hidden = value;
+        return this;
+    }
+    
     @Deprecated
     public int getQuantity() {
-        return quantity;
+        return 0;
     }
     
     public int getRealQuantity() throws Exception {
@@ -90,11 +98,11 @@ public class SparePart extends AbstractEntity {
     
     @Deprecated
     public SparePart setQuantity(int q) {
-        this.quantity = q; 
         return this;
     }
     
     public void purchase(int quantity, int price) throws Exception {
+        if(quantity == 0) return;
         model.db().insert(
                 "INSERT INTO Purchase (PK_Spare_part, Quantity, Price, Date) VALUES (%d, %d, %d, %d)",
                 id, quantity, price, System.currentTimeMillis()
