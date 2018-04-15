@@ -15,7 +15,7 @@ import java.util.List;
 public class SpareView extends AbstractView {
 
     public SpareView(MainFrame _mainFrame) {
-        super(_mainFrame);
+        super(_mainFrame, false);
 
         JButton refill = new JButton("Пополнить количество зап. частей");
         refill.addActionListener(e -> {

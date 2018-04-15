@@ -11,7 +11,7 @@ import java.util.List;
 public class ClientsView extends AbstractView {
 
     public ClientsView(MainFrame _mainFrame) {
-        super(_mainFrame);
+        super(_mainFrame, false);
     }
 
     @Override

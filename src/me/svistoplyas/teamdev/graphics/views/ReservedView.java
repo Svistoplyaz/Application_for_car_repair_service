@@ -17,7 +17,7 @@ public class ReservedView extends AbstractView {
     private JDatePicker from, to;
     
     public ReservedView(MainFrame _mainFrame) {
-        super(_mainFrame);
+        super(_mainFrame ,false);
         table.getColumnModel().getColumn(2).setMaxWidth(42);
         
         JLabel label = new JLabel("За период:");

@@ -22,7 +22,7 @@ public class HomeView extends AbstractView {
     private JLabel caption;
 
     public HomeView(MainFrame _mainFrame) {
-        super(_mainFrame);
+        super(_mainFrame, false);
 
         for (Component c : this.getComponents()) {
             if (c instanceof JScrollPane) c.setBounds(10, 54, 718 + 60 - 220, 378);

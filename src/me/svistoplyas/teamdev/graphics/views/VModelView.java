@@ -9,7 +9,7 @@ import java.util.List;
 
 public class VModelView extends AbstractView {
     public VModelView(MainFrame _mainFrame) {
-        super(_mainFrame);
+        super(_mainFrame, false);
     }
 
     @Override

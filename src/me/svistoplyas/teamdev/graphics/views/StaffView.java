@@ -11,7 +11,7 @@ import java.util.List;
 public class StaffView extends AbstractView {
 
     public StaffView(MainFrame _mainFrame) {
-        super(_mainFrame);
+        super(_mainFrame, false);
     }
 
     @Override

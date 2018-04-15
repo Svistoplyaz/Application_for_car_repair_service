@@ -11,7 +11,7 @@ import java.util.List;
 public class MarkView extends AbstractView {
 
     public MarkView(MainFrame _mainFrame) {
-        super(_mainFrame);
+        super(_mainFrame, false);
     }
 
     @Override

@@ -13,7 +13,7 @@ public abstract class AbstractView extends JPanel {
     private JButton add, edit, delete;
     MainFrame mainFrame;
 
-    AbstractView(MainFrame _mainFrame) {
+    AbstractView(MainFrame _mainFrame, boolean noTable) {
         mainFrame = _mainFrame;
         setLayout(null);
 
@@ -81,21 +81,22 @@ public abstract class AbstractView extends JPanel {
             add(delete);
         }
 
-        table = new JTable(new TableModel(getColumnNames(), getData()));
-        table.setFillsViewportHeight(true);
-        table.getTableHeader().setReorderingAllowed(false);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        table.getSelectionModel().addListSelectionListener((e) -> {
+        if (!noTable) {
+            table = new JTable(new TableModel(getColumnNames(), getData()));
+            table.setFillsViewportHeight(true);
+            table.getTableHeader().setReorderingAllowed(false);
+            table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+            table.getSelectionModel().addListSelectionListener((e) -> {
 //            boolean dis = table.getSelectedRow() == -1 || (hasFakeRow() && table.getSelectedRow() == 0);
 //            if(Connection.isUserBuh()) {
 //                edit.setEnabled(!dis);
 //                delete.setEnabled(!dis);
 //            }
-        });
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
+            });
+            table.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseReleased(MouseEvent e) {
 //                int r = table.rowAtPoint(e.getPoint());
 //                if(r >= 0 && r < table.getRowCount()) table.setRowSelectionInterval(r, r); else table.clearSelection();
 //
@@ -105,12 +106,13 @@ public abstract class AbstractView extends JPanel {
 //                    JPopupMenu popup = createPopUp();
 //                    popup.show(e.getComponent(), e.getX(), e.getY());
 //                }
-            }
-        });
+                }
+            });
 
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(10, 54, 718 + 60, 378);
-        add(scrollPane);
+            JScrollPane scrollPane = new JScrollPane(table);
+            scrollPane.setBounds(10, 54, 718 + 60, 378);
+            add(scrollPane);
+        }
     }
 
     abstract String[] getColumnNames();
@@ -136,7 +138,9 @@ public abstract class AbstractView extends JPanel {
     }
 
     public void updateTable() {
-        ((TableModel) table.getModel()).setData(getData());
+        if(table != null)
+            ((TableModel) table.getModel()).setData(getData());
+        
         mainFrame.repaint();
     }
 }

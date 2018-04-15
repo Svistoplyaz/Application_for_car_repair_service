@@ -5,7 +5,7 @@ import me.svistoplyas.teamdev.graphics.MainFrame;
 public class StatsView extends AbstractView {
 
     public StatsView(MainFrame _mainFrame) {
-        super(_mainFrame);
+        super(_mainFrame, false);
     }
 
     @Override

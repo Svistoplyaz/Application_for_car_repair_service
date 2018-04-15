@@ -12,7 +12,7 @@ import java.util.List;
 public class OrdersView extends AbstractView {
 
     public OrdersView(MainFrame _mainFrame) {
-        super(_mainFrame);
+        super(_mainFrame, false);
         table.getColumnModel().getColumn(0).setMaxWidth(30);
     }
 

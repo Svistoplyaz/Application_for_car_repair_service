@@ -11,7 +11,7 @@ import java.util.List;
 public class ServicesView extends AbstractView {
 
     public ServicesView(MainFrame _mainFrame) {
-        super(_mainFrame);
+        super(_mainFrame ,false);
     }
 
     @Override

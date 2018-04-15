@@ -13,7 +13,7 @@ import java.util.List;
 public class PositionView extends AbstractView {
 
     public PositionView(MainFrame _mainFrame) {
-        super(_mainFrame);
+        super(_mainFrame, false);
     }
 
     @Override
