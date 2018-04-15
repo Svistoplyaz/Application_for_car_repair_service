@@ -103,7 +103,8 @@ public class SpareView extends AbstractView {
     @Override
     void performDelete(int row) {
         try {
-            mainFrame.model.getSpareParts().get(row).delete();
+            if(mainFrame.model.getSpareParts().get(row).getRealQuantity() == 0)
+                mainFrame.model.getSpareParts().get(row).setHidden(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
