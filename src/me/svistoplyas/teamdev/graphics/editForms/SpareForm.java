@@ -197,7 +197,7 @@ public class SpareForm extends AbstractEdit {
 
                 priceText.setText(Converter.getInstance().convertPriceToStr(sparePart.getPrice(new Date())));
 
-                quantText.setText(sparePart.getBeautifulQuantity());
+                quantText.setText(Converter.getInstance().beautifulQuantity(sparePart.getRealQuantity(), sparePart.getUnit()));
 
                 if(sparePart.isUniversal())
                     universalCheck.setSelected(true);

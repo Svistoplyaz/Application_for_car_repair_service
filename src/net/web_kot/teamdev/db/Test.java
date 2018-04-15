@@ -18,6 +18,9 @@ public class Test {
         
         SparePart other = model.createSparePart("Воздушный фильтр", SparePart.Unit.pieces, true).save().setPrice(200);
         other.purchase(100, 127);
+        other.purchase(12, 100);
+        
+        System.out.println(other.getRealQuantity());
         
         db.close();
     }

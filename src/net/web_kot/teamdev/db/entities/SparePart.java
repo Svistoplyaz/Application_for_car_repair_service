@@ -1,6 +1,5 @@
 package net.web_kot.teamdev.db.entities;
 
-import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.Model;
 
 import java.sql.ResultSet;
@@ -62,6 +61,7 @@ public class SparePart extends AbstractEntity {
         return this;
     }
     
+    @Deprecated
     public int getQuantity() {
         return quantity;
     }
@@ -78,11 +78,14 @@ public class SparePart extends AbstractEntity {
                 id, ignored, Order.Status.CANCELED.ordinal()
         );
         result.next();
-        return quantity - result.getInt(1);
+        int reserved = result.getInt(1);
+        return getPurchasedQuantity() - reserved;
     }
     
-    public String getBeautifulQuantity() {
-        return Converter.getInstance().beautifulQuantity(quantity, getUnit());
+    public int getPurchasedQuantity() throws Exception {
+        ResultSet result = model.db().select("SELECT SUM(Quantity) FROM Purchase WHERE PK_Spare_part = %d", id);
+        result.next();
+        return result.getInt(1);
     }
     
     @Deprecated
