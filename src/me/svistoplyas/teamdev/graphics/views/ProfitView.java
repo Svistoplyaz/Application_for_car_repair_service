@@ -28,12 +28,12 @@ public class ProfitView extends AbstractView {
         calendar.set(2018, Calendar.JANUARY, 1);
 
         from = new JDatePicker(calendar);
-        from.addActionListener(e -> updateTable());
+        from.addActionListener(e -> updateFrame());
         from.setBounds(639, 4, 150, 24);
         this.add(from);
 
         to = new JDatePicker(new Date());
-        to.addActionListener(e -> updateTable());
+        to.addActionListener(e -> updateFrame());
         to.setBounds(639, 30, 150, 24);
         this.add(to);
 
