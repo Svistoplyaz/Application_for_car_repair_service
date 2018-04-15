@@ -70,11 +70,12 @@ public class SparePart extends AbstractEntity {
         return getRealQuantity(-1);
     }
     
-    // TODO: Ignore spare parts in cancelled orders
     public int getRealQuantity(int ignored) throws Exception {
         ResultSet result = model.db().select(
-                "SELECT SUM(Quantity) FROM Spare_part_Order WHERE PK_Spare_part = %d AND PK_Order <> %d",
-                id, ignored
+                "SELECT SUM(Quantity) FROM Spare_part_Order WHERE PK_Spare_part = %d " +
+                        "AND PK_Order <> %d AND PK_Order NOT IN " +
+                        "(SELECT o.PK_Order FROM `Order` o, Status s WHERE s.Type = %d AND s.PK_Order = o.PK_Order)",
+                id, ignored, Order.Status.CANCELED.ordinal()
         );
         result.next();
         return quantity - result.getInt(1);
