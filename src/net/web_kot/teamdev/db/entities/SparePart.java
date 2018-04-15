@@ -85,9 +85,17 @@ public class SparePart extends AbstractEntity {
         return Converter.getInstance().beautifulQuantity(quantity, getUnit());
     }
     
+    @Deprecated
     public SparePart setQuantity(int q) {
         this.quantity = q; 
         return this;
+    }
+    
+    public void purchase(int quantity, int price) throws Exception {
+        model.db().insert(
+                "INSERT INTO Purchase (PK_Spare_part, Quantity, Price, Date) VALUES (%d, %d, %d, %d)",
+                id, quantity, price, System.currentTimeMillis()
+        );
     }
     
     public Unit getUnit() {

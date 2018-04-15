@@ -178,3 +178,15 @@ WHERE
   AND Status <> 2
 ORDER BY
   po.Date DESC;
+
+---
+
+CREATE TABLE IF NOT EXISTS Purchase (
+  PK_Purchase INTEGER PRIMARY KEY NOT NULL,
+  PK_Spare_part INTEGER NOT NULL
+    REFERENCES Spare_part(PK_Spare_part)
+    ON DELETE RESTRICT,
+  Quantity INTEGER NOT NULL,
+  Price INTEGER NOT NULL,
+  Date INTEGER NOT NULL
+);
