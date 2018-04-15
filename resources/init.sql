@@ -148,3 +148,18 @@ CREATE TABLE IF NOT EXISTS Spare_part_Order (
   Date INTEGER NOT NULL,
   Quantity INTEGER NOT NULL
 );
+
+---
+
+CREATE VIEW IF NOT EXISTS
+  Reservation (Quantity, PartName, StaffName, PK_Order, Date, Status)
+AS SELECT
+  po.Quantity, po.PK_Spare_part, o.PK_Staff, o.PK_Order, po.Date,
+  (SELECT st.Type FROM Status st WHERE st.PK_Order = o.PK_Order ORDER BY st.PK_Status DESC LIMIT 1) as Status
+FROM
+  Spare_part_Order po, `Order` o
+WHERE
+  po.PK_Order = o.PK_Order
+  AND Status <> 2
+ORDER BY
+  po.Date DESC

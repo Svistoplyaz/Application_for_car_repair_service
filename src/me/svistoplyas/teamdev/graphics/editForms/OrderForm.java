@@ -3,7 +3,7 @@ package me.svistoplyas.teamdev.graphics.editForms;
 import me.svistoplyas.teamdev.graphics.TableModel;
 import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.entities.*;
-import net.web_kot.teamdev.db.wrapper.OrderSpareParts;
+import net.web_kot.teamdev.db.wrappers.OrderSpareParts;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jdatepicker.JDatePicker;
 

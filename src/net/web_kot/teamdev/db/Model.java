@@ -1,6 +1,7 @@
 package net.web_kot.teamdev.db;
 
 import net.web_kot.teamdev.db.entities.*;
+import net.web_kot.teamdev.db.wrappers.SparePartReservation;
 import org.apache.commons.lang3.time.DateUtils;
 import org.intellij.lang.annotations.Language;
 
@@ -22,7 +23,7 @@ public class Model {
     }
     
     @SuppressWarnings("unchecked")
-    public <T extends AbstractEntity> List<T> getList(Class<T> clazz, @Language("SQL")String sql) throws Exception {
+    public <T> List<T> getList(Class<T> clazz, @Language("SQL")String sql) throws Exception {
         Constructor<T> constructor = null;
         for(Constructor<?> c : clazz.getConstructors())
             if(c.isAnnotationPresent(AbstractEntity.SelectConstructor.class) && c.getDeclaringClass() == clazz) {
@@ -202,6 +203,13 @@ public class Model {
                         " WHERE p.PK_Spare_part = m.PK_Spare_part AND m.PK_Model = %d", model.getId()
         )));
         return new ArrayList<>(set);
+    }
+    
+    public List<SparePartReservation> getReservation(Date from, Date to) throws Exception {
+        return getList(SparePartReservation.class, db.formatQuery(
+                "SELECT * FROM Reservation WHERE %d < Date AND Date < %d",
+                from.getTime(), to.getTime()
+        ));
     }
     
 }

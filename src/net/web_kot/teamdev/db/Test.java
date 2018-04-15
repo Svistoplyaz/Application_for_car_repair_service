@@ -1,11 +1,10 @@
 package net.web_kot.teamdev.db;
 
 import net.web_kot.teamdev.db.entities.*;
-import net.web_kot.teamdev.db.wrapper.OrderSpareParts;
+import net.web_kot.teamdev.db.wrappers.OrderSpareParts;
 
 import java.io.File;
 import java.util.Date;
-import java.util.List;
 
 public class Test {
     

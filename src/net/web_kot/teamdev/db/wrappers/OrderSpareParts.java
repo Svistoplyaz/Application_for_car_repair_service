@@ -1,8 +1,7 @@
-package net.web_kot.teamdev.db.wrapper;
+package net.web_kot.teamdev.db.wrappers;
 
 import me.svistoplyas.teamdev.graphics.utils.Converter;
 import net.web_kot.teamdev.db.Model;
-import net.web_kot.teamdev.db.entities.Service;
 import net.web_kot.teamdev.db.entities.SparePart;
 
 import java.io.PrintWriter;

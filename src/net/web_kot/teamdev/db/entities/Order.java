@@ -1,7 +1,7 @@
 package net.web_kot.teamdev.db.entities;
 
 import net.web_kot.teamdev.db.Model;
-import net.web_kot.teamdev.db.wrapper.OrderSpareParts;
+import net.web_kot.teamdev.db.wrappers.OrderSpareParts;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
