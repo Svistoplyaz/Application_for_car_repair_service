@@ -86,7 +86,7 @@ public class Main {
                     setFinishDate(new Date(startDate.getTime() + 1000000000L)).save();
         }
 
-        (new LoginForm()).show();
+        (new LoginForm(model)).show();
 
     }
 

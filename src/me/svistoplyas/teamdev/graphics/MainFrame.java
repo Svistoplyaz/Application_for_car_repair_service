@@ -1,11 +1,13 @@
 package me.svistoplyas.teamdev.graphics;
 
+import me.svistoplyas.teamdev.graphics.otherFrames.ChangePassword;
 import me.svistoplyas.teamdev.graphics.utils.ImageLoader;
 import me.svistoplyas.teamdev.graphics.views.*;
 import net.web_kot.teamdev.db.Model;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 public class MainFrame extends JFrame {
@@ -57,6 +59,8 @@ public class MainFrame extends JFrame {
         addButton(39, views.get("Orders"));
         addButton(117, views.get("Clients"));
         addButton(351, views.get("Reserved"));
+        
+        addButton(480, "Изменить пароль", e -> (new ChangePassword(this)).setVisible(true));
 
         setResizable(false);
         pack();
@@ -66,17 +70,20 @@ public class MainFrame extends JFrame {
     }
 
     private void addButton(int y, JPanel panel) {
-        JButton bt = new JButton(panel.toString());
-        bt.setBounds(10, y, 180, 24);
-        bt.setFocusable(false);
-        bt.addActionListener((e) -> {
+        addButton(y, panel.toString(), e -> {
             if (panel instanceof AbstractView)
                 showView((AbstractView) panel, true);
             else showPanel(panel);
         });
-        navigation.add(bt);
     }
 
+    private void addButton(int y, String text, ActionListener listener) {
+        JButton bt = new JButton(text);
+        bt.setBounds(10, y, 180, 24);
+        bt.setFocusable(false);
+        bt.addActionListener(listener);
+        navigation.add(bt);
+    }
 
     public void showView(AbstractView view, boolean reset) {
         showPanel(loading);
@@ -114,4 +121,10 @@ public class MainFrame extends JFrame {
         views.put("Marks", new MarkView(this));
         views.put("VModels", new VModelView(this));
     }
+    
+    public int getUserId() {
+        if(type) return 1;
+        return 0;
+    }
+    
 }

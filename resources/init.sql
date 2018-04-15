@@ -1,3 +1,18 @@
+CREATE TABLE IF NOT EXISTS Users (
+  PK_User INTEGER PRIMARY KEY NOT NULL,
+  Password Text NOT NULL
+);
+
+---
+
+INSERT OR IGNORE INTO Users (PK_User, Password) VALUES (0, '123');
+
+---
+
+INSERT OR IGNORE INTO Users (PK_User, Password) VALUES (1, 'qwe');
+
+---
+
 CREATE TABLE IF NOT EXISTS Clients (
   PK_Clients INTEGER PRIMARY KEY NOT NULL,
   Name TEXT(100) NOT NULL,
@@ -162,4 +177,4 @@ WHERE
   po.PK_Order = o.PK_Order
   AND Status <> 2
 ORDER BY
-  po.Date DESC
+  po.Date DESC;

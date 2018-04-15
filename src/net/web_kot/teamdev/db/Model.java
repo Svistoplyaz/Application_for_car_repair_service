@@ -70,6 +70,18 @@ public class Model {
         return getList(clazz, sql).get(0);
     }
     
+    /* Users */
+    
+    public boolean checkPassword(int id, String password) throws Exception {
+        ResultSet result = db.select("SELECT Password FROM Users WHERE PK_User = %d", id);
+        result.next();
+        return password.equals(result.getString(1));
+    }
+    
+    public void setPassword(int id, String password) throws Exception {
+        db.update("UPDATE Users SET Password = %s WHERE PK_User = %d", password, id);
+    }
+    
     /* Clients */
     
     public Client createClient(String name) {

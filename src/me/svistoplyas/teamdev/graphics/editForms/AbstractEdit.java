@@ -15,7 +15,7 @@ public abstract class AbstractEdit extends JDialog {
     HashMap<JComponent, Boolean> baddies = new HashMap<>();
     ImageLoader imageLoader = ImageLoader.getInstance();
     HashMap<JComponent, JLabel> marks = new HashMap<>();
-    MainFrame mainFrame;
+    public MainFrame mainFrame;
     Object data;
     JButton save;
     JButton exit;
