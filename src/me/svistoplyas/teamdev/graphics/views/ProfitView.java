@@ -1,16 +1,15 @@
 package me.svistoplyas.teamdev.graphics.views;
 
 import me.svistoplyas.teamdev.graphics.MainFrame;
+import me.svistoplyas.teamdev.graphics.PeriodSelector;
 import me.svistoplyas.teamdev.graphics.TableModel;
-import org.jdatepicker.JDatePicker;
 
 import javax.swing.*;
-import java.util.Calendar;
-import java.util.Date;
 
 public class ProfitView extends AbstractView {
 
-    private JDatePicker from, to;
+    private PeriodSelector period;
+    
     private JTable incomeTable;
     private JTable spendingTable;
     private JLabel incomeLabel;
@@ -20,22 +19,10 @@ public class ProfitView extends AbstractView {
     public ProfitView(MainFrame _mainFrame) {
         super(_mainFrame, true);
 
-        JLabel label = new JLabel("За период:");
-        label.setBounds(570, 2, 80, 24);
-        this.add(label);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2018, Calendar.JANUARY, 1);
-
-        from = new JDatePicker(calendar);
-        from.addActionListener(e -> updateFrame());
-        from.setBounds(639, 4, 150, 24);
-        this.add(from);
-
-        to = new JDatePicker(new Date());
-        to.addActionListener(e -> updateFrame());
-        to.setBounds(639, 30, 150, 24);
-        this.add(to);
+        period = new PeriodSelector();
+        period.addActionListener(e -> updateFrame());
+        period.setLocation(568, 0);
+        this.add(period);
 
         //Таблица доходов
         incomeTable = new JTable(new TableModel(getIncomeColumnNames(), getIncomeData()));
