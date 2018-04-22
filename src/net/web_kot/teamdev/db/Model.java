@@ -215,7 +215,7 @@ public class Model {
                 "SELECT * FROM Spare_part WHERE Universal <> 0"
         ));
         set.addAll(getList(SparePart.class, db.formatQuery(
-                "SELECT p.PK_Spare_part, p.Name, p.Quantity, p.Unit, p.Universal FROM Spare_part p, Model_Spare_part m" +
+                "SELECT p.PK_Spare_part, p.Name, p.Hidden, p.Unit, p.Universal FROM Spare_part p, Model_Spare_part m" +
                         " WHERE p.PK_Spare_part = m.PK_Spare_part AND m.PK_Model = %d", model.getId()
         )));
         return new ArrayList<>(set);
