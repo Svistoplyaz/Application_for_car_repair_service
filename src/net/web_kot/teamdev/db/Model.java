@@ -1,6 +1,7 @@
 package net.web_kot.teamdev.db;
 
 import net.web_kot.teamdev.db.entities.*;
+import net.web_kot.teamdev.db.wrappers.Profit;
 import net.web_kot.teamdev.db.wrappers.SparePartReservation;
 import org.apache.commons.lang3.time.DateUtils;
 import org.intellij.lang.annotations.Language;
@@ -246,6 +247,24 @@ public class Model {
         for(int i = 0; i < ret.length; i++) ret[i] = list.get(i);
         
         return ret;
+    }
+    
+    public Profit getProfitStats(Date from, Date to) throws Exception {
+        ResultSet result = db.select(
+                "SELECT * FROM Purchase s WHERE %d < Date AND Date < %d", 
+                from.getTime(), to.getTime()
+        );
+        
+        ArrayList<Object[]> data = new ArrayList<>();
+        while(result.next()) data.add(new Object[] { result.getInt(2), result.getInt(3), result.getInt(4) });
+        
+        List<Order> orders = getList(Order.class, db.formatQuery(
+                "SELECT * FROM `Order` WHERE PK_Order IN (SELECT o.PK_Order FROM `Order` o, Status s WHERE " +
+                        "s.Type = %d AND s.PK_Order = o.PK_Order AND %d < s.Date_Time AND s.Date_Time < %d)",
+                Order.Status.FINISHED.ordinal(), from.getTime(), to.getTime()
+        ));
+        
+        return new Profit(this, data, orders);
     }
     
 }

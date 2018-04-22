@@ -11,4 +11,9 @@ public class TableUtils {
         table.getColumnModel().getColumn(column).setCellRenderer(centerRenderer);
     }
     
+    public static void setFixedColumnWidth(JTable table, int column, int width) {
+        table.getColumnModel().getColumn(column).setMaxWidth(width);
+        table.getColumnModel().getColumn(column).setMinWidth(width);
+    }
+    
 }

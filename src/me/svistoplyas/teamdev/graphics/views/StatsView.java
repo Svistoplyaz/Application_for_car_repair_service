@@ -13,8 +13,8 @@ public class StatsView extends AbstractView {
 
     public StatsView(MainFrame _mainFrame) {
         super(_mainFrame, false);
-
-        table.getColumnModel().getColumn(1).setMaxWidth(140);
+        
+        TableUtils.setFixedColumnWidth(table, 1, 120);
         TableUtils.centerColumn(table, 1);
         
         period = new PeriodSelector();

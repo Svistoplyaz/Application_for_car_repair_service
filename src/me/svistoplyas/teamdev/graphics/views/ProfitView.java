@@ -3,6 +3,9 @@ package me.svistoplyas.teamdev.graphics.views;
 import me.svistoplyas.teamdev.graphics.MainFrame;
 import me.svistoplyas.teamdev.graphics.PeriodSelector;
 import me.svistoplyas.teamdev.graphics.TableModel;
+import me.svistoplyas.teamdev.graphics.utils.Converter;
+import me.svistoplyas.teamdev.graphics.utils.TableUtils;
+import net.web_kot.teamdev.db.wrappers.Profit;
 
 import javax.swing.*;
 
@@ -25,23 +28,31 @@ public class ProfitView extends AbstractView {
         this.add(period);
 
         //Таблица доходов
-        incomeTable = new JTable(new TableModel(getIncomeColumnNames(), getIncomeData()));
+        incomeTable = new JTable(new TableModel(getIncomeColumnNames(), new Object[0][]));
         incomeTable.setFillsViewportHeight(true);
         incomeTable.getTableHeader().setReorderingAllowed(false);
         incomeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         incomeTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
+        
+        TableUtils.setFixedColumnWidth(incomeTable, 1, 120);
+        TableUtils.centerColumn(incomeTable, 1);
+        
         JScrollPane incomeScrollPane = new JScrollPane(incomeTable);
         incomeScrollPane.setBounds(10, 60, 718 + 60, 200);
         add(incomeScrollPane);
 
         //Таблица расходов
-        spendingTable = new JTable(new TableModel(getSpendingColumnNames(), getSpendingData()));
+        spendingTable = new JTable(new TableModel(getSpendingColumnNames(), new Object[0][]));
         spendingTable.setFillsViewportHeight(true);
         spendingTable.getTableHeader().setReorderingAllowed(false);
         spendingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         spendingTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
+        
+        for(int i = 1; i <= 2; i++) {
+            TableUtils.setFixedColumnWidth(spendingTable, i, 120);
+            TableUtils.centerColumn(spendingTable, i);
+        }
+        
         JScrollPane spendingScrollPane = new JScrollPane(spendingTable);
         spendingScrollPane.setBounds(10, incomeScrollPane.getY() + incomeScrollPane.getHeight() + 15,
                 718 + 60, 200);
@@ -62,8 +73,15 @@ public class ProfitView extends AbstractView {
         profitLabel.setBounds(spendingLabel.getX() + spendingLabel.getWidth() + 30,
                 spendingScrollPane.getY() + spendingScrollPane.getHeight() + 5, labelWidth, 30);
         add(profitLabel);
+        
+        updateFrame();
     }
-
+    
+    @Override
+    public void updateTable() {
+        updateFrame();
+    }
+    
     @Override
     String[] getColumnNames() {
         return new String[0];
@@ -107,25 +125,24 @@ public class ProfitView extends AbstractView {
     private String[] getIncomeColumnNames() {
         return new String[]{"Заказ", "Доход"};
     }
-
-    private Object[][] getIncomeData() {
-        return new Object[0][];
-    }
-
+    
     private String[] getSpendingColumnNames() {
         return new String[]{"Зап. часть", "Количество", "Расход"};
     }
 
-    private Object[][] getSpendingData() {
-        return new Object[0][];
-    }
-
     private void updateFrame(){
-        ((TableModel) incomeTable.getModel()).setData(getIncomeData());
-        ((TableModel) spendingTable.getModel()).setData(getSpendingData());
-
-        incomeLabel.setText("Доход составляет: ");
-        spendingLabel.setText("Расход составляет: ");
-        profitLabel.setText("Прибыль составляет: ");
+        Converter c = Converter.getInstance();
+        try {
+            Profit profit = mainFrame.model.getProfitStats(period.getStart(), period.getFinish());
+            
+            ((TableModel) incomeTable.getModel()).setData(profit.getIncomeData());
+            ((TableModel) spendingTable.getModel()).setData(profit.getSpendingData());
+            
+            incomeLabel.setText("Доход составляет: " + c.convertPriceToStr(profit.getTotalIncome()) + "p.");
+            spendingLabel.setText("Расход составляет: " + c.convertPriceToStr(profit.getTotalSpending()) + "p.");
+            profitLabel.setText("Прибыль составляет: " + c.convertPriceToStr(profit.getProfit()) + "p.");
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }
