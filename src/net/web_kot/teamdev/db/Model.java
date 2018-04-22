@@ -228,4 +228,24 @@ public class Model {
         ));
     }
     
+    /* Statistics */
+    
+    public Object[][] getServicesStat(Date from, Date to) throws Exception {
+        ResultSet result = db.select(
+                "SELECT s.Name, COUNT(*) FROM Service s, Order_Service os WHERE s.PK_Service = os.PK_Service AND " +
+                        "%d < os.Date AND os.Date < %d AND os.PK_Order IN (SELECT o.PK_Order FROM " +
+                        "`Order` o, Status s WHERE s.Type = %d AND s.PK_Order = o.PK_Order) " +
+                        "GROUP BY s.Name",
+                from.getTime(), to.getTime(), Order.Status.FINISHED.ordinal()
+        );
+
+        ArrayList<Object[]> list = new ArrayList<>();
+        while(result.next()) list.add(new Object[] { result.getString(1), result.getInt(2) });
+        
+        Object[][] ret = new Object[list.size()][];
+        for(int i = 0; i < ret.length; i++) ret[i] = list.get(i);
+        
+        return ret;
+    }
+    
 }

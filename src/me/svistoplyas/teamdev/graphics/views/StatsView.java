@@ -2,6 +2,10 @@ package me.svistoplyas.teamdev.graphics.views;
 
 import me.svistoplyas.teamdev.graphics.MainFrame;
 import me.svistoplyas.teamdev.graphics.PeriodSelector;
+import me.svistoplyas.teamdev.graphics.utils.TableUtils;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class StatsView extends AbstractView {
 
@@ -10,6 +14,9 @@ public class StatsView extends AbstractView {
     public StatsView(MainFrame _mainFrame) {
         super(_mainFrame, false);
 
+        table.getColumnModel().getColumn(1).setMaxWidth(140);
+        TableUtils.centerColumn(table, 1);
+        
         period = new PeriodSelector();
         period.addActionListener(e -> updateTable());
         period.setLocation(568, 0);
@@ -23,7 +30,13 @@ public class StatsView extends AbstractView {
 
     @Override
     Object[][] getData() {
-        return new Object[0][];
+        if(period == null) return new Object[0][];
+        try {
+            return mainFrame.model.getServicesStat(period.getStart(), period.getFinish());
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new Object[0][];
+        }
     }
 
     @Override
