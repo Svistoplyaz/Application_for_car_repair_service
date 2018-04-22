@@ -47,14 +47,16 @@ public class SpareForm extends AbstractEdit {
         previous += 30;
 
         //Цена закупки
-        JLabel priceBuyLabel = new JLabel("Цена закупки");
-        priceBuyLabel.setBounds(firstRow, previous, 140, 24);
-        add(priceBuyLabel);
+        if(!isEdit) {
+            JLabel priceBuyLabel = new JLabel("Цена закупки");
+            priceBuyLabel.setBounds(firstRow, previous, 140, 24);
+            add(priceBuyLabel);
 
-        priceBuyText = new JTextField();
-        priceBuyText.setBounds(secondRow, previous, 200, 24);
-        add(priceBuyText);
-        addMark(priceBuyText, "Price");
+            priceBuyText = new JTextField();
+            priceBuyText.setBounds(secondRow, previous, 200, 24);
+            add(priceBuyText);
+            addMark(priceBuyText, "Price");
+        }
 
         previous += 30;
 
@@ -71,25 +73,21 @@ public class SpareForm extends AbstractEdit {
         previous += 30;
 
         //Количество
-        JLabel quantLabel = new JLabel("Количество");
-        quantLabel.setBounds(firstRow, previous, 140, 24);
-        add(quantLabel);
+        if(!isEdit) {
+            JLabel quantLabel = new JLabel("Количество");
+            quantLabel.setBounds(firstRow, previous, 140, 24);
+            add(quantLabel);
 
-        quantText = new JTextField();
-        quantText.setBounds(secondRow, previous, 145, 24);
-        quantText.setName("Left");
-        add(quantText);
-        addMark(quantText, "Price");
+            quantText = new JTextField();
+            quantText.setBounds(secondRow, previous, 145, 24);
+            quantText.setName("Left");
+            add(quantText);
+            addMark(quantText, "Price");
 
-        quantCombo = new JComboBox<>();
-        quantCombo.setBounds(quantText.getX() + quantText.getWidth() + 5, previous, 50, 24);
-        add(quantCombo);
-        addMark(quantCombo);
-
-        if (isEdit) {
-            quantLabel.setVisible(false);
-            quantText.setVisible(false);
-            quantCombo.setVisible(false);
+            quantCombo = new JComboBox<>();
+            quantCombo.setBounds(quantText.getX() + quantText.getWidth() + 5, previous, 50, 24);
+            add(quantCombo);
+            addMark(quantCombo);
         }
 
         previous += 30;
@@ -195,21 +193,17 @@ public class SpareForm extends AbstractEdit {
         SparePart sparePart = (SparePart) data;
 
         try {
-            quantCombo.removeAllItems();
-            SparePart.Unit[] units = SparePart.Unit.values();
-            for (SparePart.Unit unit : units) {
-                quantCombo.addItem(unit);
-            }
-            if (isEdit) {
-                quantCombo.setSelectedItem(sparePart.getUnit());
-                quantCombo.setEnabled(false);
-
+            if(!isEdit) {
+                quantCombo.removeAllItems();
+                SparePart.Unit[] units = SparePart.Unit.values();
+                for (SparePart.Unit unit : units) {
+                    quantCombo.addItem(unit);
+                }
+            } else {
                 nameText.setText(sparePart.getName());
 
                 priceSellText.setText(Converter.getInstance().convertPriceToStr(sparePart.getPrice(new Date())));
-
-                quantText.setText(Converter.getInstance().beautifulQuantity(sparePart.getRealQuantity(), sparePart.getUnit()));
-
+                
                 if (sparePart.isUniversal())
                     universalCheck.setSelected(true);
             }
@@ -245,10 +239,6 @@ public class SpareForm extends AbstractEdit {
         //Универсальность
         sparePart.setUniversal(universalCheck.isSelected());
 
-        //Закупка
-        sparePart.purchase(Converter.getInstance().convertStrToPrice(quantText.getText()),
-                Converter.getInstance().convertStrToPrice(priceBuyText.getText()));
-
         duplicateCode(sparePart);
 
         sparePart.setPrice(Converter.getInstance().convertStrToPrice(priceSellText.getText()));
@@ -271,7 +261,7 @@ public class SpareForm extends AbstractEdit {
 
     @Override
     public boolean otherValidation() {
-        if (quantCombo.getSelectedItem() == SparePart.Unit.pieces)
+        if (!isEdit && quantCombo.getSelectedItem() == SparePart.Unit.pieces)
             try {
                 int quant = Converter.getInstance().convertStrToPrice(quantText.getText());
                 if (quant % 100 != 0) {

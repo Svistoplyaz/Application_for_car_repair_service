@@ -104,7 +104,9 @@ public class SpareView extends AbstractView {
     void performDelete(int row) {
         try {
             if(mainFrame.model.getSpareParts().get(row).getRealQuantity() == 0)
-                mainFrame.model.getSpareParts().get(row).setHidden(true);
+                mainFrame.model.getSpareParts().get(row).setHidden(true).save();
+            else
+                JOptionPane.showMessageDialog(this, "Невозможно удалить детали, имеющиеся на складе");
         } catch (Exception e) {
             e.printStackTrace();
         }
