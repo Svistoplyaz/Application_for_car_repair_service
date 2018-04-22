@@ -9,6 +9,8 @@ public class VehicleModel extends AbstractEntity {
     private String name;
     private int year;
     
+    private String cachedMarkName = null;
+    
     public VehicleModel(Model model, Mark mark, String name, int year) {
         this(model, -1, name, year, mark.getId());
     }
@@ -57,12 +59,13 @@ public class VehicleModel extends AbstractEntity {
     
     @Override
     public String toString() {
-        try {
-            return String.format("%s %s %d", getMark().getName(), name, year);
-        } catch(Exception e) {
-            e.printStackTrace();
-            return "ERROR";
-        }
+        if(cachedMarkName == null)
+            try {
+                cachedMarkName = model.getMarkById(markId).getName();
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        return String.format("%s %s %d", cachedMarkName, name, year);
     }
     
 }

@@ -11,6 +11,8 @@ public class Staff extends AbstractEntity {
     private String name, phone;
     private long birthday;
     
+    private String cachedPositionName = null;
+    
     public Staff(Model model, Position position, String name, String phone, Date birthday) {
         this(model, -1, position.getId(), name, phone, birthday.getTime());
     }
@@ -41,6 +43,7 @@ public class Staff extends AbstractEntity {
     
     public Staff setPosition(Position position) {
         idPosition = position.id;
+        reloadPositionCache();
         return this;
     }
     
@@ -70,15 +73,19 @@ public class Staff extends AbstractEntity {
         birthday = date.getTime();
         return this;
     }
+    
+    private void reloadPositionCache() {
+        try {
+            cachedPositionName = model.getPositionById(idPosition).getName();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public String toString() {
-        try {
-            return String.format("%s (%s)", name, getPosition().getName());
-        } catch(Exception e) {
-            e.printStackTrace();
-            return "ERROR";
-        }
+        if(cachedPositionName == null) reloadPositionCache();
+        return String.format("%s (%s)", name, cachedPositionName);
     }
     
 }
