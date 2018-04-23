@@ -23,20 +23,20 @@ public class Converter {
     }
 
     public String convertPriceToStr(int price) {
-        String str;
-        if(price < 0)
-            str = "-1";
-        else {
-            if (price % 100 < 10)
-                str = price / 100 + ",0" + price % 100 + "";
-            else if (price % 100 % 10 == 0)
-                str = price / 100 + "," + price % 100 / 10 + "";
-            else
-                str = price / 100 + "," + price % 100 + "";
+        String str = "";
+        if(price < 0) {
+            str = "-";
+            price *= -1;
         }
-
+        
+        if (price % 100 < 10)
+            str += price / 100 + ",0" + price % 100 + "";
+        else if (price % 100 % 10 == 0)
+            str += price / 100 + "," + price % 100 / 10 + "";
+        else
+            str += price / 100 + "," + price % 100 + "";
+        
         return str;
-//        return price / 100 + " руб. " + price % 100 + " коп.";
     }
 
     public String convertPriceToStrOnlyRubbles(int price) {
