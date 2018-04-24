@@ -233,10 +233,10 @@ public class Model {
     
     public Object[][] getServicesStat(Date from, Date to) throws Exception {
         ResultSet result = db.select(
-                "SELECT s.Name, COUNT(*) FROM Service s, Order_Service os WHERE s.PK_Service = os.PK_Service AND " +
+                "SELECT s.Name, COUNT(*) as cnt FROM Service s, Order_Service os WHERE s.PK_Service = os.PK_Service AND " +
                         "%d < os.Date AND os.Date < %d AND os.PK_Order IN (SELECT o.PK_Order FROM " +
                         "`Order` o, Status s WHERE s.Type = %d AND s.PK_Order = o.PK_Order) " +
-                        "GROUP BY s.Name",
+                        "GROUP BY s.Name ORDER BY cnt DESC",
                 from.getTime(), to.getTime(), Order.Status.FINISHED.ordinal()
         );
 
