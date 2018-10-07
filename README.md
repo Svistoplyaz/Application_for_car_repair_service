@@ -1,4 +1,4 @@
-# Application for car repair shop service
+# Application for car repair service
 
 #### This application lets you:
 - Creating, editing, deleting information about services
